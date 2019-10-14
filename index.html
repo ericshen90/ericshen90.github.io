@@ -229,6 +229,135 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/解决Ubuntu-18-04-DHCP-ip失效问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Shen">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/14/解决Ubuntu-18-04-DHCP-ip失效问题/" itemprop="url">解决Ubuntu 18.04 DHCP ip失效问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T20:16:18+08:00">
+                2019-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 clone 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 ip 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
+<p>所以就需要把 <code>/etc/machine-id</code> 给换一下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">uuidgen | sed 's/-//g' &gt; /etc/machine-id</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<p>即可。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.freedesktop.org/software/systemd/man/networkd.conf.html" target="_blank" rel="noopener">https://www.freedesktop.org/software/systemd/man/networkd.conf.html</a></li>
+<li><a href="https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/解决Linux下Harbor开机启动失败/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -300,7 +429,7 @@
       
         
           
-            <p>Harbor 是一个企业级的 Docker 私有仓库项目，它本身由多个 Docker Containers 组成，通过 docker-compose 管理 containers 之间的依赖关系。</p>
+            <p>Harbor 是一个用于存储和分发 Docker 镜像的企业级 Registry 服务器，通过添加一些企业必需的功能特性，例如安全、标识和管理等，扩展了开源 Docker Distribution。作为一个企业级私有 Registry 服务器，Harbor 提供了更好的性能和安全。提升用户使用 Registry 构建和运行环境传输镜像的效率。Harbor 支持安装在多个 Registry 节点的镜像资源复制，镜像全部保存在私有 Registry 中， 确保数据和知识产权在公司内部网络中管控。另外，Harbor 也提供了高级的安全特性，诸如用户管理，访问控制和活动审计等。</p>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装参见官方文档：<a href="https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md" target="_blank" rel="noopener">Harbor - Installation and Configuration Guide</a>，  </p>
 <p>修改 <code>harbor.yml</code> 时，需要注意的有：</p>
 <ol>
@@ -312,10 +441,11 @@
 <li>data_volume 可以指定为 <code>/data/harbor</code>，然后要定期备份这个文件夹。（或者直接在新机器上装个 harbor，用 harbor 自带的仓库复制功能做定期备份。）</li>
 <li>企业的话，可能还需要配置 ldap 集成验证。</li>
 </ol>
-<p>然后 <code>sudo ./install.sh</code> 安装 harbor（貌似必须用 sudo，因为生成出来的配置文件的 owner 都是 root，而且权限设得很严格。）  </p>
+<p>然后赋权<code>sudo chomod +x ./install.sh</code></p>
+<p>执行 <code>sudo ./install.sh</code> 安装 harbor（貌似必须用 sudo，因为生成出来的配置文件的 owner 都是 root，而且权限设得很严格。）  </p>
 <p>安装完成后会自动启动 harbor.</p>
-<h2 id="自动启动"><a href="#自动启动" class="headerlink" title="自动启动"></a>自动启动</h2><p>查看 harbor 目录下的 docker-compose.yml 会发现，所有的 containers 都配置了 <code>restart: always</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">version: &apos;2.3&apos;</span><br><span class="line">services:</span><br><span class="line">  log:</span><br><span class="line">    image: goharbor/harbor-log:v1.8.1</span><br><span class="line">    container_name: harbor-log</span><br><span class="line">    restart: always</span><br><span class="line">    dns_search: .</span><br><span class="line">    # ......</span><br><span class="line"></span><br><span class="line">  registry:</span><br><span class="line">    image: goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1</span><br><span class="line">    container_name: registry</span><br><span class="line">    restart: always</span><br><span class="line">    # ......</span><br></pre></td></tr></table></figure>
+<h2 id="自动启动"><a href="#自动启动" class="headerlink" title="自动启动"></a>自动启动</h2><p>查看 harbor 目录下的自动生成的 docker-compose.yml 会发现，所有的 containers 都配置了 <code>restart: always</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2.3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  log:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">goharbor/harbor-log:v1.9.0</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">harbor-log</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="string">·····省略·······</span></span><br><span class="line">      </span><br><span class="line"><span class="attr">  proxy:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">goharbor/nginx-photon:v1.9.0</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    cap_drop:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ALL</span></span><br><span class="line"><span class="attr">    cap_add:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CHOWN</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">SETGID</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">SETUID</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">NET_BIND_SERVICE</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./common/config/nginx:/etc/nginx:z</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">harbor</span></span><br><span class="line"><span class="attr">    dns_search:</span> <span class="string">.</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">9090</span><span class="string">:8080</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">registry</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">core</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">portal</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">log</span></span><br><span class="line"><span class="attr">    logging:</span></span><br><span class="line"><span class="attr">      driver:</span> <span class="string">"syslog"</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        syslog-address:</span> <span class="string">"tcp://127.0.0.1:1514"</span></span><br><span class="line"><span class="attr">        tag:</span> <span class="string">"proxy"</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line"><span class="attr">  harbor:</span></span><br><span class="line"><span class="attr">    external:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
 
 <p>这表示所有的容器在<strong>意外关闭</strong>后都会自动重启，比如 docker 重启或服务器重启。（手动 stop 不会自动重启）</p>
 <p>但是我在手动运行 <code>docker-compose up -d</code>，然后重启服务器后，发现有几个 container 并没有自动重启：</p>
@@ -330,19 +460,26 @@
 <li><code>goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1</code></li>
 </ol>
 <p>搜索发现有人提过这个 issue: <a href="https://github.com/goharbor/harbor/issues/7008" target="_blank" rel="noopener">https://github.com/goharbor/harbor/issues/7008</a></p>
-<p>于是尝试将 harbor 配成 systemd 的 service，添加配置文件 <code>/usr/lib/systemd/system/harbor.service</code>，内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Harbor</span><br><span class="line">After=docker.service systemd-networkd.service systemd-resolved.service</span><br><span class="line">Requires=docker.service</span><br><span class="line">Documentation=http://github.com/vmware/harbor</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">ExecStart=/usr/local/bin/docker-compose -f &#123;&#123; harbor_install_path &#125;&#125;/harbor/docker-compose.yml up</span><br><span class="line">ExecStop=/usr/local/bin/docker-compose -f &#123;&#123; harbor_install_path &#125;&#125;/harbor/docker-compose.yml down</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>于是尝试将 harbor 配成<strong><code>systemd</code></strong>的服务，添加配置文件 <code>/lib/systemd/system/harbor.service</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Harbor</span><br><span class="line">After=docker.service systemd-networkd.service systemd-resolved.service</span><br><span class="line">Requires=docker.service</span><br><span class="line">Documentation=http://github.com/vmware/harbor</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">ExecStart=/usr/local/bin/docker-compose -f $harbor_path/harbor/docker-compose.yml up</span><br><span class="line">ExecStop=/usr/local/bin/docker-compose -f $harbor_path/harbor/docker-compose.yml down</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
 
-<p>其中 <code></code> 换成自己的 harbor 安装路径。<br>还有 docker-compose 的绝对路径，请通过 <code>which docker-compose</code> 查看。</p>
-<p>然后启动该项服务：</p>
+<p>其中<strong><code>$harbor_path</code></strong> 换成自己的 harbor 安装路径。  </p>
+<p>还有 docker-compose 的绝对路径，请通过 <code>which docker-compose</code> 查看，默认路径为<code>/usr/local/bin/docker-compose</code>。</p>
+<p>此时通过<code>docker-compose down</code>关闭harbor</p>
+<p>然后通过systemd设置为开机启动并启动该项服务：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable harbor</span><br><span class="line">sudo systemctl start harbor</span><br></pre></td></tr></table></figure>
 
-<p>现在查看下 harbor.service 的情况：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">● harbor.service - Harbor</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/harbor.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since Sun 2019-07-07 12:54:27 CST; 2min 4s ago</span><br><span class="line">     Docs: http://github.com/vmware/harbor</span><br><span class="line"> Main PID: 9734 (docker-compose)</span><br><span class="line">    Tasks: 11 (limit: 4915)</span><br><span class="line">   Memory: 35.7M</span><br><span class="line">   CGroup: /system.slice/harbor.service</span><br><span class="line">           └─9734 /usr/bin/python /usr/bin/docker-compose -f /home/ryan/harbor/docker-compose.yml up</span><br><span class="line"></span><br><span class="line">7月 07 12:54:30 ryan-pc docker-compose[9734]: [128B blob data]</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: [167B blob data]</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: registryctl    | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: registry       | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: harbor-db      | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: redis          | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: harbor-core    | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: harbor-jobservice | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: harbor-portal  | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br><span class="line">7月 07 12:54:31 ryan-pc docker-compose[9734]: nginx          | WARNING: no logs are available with the &apos;syslog&apos; log driver</span><br></pre></td></tr></table></figure>
+<p>若提示找不到<code>harbor.servce</code>，则执行<code>systemctl daemon-reload</code>重启<code>systemd</code>服务</p>
+<p><code>systemctl status harobr</code>查看 harbor.service 的情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">● harbor.service - Harbor</span><br><span class="line">   Loaded: loaded (/lib/systemd/system/harbor.service; enabled; vendor preset: enabled)</span><br><span class="line">   Active: active (running) since Mon 2019-10-14 18:55:28 CST; 49s ago</span><br><span class="line">     Docs: http://github.com/vmware/harbor</span><br><span class="line"> Main PID: 15706 (docker-compose)</span><br><span class="line">    Tasks: 12 (limit: 2312)</span><br><span class="line">   CGroup: /system.slice/harbor.service</span><br><span class="line">           ├─15706 /usr/local/bin/docker-compose -f /usr/local/harbor/harbor/docker-compose.yml up</span><br><span class="line">           └─15717 /usr/local/bin/docker-compose -f /usr/local/harbor/harbor/docker-compose.yml up</span><br><span class="line"></span><br><span class="line">.....省略.....</span><br></pre></td></tr></table></figure>
 
+<p>状态为：<code>active</code></p>
 <p>重启再看，发现 harbor 容器组终于全部 up 了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ryan@ryan-pc ~]$ docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE                                               COMMAND                  CREATED             STATUS                    PORTS                       NAMES</span><br><span class="line">90943210e354        goharbor/nginx-photon:v1.8.1                        &quot;nginx -g &apos;daemon of…&quot;   37 seconds ago      Up 35 seconds (healthy)   0.0.0.0:80-&gt;80/tcp          nginx</span><br><span class="line">bc70706d7b5f        goharbor/harbor-portal:v1.8.1                       &quot;nginx -g &apos;daemon of…&quot;   38 seconds ago      Up 36 seconds (healthy)   80/tcp                      harbor-portal</span><br><span class="line">54e132bd1a10        goharbor/harbor-jobservice:v1.8.1                   &quot;/harbor/start.sh&quot;       38 seconds ago      Up 36 seconds                                         harbor-jobservice</span><br><span class="line">28ada4a941ee        goharbor/harbor-core:v1.8.1                         &quot;/harbor/start.sh&quot;       39 seconds ago      Up 37 seconds (healthy)                               harbor-core</span><br><span class="line">de44686f7e72        goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1   &quot;/entrypoint.sh /etc…&quot;   39 seconds ago      Up 38 seconds (healthy)   5000/tcp                    registry</span><br><span class="line">e5efdae34c13        goharbor/harbor-db:v1.8.1                           &quot;/entrypoint.sh post…&quot;   39 seconds ago      Up 38 seconds (healthy)   5432/tcp                    harbor-db</span><br><span class="line">a5fe52e1f184        goharbor/harbor-registryctl:v1.8.1                  &quot;/harbor/start.sh&quot;       39 seconds ago      Up 38 seconds (healthy)                               registryctl</span><br><span class="line">4a74b5f3499a        goharbor/redis-photon:v1.8.1                        &quot;docker-entrypoint.s…&quot;   39 seconds ago      Up 38 seconds             6379/tcp                    redis</span><br><span class="line">677fd84d0a70        goharbor/harbor-log:v1.8.1                          &quot;/bin/sh -c /usr/loc…&quot;   40 seconds ago      Up 39 seconds (healthy)   127.0.0.1:1514-&gt;10514/tcp   harbor-log</span><br></pre></td></tr></table></figure>
+<p><code>docker-compose ps</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">      Name                     Command                  State                 Ports</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line">harbor-core         /harbor/harbor_core              Up (healthy)</span><br><span class="line">harbor-db           /docker-entrypoint.sh            Up (healthy)   5432/tcp</span><br><span class="line">harbor-jobservice   /harbor/harbor_jobservice  ...   Up (healthy)</span><br><span class="line">harbor-log          /bin/sh -c /usr/local/bin/ ...   Up (healthy)   127.0.0.1:1514-&gt;10514/tcp</span><br><span class="line">harbor-portal       nginx -g daemon off;             Up (healthy)   8080/tcp</span><br><span class="line">nginx               nginx -g daemon off;             Up (healthy)   0.0.0.0:9090-&gt;8080/tcp</span><br><span class="line">redis               redis-server /etc/redis.conf     Up (healthy)   6379/tcp</span><br><span class="line">registry            /entrypoint.sh /etc/regist ...   Up (healthy)   5000/tcp</span><br><span class="line">registryctl         /harbor/start.sh                 Up (healthy)</span><br></pre></td></tr></table></figure>
 
+<p>Web端Harbor也可正常访问:</p>
+<p><img src="https://i.loli.net/2019/10/14/MFGgetjQuJ5NPCA.png" alt="image.png"></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://github.com/goharbor/harbor/issues/7008" target="_blank" rel="noopener">Harbor containers fail to start on docker startup</a></li>
 <li><a href="https://www.cnblogs.com/kirito-c/p/10331598.html" target="_blank" rel="noopener">通过 systemctl 设置自定义 Service</a></li>
@@ -560,7 +697,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
