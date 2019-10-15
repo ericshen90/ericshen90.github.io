@@ -229,6 +229,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/git-archive-打包文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Shen">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/15/git-archive-打包文件/" itemprop="url">git archive 打包文件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T12:13:35+08:00">
+                2019-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Git 中打包文件是个简单的活，不管是<strong>打包全部文件</strong>作为 release，</p>
+<p>还是<strong>只压缩更改的文件</strong>，一个命令就能搞定。</p>
+<p>而且，打包之后<strong>目录结构完全不变</strong>，这对于覆盖部署来说极其方便。</p>
+<h2 id="1-打包所有文件"><a href="#1-打包所有文件" class="headerlink" title="1 打包所有文件"></a>1 打包所有文件</h2><p>打包<code>master</code>分支的所有文件：</p>
+<blockquote>
+<p>注：本地修改未提交的并不会打包进去</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip --output master.zip master</span><br></pre></td></tr></table></figure>
+
+<p>其中，输出格式为<code>zip</code>，输出文件为<code>master.zip</code>。git 支持 zip 和 tar 两种输出格式。</p>
+<p>打包当前分支当前<code>HEAD</code>的所有文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip --output head.zip HEAD</span><br></pre></td></tr></table></figure>
+
+<p>打包<code>v1.2</code>标签的所有文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip --output v1.2.zip v1.2</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-打包更改的文件"><a href="#2-打包更改的文件" class="headerlink" title="2 打包更改的文件"></a>2 打包更改的文件</h2><p>打包更改文件的原理是：</p>
+<ol>
+<li>用<code>git diff</code> 找出文件列表；</li>
+<li>用打包命令打包。</li>
+</ol>
+<p>也就是说，<strong>只要能用找出文件列表，就可以 git 打包出来。</strong></p>
+<h3 id="2-1-打包最后修改的文件"><a href="#2-1-打包最后修改的文件" class="headerlink" title="2.1 打包最后修改的文件"></a>2.1 打包最后修改的文件</h3><p>先通过<code>git diff</code>找到最新版本修改过的文件，再压缩打包这些文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD^)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-打包最后两个版本修改的文件"><a href="#2-2-打包最后两个版本修改的文件" class="headerlink" title="2.2 打包最后两个版本修改的文件"></a>2.2 打包最后两个版本修改的文件</h3><p>总共也是 2 个版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD~2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-打包两个分支之间差别的文件"><a href="#2-3-打包两个分支之间差别的文件" class="headerlink" title="2.3 打包两个分支之间差别的文件"></a>2.3 打包两个分支之间差别的文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip -o update.zip HEAD $(git diff --name-only master fix-error)</span><br></pre></td></tr></table></figure>
+
+<p>如上，打包<code>master</code>和<code>fix-error</code>分支差异的文件。</p>
+<p><strong>参考资料：</strong></p>
+<ol>
+<li><a href="http://tosbourn.com/using-git-to-create-an-archive-of-changed-files/" target="_blank" rel="noopener">Using Git to create an archive of changed files.</a></li>
+<li><a href="http://blog.miniasp.com/post/2014/04/01/Git-Export-Only-Added-Modified-Files.aspx" target="_blank" rel="noopener">如何讓 Git 僅匯出在特定版本中新增或修改過的檔案</a></li>
+</ol>
+<p>« <a href="https://www.awaimai.com/1448.html" target="_blank" rel="noopener">UMLet 使用教程</a> <a href="https://www.awaimai.com/1513.html" target="_blank" rel="noopener">mysqldiff 实现 MySQL 数据表比较</a> »</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/Linux同步系统时间/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -458,180 +614,6 @@
 <ul>
 <li><a href="https://www.freedesktop.org/software/systemd/man/networkd.conf.html" target="_blank" rel="noopener">https://www.freedesktop.org/software/systemd/man/networkd.conf.html</a></li>
 <li><a href="https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/解决Linux下Harbor开机启动失败/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/14/解决Linux下Harbor开机启动失败/" itemprop="url">解决Linux下Harbor开机启动失败</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T18:39:58+08:00">
-                2019-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Harbor 是一个用于存储和分发 Docker 镜像的企业级 Registry 服务器，通过添加一些企业必需的功能特性，例如安全、标识和管理等，扩展了开源 Docker Distribution。作为一个企业级私有 Registry 服务器，Harbor 提供了更好的性能和安全。提升用户使用 Registry 构建和运行环境传输镜像的效率。Harbor 支持安装在多个 Registry 节点的镜像资源复制，镜像全部保存在私有 Registry 中， 确保数据和知识产权在公司内部网络中管控。另外，Harbor 也提供了高级的安全特性，诸如用户管理，访问控制和活动审计等。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装参见官方文档：<a href="https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md" target="_blank" rel="noopener">Harbor - Installation and Configuration Guide</a>，  </p>
-<p>修改 <code>harbor.yml</code> 时，需要注意的有：</p>
-<ol>
-<li>使用 https 时，要自己生成证书，然后在 harbor.yml 里配置好证书的路径。<ul>
-<li>客户端也需要安装你生成的这个证书，否则会报错。（所以证书要做好备份）</li>
-<li>详见 <a href="https://docs.docker.com/registry/insecure/" target="_blank" rel="noopener">Docker - Use self-signed certificates</a></li>
-</ul>
-</li>
-<li>data_volume 可以指定为 <code>/data/harbor</code>，然后要定期备份这个文件夹。（或者直接在新机器上装个 harbor，用 harbor 自带的仓库复制功能做定期备份。）</li>
-<li>企业的话，可能还需要配置 ldap 集成验证。</li>
-</ol>
-<p>然后赋权<code>sudo chomod +x ./install.sh</code></p>
-<p>执行 <code>sudo ./install.sh</code> 安装 harbor（貌似必须用 sudo，因为生成出来的配置文件的 owner 都是 root，而且权限设得很严格。）  </p>
-<p>安装完成后会自动启动 harbor.</p>
-<h2 id="自动启动"><a href="#自动启动" class="headerlink" title="自动启动"></a>自动启动</h2><p>查看 harbor 目录下的自动生成的 docker-compose.yml 会发现，所有的 containers 都配置了 <code>restart: always</code>：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2.3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  log:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">goharbor/harbor-log:v1.9.0</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">harbor-log</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="string">·····省略·······</span></span><br><span class="line">      </span><br><span class="line"><span class="attr">  proxy:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">goharbor/nginx-photon:v1.9.0</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    cap_drop:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ALL</span></span><br><span class="line"><span class="attr">    cap_add:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CHOWN</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">SETGID</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">SETUID</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">NET_BIND_SERVICE</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./common/config/nginx:/etc/nginx:z</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">harbor</span></span><br><span class="line"><span class="attr">    dns_search:</span> <span class="string">.</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">9090</span><span class="string">:8080</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">registry</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">core</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">portal</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">log</span></span><br><span class="line"><span class="attr">    logging:</span></span><br><span class="line"><span class="attr">      driver:</span> <span class="string">"syslog"</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        syslog-address:</span> <span class="string">"tcp://127.0.0.1:1514"</span></span><br><span class="line"><span class="attr">        tag:</span> <span class="string">"proxy"</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line"><span class="attr">  harbor:</span></span><br><span class="line"><span class="attr">    external:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<p>这表示所有的容器在<strong>意外关闭</strong>后都会自动重启，比如 docker 重启或服务器重启。（手动 stop 不会自动重启）</p>
-<p>但是我在手动运行 <code>docker-compose up -d</code>，然后重启服务器后，发现有几个 container 并没有自动重启：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ryan@ryan-pc ~]$ docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE                                               COMMAND                  CREATED             STATUS                             PORTS                       NAMES</span><br><span class="line">f30d802002a4        goharbor/nginx-photon:v1.8.1                        &quot;nginx -g &apos;daemon of…&quot;   13 hours ago        Exited (128) 27 minutes ago        0.0.0.0:80-&gt;80/tcp          nginx</span><br><span class="line">21472ce8a993        goharbor/harbor-portal:v1.8.1                       &quot;nginx -g &apos;daemon of…&quot;   13 hours ago        Exited (128) 27 minutes ago        80/tcp                      harbor-portal</span><br><span class="line">5d866bb17c58        goharbor/harbor-jobservice:v1.8.1                   &quot;/harbor/start.sh&quot;       13 hours ago        Exited (137) 26 minutes ago                                    harbor-jobservice</span><br><span class="line">0cf0f93b5a87        goharbor/harbor-core:v1.8.1                         &quot;/harbor/start.sh&quot;       13 hours ago        Up 11 seconds (health: starting)                               harbor-core</span><br><span class="line">cba280d9b945        goharbor/redis-photon:v1.8.1                        &quot;docker-entrypoint.s…&quot;   13 hours ago        Exited (137) 26 minutes ago        6379/tcp                    redis</span><br><span class="line">473e46d1f746        goharbor/harbor-registryctl:v1.8.1                  &quot;/harbor/start.sh&quot;       13 hours ago        Up 11 seconds (health: starting)                               registryctl</span><br><span class="line">51f105f1691d        goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1   &quot;/entrypoint.sh /etc…&quot;   13 hours ago        Exited (137) 26 minutes ago        5000/tcp                    registry</span><br><span class="line">c41594ec7779        goharbor/harbor-db:v1.8.1                           &quot;/entrypoint.sh post…&quot;   13 hours ago        Up 11 seconds (health: starting)   5432/tcp                    harbor-db</span><br><span class="line">713bd4961772        goharbor/harbor-log:v1.8.1                          &quot;/bin/sh -c /usr/loc…&quot;   13 hours ago        Up 11 seconds (health: starting)   127.0.0.1:1514-&gt;10514/tcp   harbor-log</span><br></pre></td></tr></table></figure>
-
-<p>可以看到下列五个容器都处于 Exited 状态：</p>
-<ol>
-<li><code>goharbor/nginx-photon:v1.8.1</code></li>
-<li><code>goharbor/harbor-portal:v1.8.1</code></li>
-<li><code>goharbor/harbor-jobservice:v1.8.1</code></li>
-<li><code>goharbor/redis-photon:v1.8.1</code></li>
-<li><code>goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1</code></li>
-</ol>
-<p>搜索发现有人提过这个 issue: <a href="https://github.com/goharbor/harbor/issues/7008" target="_blank" rel="noopener">https://github.com/goharbor/harbor/issues/7008</a></p>
-<p>于是尝试将 harbor 配成<strong><code>systemd</code></strong>的服务，添加配置文件 <code>/lib/systemd/system/harbor.service</code>，内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Harbor</span><br><span class="line">After=docker.service systemd-networkd.service systemd-resolved.service</span><br><span class="line">Requires=docker.service</span><br><span class="line">Documentation=http://github.com/vmware/harbor</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">ExecStart=/usr/local/bin/docker-compose -f $harbor_path/harbor/docker-compose.yml up</span><br><span class="line">ExecStop=/usr/local/bin/docker-compose -f $harbor_path/harbor/docker-compose.yml down</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-
-<p>其中<strong><code>$harbor_path</code></strong> 换成自己的 harbor 安装路径。  </p>
-<p>还有 docker-compose 的绝对路径，请通过 <code>which docker-compose</code> 查看，默认路径为<code>/usr/local/bin/docker-compose</code>。</p>
-<p>此时通过<code>docker-compose down</code>关闭harbor</p>
-<p>然后通过systemd设置为开机启动并启动该项服务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable harbor</span><br><span class="line">sudo systemctl start harbor</span><br></pre></td></tr></table></figure>
-
-<p>若提示找不到<code>harbor.servce</code>，则执行<code>systemctl daemon-reload</code>重启<code>systemd</code>服务</p>
-<p><code>systemctl status harobr</code>查看 harbor.service 的情况：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">● harbor.service - Harbor</span><br><span class="line">   Loaded: loaded (/lib/systemd/system/harbor.service; enabled; vendor preset: enabled)</span><br><span class="line">   Active: active (running) since Mon 2019-10-14 18:55:28 CST; 49s ago</span><br><span class="line">     Docs: http://github.com/vmware/harbor</span><br><span class="line"> Main PID: 15706 (docker-compose)</span><br><span class="line">    Tasks: 12 (limit: 2312)</span><br><span class="line">   CGroup: /system.slice/harbor.service</span><br><span class="line">           ├─15706 /usr/local/bin/docker-compose -f /usr/local/harbor/harbor/docker-compose.yml up</span><br><span class="line">           └─15717 /usr/local/bin/docker-compose -f /usr/local/harbor/harbor/docker-compose.yml up</span><br><span class="line"></span><br><span class="line">.....省略.....</span><br></pre></td></tr></table></figure>
-
-<p>状态为：<code>active</code></p>
-<p>重启再看，发现 harbor 容器组终于全部 up 了：</p>
-<p><code>docker-compose ps</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">      Name                     Command                  State                 Ports</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line">harbor-core         /harbor/harbor_core              Up (healthy)</span><br><span class="line">harbor-db           /docker-entrypoint.sh            Up (healthy)   5432/tcp</span><br><span class="line">harbor-jobservice   /harbor/harbor_jobservice  ...   Up (healthy)</span><br><span class="line">harbor-log          /bin/sh -c /usr/local/bin/ ...   Up (healthy)   127.0.0.1:1514-&gt;10514/tcp</span><br><span class="line">harbor-portal       nginx -g daemon off;             Up (healthy)   8080/tcp</span><br><span class="line">nginx               nginx -g daemon off;             Up (healthy)   0.0.0.0:9090-&gt;8080/tcp</span><br><span class="line">redis               redis-server /etc/redis.conf     Up (healthy)   6379/tcp</span><br><span class="line">registry            /entrypoint.sh /etc/regist ...   Up (healthy)   5000/tcp</span><br><span class="line">registryctl         /harbor/start.sh                 Up (healthy)</span><br></pre></td></tr></table></figure>
-
-<p>Web端Harbor也可正常访问:</p>
-<p><img src="https://i.loli.net/2019/10/14/MFGgetjQuJ5NPCA.png" alt="image.png"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://github.com/goharbor/harbor/issues/7008" target="_blank" rel="noopener">Harbor containers fail to start on docker startup</a></li>
-<li><a href="https://www.cnblogs.com/kirito-c/p/10331598.html" target="_blank" rel="noopener">通过 systemctl 设置自定义 Service</a></li>
 </ul>
 
           
