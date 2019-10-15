@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述Redis 集群可以在一组 redis 节点之间实现高可用性和 sharding。在集群中会有 1 个 master 和多个 slave 节点。当 master 节点失效时，应选举出一个 slave 节点作为新的 master。然而 Redis 本身(包括它的很多客户端)没有实现自动故障发现并进行主备切换的能力，需要外部的监控方案来实现自动故障恢复。 Redis Sentinel 是官方推荐的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Sentinel 集群部署">
+<meta property="og:url" content="http://yoursite.com/2019/10/15/Redis-Sentinel-集群部署/index.html">
+<meta property="og:site_name" content="Eric Shen Blog">
+<meta property="og:description" content="概述Redis 集群可以在一组 redis 节点之间实现高可用性和 sharding。在集群中会有 1 个 master 和多个 slave 节点。当 master 节点失效时，应选举出一个 slave 节点作为新的 master。然而 Redis 本身(包括它的很多客户端)没有实现自动故障发现并进行主备切换的能力，需要外部的监控方案来实现自动故障恢复。 Redis Sentinel 是官方推荐的">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/10/15/4XWpR7vizfPs51Q.png">
+<meta property="og:updated_time" content="2019-10-15T10:00:29.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis Sentinel 集群部署">
+<meta name="twitter:description" content="概述Redis 集群可以在一组 redis 节点之间实现高可用性和 sharding。在集群中会有 1 个 master 和多个 slave 节点。当 master 节点失效时，应选举出一个 slave 节点作为新的 master。然而 Redis 本身(包括它的很多客户端)没有实现自动故障发现并进行主备切换的能力，需要外部的监控方案来实现自动故障恢复。 Redis Sentinel 是官方推荐的">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/15/4XWpR7vizfPs51Q.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/15/Redis-Sentinel-集群部署/">
+
+
+
+
+
+  <title>Redis Sentinel 集群部署 | Eric Shen Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Eric Shen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/Redis-Sentinel-集群部署/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Shen">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Shen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis Sentinel 集群部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T17:49:32+08:00">
+                2019-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Redis 集群可以在一组 redis 节点之间实现高可用性和 sharding。在集群中会有 1 个 master 和多个 slave 节点。当 master 节点失效时，应选举出一个 slave 节点作为新的 master。然而 Redis 本身(包括它的很多客户端)没有实现自动故障发现并进行主备切换的能力，需要外部的监控方案来实现自动故障恢复。</p>
+<p>Redis Sentinel 是官方推荐的高可用性解决方案。它是 Redis 集群的监控管理工具，可以提供节点监控、通知、自动故障恢复和客户端配置发现服务。</p>
+<p><img src="https://i.loli.net/2019/10/15/4XWpR7vizfPs51Q.png" alt="image.png"></p>
+<h2 id="Redis-Sentinel-核心配置"><a href="#Redis-Sentinel-核心配置" class="headerlink" title="Redis Sentinel 核心配置"></a>Redis Sentinel 核心配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br></pre></td><td class="code"><pre><span class="line"># Example sentinel.conf</span><br><span class="line"></span><br><span class="line"># *** IMPORTANT ***</span><br><span class="line">#</span><br><span class="line"># By default Sentinel will not be reachable from interfaces different than</span><br><span class="line"># localhost, either use the &apos;bind&apos; directive to bind to a list of network</span><br><span class="line"># interfaces, or disable protected mode with &quot;protected-mode no&quot; by</span><br><span class="line"># adding it to this configuration file.</span><br><span class="line">#</span><br><span class="line"># Before doing that MAKE SURE the instance is protected from the outside</span><br><span class="line"># world via firewalling or other means.</span><br><span class="line">#</span><br><span class="line"># For example you may use one of the following:</span><br><span class="line">#</span><br><span class="line"># bind 127.0.0.1 192.168.1.1</span><br><span class="line">#</span><br><span class="line"># protected-mode no</span><br><span class="line"></span><br><span class="line"># port &lt;sentinel-port&gt;</span><br><span class="line"># The port that this sentinel instance will run on</span><br><span class="line">port 26379</span><br><span class="line"></span><br><span class="line"># sentinel announce-ip &lt;ip&gt;</span><br><span class="line"># sentinel announce-port &lt;port&gt;</span><br><span class="line">#</span><br><span class="line"># The above two configuration directives are useful in environments where,</span><br><span class="line"># because of NAT, Sentinel is reachable from outside via a non-local address.</span><br><span class="line">#</span><br><span class="line"># When announce-ip is provided, the Sentinel will claim the specified IP address</span><br><span class="line"># in HELLO messages used to gossip its presence, instead of auto-detecting the</span><br><span class="line"># local address as it usually does.</span><br><span class="line">#</span><br><span class="line"># Similarly when announce-port is provided and is valid and non-zero, Sentinel</span><br><span class="line"># will announce the specified TCP port.</span><br><span class="line">#</span><br><span class="line"># The two options don&apos;t need to be used together, if only announce-ip is</span><br><span class="line"># provided, the Sentinel will announce the specified IP and the server port</span><br><span class="line"># as specified by the &quot;port&quot; option. If only announce-port is provided, the</span><br><span class="line"># Sentinel will announce the auto-detected local IP and the specified port.</span><br><span class="line">#</span><br><span class="line"># Example:</span><br><span class="line">#</span><br><span class="line"># sentinel announce-ip 1.2.3.4</span><br><span class="line"></span><br><span class="line"># dir &lt;working-directory&gt;</span><br><span class="line"># Every long running process should have a well-defined working directory.</span><br><span class="line"># For Redis Sentinel to chdir to /tmp at startup is the simplest thing</span><br><span class="line"># for the process to don&apos;t interfere with administrative tasks such as</span><br><span class="line"># unmounting filesystems.</span><br><span class="line">dir /tmp</span><br><span class="line"></span><br><span class="line"># sentinel monitor &lt;master-name&gt; &lt;ip&gt; &lt;redis-port&gt; &lt;quorum&gt;</span><br><span class="line">#</span><br><span class="line"># Tells Sentinel to monitor this master, and to consider it in O_DOWN</span><br><span class="line"># (Objectively Down) state only if at least &lt;quorum&gt; sentinels agree.</span><br><span class="line">#</span><br><span class="line"># Note that whatever is the ODOWN quorum, a Sentinel will require to</span><br><span class="line"># be elected by the majority of the known Sentinels in order to</span><br><span class="line"># start a failover, so no failover can be performed in minority.</span><br><span class="line">#</span><br><span class="line"># Slaves are auto-discovered, so you don&apos;t need to specify slaves in</span><br><span class="line"># any way. Sentinel itself will rewrite this configuration file adding</span><br><span class="line"># the slaves using additional configuration options.</span><br><span class="line"># Also note that the configuration file is rewritten when a</span><br><span class="line"># slave is promoted to master.</span><br><span class="line">#</span><br><span class="line"># Note: master name should not include special characters or spaces.</span><br><span class="line"># The valid charset is A-z 0-9 and the three characters &quot;.-_&quot;.</span><br><span class="line">sentinel monitor mymaster 127.0.0.1 6379 2</span><br><span class="line"></span><br><span class="line"># sentinel auth-pass &lt;master-name&gt; &lt;password&gt;</span><br><span class="line">#</span><br><span class="line"># Set the password to use to authenticate with the master and slaves.</span><br><span class="line"># Useful if there is a password set in the Redis instances to monitor.</span><br><span class="line">#</span><br><span class="line"># Note that the master password is also used for slaves, so it is not</span><br><span class="line"># possible to set a different password in masters and slaves instances</span><br><span class="line"># if you want to be able to monitor these instances with Sentinel.</span><br><span class="line">#</span><br><span class="line"># However you can have Redis instances without the authentication enabled</span><br><span class="line"># mixed with Redis instances requiring the authentication (as long as the</span><br><span class="line"># password set is the same for all the instances requiring the password) as</span><br><span class="line"># the AUTH command will have no effect in Redis instances with authentication</span><br><span class="line"># switched off.</span><br><span class="line">#</span><br><span class="line"># Example:</span><br><span class="line">#</span><br><span class="line"># sentinel auth-pass mymaster MySUPER--secret-0123passw0rd</span><br><span class="line"></span><br><span class="line"># sentinel down-after-milliseconds &lt;master-name&gt; &lt;milliseconds&gt;</span><br><span class="line">#</span><br><span class="line"># Number of milliseconds the master (or any attached slave or sentinel) should</span><br><span class="line"># be unreachable (as in, not acceptable reply to PING, continuously, for the</span><br><span class="line"># specified period) in order to consider it in S_DOWN state (Subjectively</span><br><span class="line"># Down).</span><br><span class="line">#</span><br><span class="line"># Default is 30 seconds.</span><br><span class="line">sentinel down-after-milliseconds mymaster 30000</span><br><span class="line"></span><br><span class="line"># sentinel parallel-syncs &lt;master-name&gt; &lt;numslaves&gt;</span><br><span class="line">#</span><br><span class="line"># How many slaves we can reconfigure to point to the new slave simultaneously</span><br><span class="line"># during the failover. Use a low number if you use the slaves to serve query</span><br><span class="line"># to avoid that all the slaves will be unreachable at about the same</span><br><span class="line"># time while performing the synchronization with the master.</span><br><span class="line">sentinel parallel-syncs mymaster 1</span><br><span class="line"></span><br><span class="line"># sentinel failover-timeout &lt;master-name&gt; &lt;milliseconds&gt;</span><br><span class="line">#</span><br><span class="line"># Specifies the failover timeout in milliseconds. It is used in many ways:</span><br><span class="line">#</span><br><span class="line"># - The time needed to re-start a failover after a previous failover was</span><br><span class="line">#   already tried against the same master by a given Sentinel, is two</span><br><span class="line">#   times the failover timeout.</span><br><span class="line">#</span><br><span class="line"># - The time needed for a slave replicating to a wrong master according</span><br><span class="line">#   to a Sentinel current configuration, to be forced to replicate</span><br><span class="line">#   with the right master, is exactly the failover timeout (counting since</span><br><span class="line">#   the moment a Sentinel detected the misconfiguration).</span><br><span class="line">#</span><br><span class="line"># - The time needed to cancel a failover that is already in progress but</span><br><span class="line">#   did not produced any configuration change (SLAVEOF NO ONE yet not</span><br><span class="line">#   acknowledged by the promoted slave).</span><br><span class="line">#</span><br><span class="line"># - The maximum time a failover in progress waits for all the slaves to be</span><br><span class="line">#   reconfigured as slaves of the new master. However even after this time</span><br><span class="line">#   the slaves will be reconfigured by the Sentinels anyway, but not with</span><br><span class="line">#   the exact parallel-syncs progression as specified.</span><br><span class="line">#</span><br><span class="line"># Default is 3 minutes.</span><br><span class="line">sentinel failover-timeout mymaster 180000</span><br><span class="line"></span><br><span class="line"># SCRIPTS EXECUTION</span><br><span class="line">#</span><br><span class="line"># sentinel notification-script and sentinel reconfig-script are used in order</span><br><span class="line"># to configure scripts that are called to notify the system administrator</span><br><span class="line"># or to reconfigure clients after a failover. The scripts are executed</span><br><span class="line"># with the following rules for error handling:</span><br><span class="line">#</span><br><span class="line"># If script exits with &quot;1&quot; the execution is retried later (up to a maximum</span><br><span class="line"># number of times currently set to 10).</span><br><span class="line">#</span><br><span class="line"># If script exits with &quot;2&quot; (or an higher value) the script execution is</span><br><span class="line"># not retried.</span><br><span class="line">#</span><br><span class="line"># If script terminates because it receives a signal the behavior is the same</span><br><span class="line"># as exit code 1.</span><br><span class="line">#</span><br><span class="line"># A script has a maximum running time of 60 seconds. After this limit is</span><br><span class="line"># reached the script is terminated with a SIGKILL and the execution retried.</span><br><span class="line"></span><br><span class="line"># NOTIFICATION SCRIPT</span><br><span class="line">#</span><br><span class="line"># sentinel notification-script &lt;master-name&gt; &lt;script-path&gt;</span><br><span class="line"># </span><br><span class="line"># Call the specified notification script for any sentinel event that is</span><br><span class="line"># generated in the WARNING level (for instance -sdown, -odown, and so forth).</span><br><span class="line"># This script should notify the system administrator via email, SMS, or any</span><br><span class="line"># other messaging system, that there is something wrong with the monitored</span><br><span class="line"># Redis systems.</span><br><span class="line">#</span><br><span class="line"># The script is called with just two arguments: the first is the event type</span><br><span class="line"># and the second the event description.</span><br><span class="line">#</span><br><span class="line"># The script must exist and be executable in order for sentinel to start if</span><br><span class="line"># this option is provided.</span><br><span class="line">#</span><br><span class="line"># Example:</span><br><span class="line">#</span><br><span class="line"># sentinel notification-script mymaster /var/redis/notify.sh</span><br><span class="line"></span><br><span class="line"># CLIENTS RECONFIGURATION SCRIPT</span><br><span class="line">#</span><br><span class="line"># sentinel client-reconfig-script &lt;master-name&gt; &lt;script-path&gt;</span><br><span class="line">#</span><br><span class="line"># When the master changed because of a failover a script can be called in</span><br><span class="line"># order to perform application-specific tasks to notify the clients that the</span><br><span class="line"># configuration has changed and the master is at a different address.</span><br><span class="line"># </span><br><span class="line"># The following arguments are passed to the script:</span><br><span class="line">#</span><br><span class="line"># &lt;master-name&gt; &lt;role&gt; &lt;state&gt; &lt;from-ip&gt; &lt;from-port&gt; &lt;to-ip&gt; &lt;to-port&gt;</span><br><span class="line">#</span><br><span class="line"># &lt;state&gt; is currently always &quot;failover&quot;</span><br><span class="line"># &lt;role&gt; is either &quot;leader&quot; or &quot;observer&quot;</span><br><span class="line"># </span><br><span class="line"># The arguments from-ip, from-port, to-ip, to-port are used to communicate</span><br><span class="line"># the old address of the master and the new address of the elected slave</span><br><span class="line"># (now a master).</span><br><span class="line">#</span><br><span class="line"># This script should be resistant to multiple invocations.</span><br><span class="line">#</span><br><span class="line"># Example:</span><br><span class="line">#</span><br><span class="line"># sentinel client-reconfig-script mymaster /var/redis/reconfig.sh</span><br><span class="line"></span><br><span class="line"># SECURITY</span><br><span class="line">#</span><br><span class="line"># By default SENTINEL SET will not be able to change the notification-script</span><br><span class="line"># and client-reconfig-script at runtime. This avoids a trivial security issue</span><br><span class="line"># where clients can set the script to anything and trigger a failover in order</span><br><span class="line"># to get the program executed.</span><br><span class="line"></span><br><span class="line">sentinel deny-scripts-reconfig yes</span><br></pre></td></tr></table></figure>
+
+<h2 id="搭建-Redis-集群"><a href="#搭建-Redis-集群" class="headerlink" title="搭建 Redis 集群"></a>搭建 Redis 集群</h2><ul>
+<li><p>搭建一主两从环境，docker-compose.yml 配置如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3.1'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  sentinel1:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">redis-sentinel-1</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">26379</span><span class="string">:26379</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">redis-sentinel</span> <span class="string">/usr/local/etc/redis/sentinel.conf</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./sentinel1.conf:/usr/local/etc/redis/sentinel.conf</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  sentinel2:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">redis-sentinel-2</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">26380</span><span class="string">:26379</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">redis-sentinel</span> <span class="string">/usr/local/etc/redis/sentinel.conf</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./sentinel2.conf:/usr/local/etc/redis/sentinel.conf</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  sentinel3:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">redis-sentinel-3</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">26381</span><span class="string">:26379</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">redis-sentinel</span> <span class="string">/usr/local/etc/redis/sentinel.conf</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./sentinel3.conf:/usr/local/etc/redis/sentinel.conf</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h2 id="搭建-Sentinel-集群"><a href="#搭建-Sentinel-集群" class="headerlink" title="搭建 Sentinel 集群"></a>搭建 Sentinel 集群</h2><ul>
+<li><p>我们至少需要创建三个 Sentinel 服务，docker-compose.yml 配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">version: &apos;3.1&apos;</span><br><span class="line">services:</span><br><span class="line">  sentinel1:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-sentinel-1</span><br><span class="line">    ports:</span><br><span class="line">      - 26379:26379</span><br><span class="line">    command: redis-sentinel /usr/local/etc/redis/sentinel.conf</span><br><span class="line">    volumes:</span><br><span class="line">      - ./sentinel1.conf:/usr/local/etc/redis/sentinel.conf</span><br><span class="line"></span><br><span class="line">  sentinel2:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-sentinel-2</span><br><span class="line">    ports:</span><br><span class="line">      - 26380:26379</span><br><span class="line">    command: redis-sentinel /usr/local/etc/redis/sentinel.conf</span><br><span class="line">    volumes:</span><br><span class="line">      - ./sentinel2.conf:/usr/local/etc/redis/sentinel.conf</span><br><span class="line"></span><br><span class="line">  sentinel3:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-sentinel-3</span><br><span class="line">    ports:</span><br><span class="line">      - 26381:26379</span><br><span class="line">    command: redis-sentinel /usr/local/etc/redis/sentinel.conf</span><br><span class="line">    volumes:</span><br><span class="line">      - ./sentinel3.conf:/usr/local/etc/redis/sentinel.conf</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h3 id="修改-Sentinel-配置文件"><a href="#修改-Sentinel-配置文件" class="headerlink" title="修改 Sentinel 配置文件"></a>修改 Sentinel 配置文件</h3><ul>
+<li><p>需要三份 sentinel.conf 配置文件，分别为 <code>sentinel1.conf</code>，<code>sentinel2.conf</code>，<code>sentinel3.conf</code>，配置文件内容相同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">port 26379</span><br><span class="line">dir /tmp</span><br><span class="line"># 自定义集群名，其中 127.0.0.1 为 redis-master 的 ip，6379 为 redis-master 的端口，2 为最小投票数（因为有 3 台 Sentinel 所以可以设置成 2）</span><br><span class="line">sentinel monitor mymaster 127.0.0.1 6379 2</span><br><span class="line">sentinel down-after-milliseconds mymaster 30000</span><br><span class="line">sentinel parallel-syncs mymaster 1</span><br><span class="line">sentinel failover-timeout mymaster 180000</span><br><span class="line">sentinel deny-scripts-reconfig yes</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</li>
+</ul>
+<h3 id="查看集群是否生效"><a href="#查看集群是否生效" class="headerlink" title="查看集群是否生效"></a>查看集群是否生效</h3><ul>
+<li><p>进入 Sentinel 容器，使用 Sentinel API 查看监控情况：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it redis-sentinel-1 /bin/bash</span><br><span class="line">redis-cli -p 26379</span><br><span class="line">sentinel master mymaster</span><br><span class="line">sentinel slaves mymaster</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输出如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26379&gt; sentinel master mymaster</span><br><span class="line"> 1) &quot;name&quot;</span><br><span class="line"> 2) &quot;mymaster&quot;</span><br><span class="line"> 3) &quot;ip&quot;</span><br><span class="line"> 4) &quot;127.0.0.1&quot;</span><br><span class="line"> 5) &quot;port&quot;</span><br><span class="line"> 6) &quot;6379&quot;</span><br><span class="line"> 7) &quot;runid&quot;</span><br><span class="line"> 8) &quot;&quot;</span><br><span class="line"> 9) &quot;flags&quot;</span><br><span class="line">10) &quot;s_down,master,disconnected&quot;</span><br><span class="line">11) &quot;link-pending-commands&quot;</span><br><span class="line">12) &quot;3&quot;</span><br><span class="line">13) &quot;link-refcount&quot;</span><br><span class="line">14) &quot;1&quot;</span><br><span class="line">15) &quot;last-ping-sent&quot;</span><br><span class="line">16) &quot;11379728&quot;</span><br><span class="line">17) &quot;last-ok-ping-reply&quot;</span><br><span class="line">18) &quot;11379728&quot;</span><br><span class="line">19) &quot;last-ping-reply&quot;</span><br><span class="line">20) &quot;11379728&quot;</span><br><span class="line">21) &quot;s-down-time&quot;</span><br><span class="line">22) &quot;11349688&quot;</span><br><span class="line">23) &quot;down-after-milliseconds&quot;</span><br><span class="line">24) &quot;30000&quot;</span><br><span class="line">25) &quot;info-refresh&quot;</span><br><span class="line">26) &quot;1571133490553&quot;</span><br><span class="line">27) &quot;role-reported&quot;</span><br><span class="line">28) &quot;master&quot;</span><br><span class="line">29) &quot;role-reported-time&quot;</span><br><span class="line">30) &quot;11379728&quot;</span><br><span class="line">31) &quot;config-epoch&quot;</span><br><span class="line">32) &quot;0&quot;</span><br><span class="line">33) &quot;num-slaves&quot;</span><br><span class="line">34) &quot;0&quot;</span><br><span class="line">35) &quot;num-other-sentinels&quot;</span><br><span class="line">36) &quot;0&quot;</span><br><span class="line">37) &quot;quorum&quot;</span><br><span class="line">38) &quot;2&quot;</span><br><span class="line">39) &quot;failover-timeout&quot;</span><br><span class="line">40) &quot;180000&quot;</span><br><span class="line">41) &quot;parallel-syncs&quot;</span><br><span class="line">42) &quot;1&quot;</span><br><span class="line">127.0.0.1:26379&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/15/ZoomKeeper-Docker-Cluster-ZK伪集群/" rel="next" title="ZoomKeeper Docker Cluster(ZK伪集群)">
+                <i class="fa fa-chevron-left"></i> ZoomKeeper Docker Cluster(ZK伪集群)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Eric Shen</p>
+              <p class="site-description motion-element" itemprop="description">Fake Geeker, Hoops Lover!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-Sentinel-核心配置"><span class="nav-number">2.</span> <span class="nav-text">Redis Sentinel 核心配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建-Redis-集群"><span class="nav-number">3.</span> <span class="nav-text">搭建 Redis 集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建-Sentinel-集群"><span class="nav-number">4.</span> <span class="nav-text">搭建 Sentinel 集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-Sentinel-配置文件"><span class="nav-number">4.1.</span> <span class="nav-text">修改 Sentinel 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看集群是否生效"><span class="nav-number">4.2.</span> <span class="nav-text">查看集群是否生效</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eric Shen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
