@@ -306,14 +306,14 @@
 <blockquote>
 <p>注：本地修改未提交的并不会打包进去</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip --output master.zip master</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip --output master.zip master</span></span><br></pre></td></tr></table></figure>
 
 <p>其中，输出格式为<code>zip</code>，输出文件为<code>master.zip</code>。git 支持 zip 和 tar 两种输出格式。</p>
 <p>打包当前分支当前<code>HEAD</code>的所有文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip --output head.zip HEAD</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip --output head.zip HEAD</span></span><br></pre></td></tr></table></figure>
 
 <p>打包<code>v1.2</code>标签的所有文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip --output v1.2.zip v1.2</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip --output v1.2.zip v1.2</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="2-打包更改的文件"><a href="#2-打包更改的文件" class="headerlink" title="2 打包更改的文件"></a>2 打包更改的文件</h2><p>打包更改文件的原理是：</p>
 <ol>
@@ -322,12 +322,12 @@
 </ol>
 <p>也就是说，<strong>只要能用找出文件列表，就可以 git 打包出来。</strong></p>
 <h3 id="2-1-打包最后修改的文件"><a href="#2-1-打包最后修改的文件" class="headerlink" title="2.1 打包最后修改的文件"></a>2.1 打包最后修改的文件</h3><p>先通过<code>git diff</code>找到最新版本修改过的文件，再压缩打包这些文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD^)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD^)</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="2-2-打包最后两个版本修改的文件"><a href="#2-2-打包最后两个版本修改的文件" class="headerlink" title="2.2 打包最后两个版本修改的文件"></a>2.2 打包最后两个版本修改的文件</h3><p>总共也是 2 个版本：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD~2)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD~2)</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="2-3-打包两个分支之间差别的文件"><a href="#2-3-打包两个分支之间差别的文件" class="headerlink" title="2.3 打包两个分支之间差别的文件"></a>2.3 打包两个分支之间差别的文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> git archive --format=zip -o update.zip HEAD $(git diff --name-only master fix-error)</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-打包两个分支之间差别的文件"><a href="#2-3-打包两个分支之间差别的文件" class="headerlink" title="2.3 打包两个分支之间差别的文件"></a>2.3 打包两个分支之间差别的文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip -o update.zip HEAD $(git diff --name-only master fix-error)</span></span><br></pre></td></tr></table></figure>
 
 <p>如上，打包<code>master</code>和<code>fix-error</code>分支差异的文件。</p>
 <p><strong>参考资料：</strong></p>
@@ -369,6 +369,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/15/Linux安装Dokcer-CE/" rel="prev" title="Linux安装Dokcer CE">
+                Linux安装Dokcer CE <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -445,7 +449,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

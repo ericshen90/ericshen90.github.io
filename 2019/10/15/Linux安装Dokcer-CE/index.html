@@ -79,13 +79,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux安装Dokcer CE">
+<meta property="og:url" content="http://yoursite.com/2019/10/15/Linux安装Dokcer-CE/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png">
+<meta property="og:updated_time" content="2019-10-15T09:22:46.416Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Linux安装Dokcer CE">
+<meta name="twitter:description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png">
 
 
 
@@ -115,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/15/Linux安装Dokcer-CE/">
 
 
 
 
 
-  <title>Hexo</title>
+  <title>Linux安装Dokcer CE | Hexo</title>
   
 
 
@@ -140,8 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,9 +219,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -246,9 +251,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/15/Linux安装Dokcer-CE/" itemprop="url">Linux安装Dokcer CE</a></h1>
+          <h1 class="post-title" itemprop="name headline">Linux安装Dokcer CE</h1>
         
 
         <div class="post-meta">
@@ -298,9 +301,7 @@
       
 
       
-        
-          
-            <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><p>Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.11 开始，则进一步演进为使用 runC 和 containerd。</p>
+        <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><p>Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.11 开始，则进一步演进为使用 runC 和 containerd。</p>
 <p>Docker 在容器的基础上，进行了进一步的封装，从文件系统、网络互联到进程隔离等等，极 大的简化了容器的创建和维护。使得 Docker 技术比虚拟机技术更为轻便、快捷。</p>
 <h3 id="1-2-为什么要使用-Docker"><a href="#1-2-为什么要使用-Docker" class="headerlink" title="1.2 为什么要使用 Docker"></a>1.2 为什么要使用 Docker</h3><p>作为一种新兴的虚拟化方式，Docker 跟传统的虚拟化方式相比具有众多的优势。</p>
 <h4 id="1-2-1-更高效的利用系统资源"><a href="#1-2-1-更高效的利用系统资源" class="headerlink" title="1.2.1 更高效的利用系统资源"></a>1.2.1 更高效的利用系统资源</h4><p>由于容器不需要进行硬件虚拟以及运行完整操作系统等额外开销，Docker 对系统资源的利用 率更高。无论是应用执行速度、内存损耗或者文件存储速度，都要比传统虚拟机技术更高 效。因此，相比虚拟机技术，一个相同配置的主机，往往可以运行更多数量的应用。</p>
@@ -409,8 +410,6 @@
 <li><a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">Docker Compose 官网安装文档</a></li>
 </ol>
 
-          
-        
       
     </div>
     
@@ -427,168 +426,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/git-archive-打包文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/15/git-archive-打包文件/" itemprop="url">git archive 打包文件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T12:13:35+08:00">
-                2019-10-15
-              </time>
+              <a href="/2019/10/15/git-archive-打包文件/" rel="next" title="git archive 打包文件">
+                <i class="fa fa-chevron-left"></i> git archive 打包文件
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>Git 中打包文件是个简单的活，不管是<strong>打包全部文件</strong>作为 release，</p>
-<p>还是<strong>只压缩更改的文件</strong>，一个命令就能搞定。</p>
-<p>而且，打包之后<strong>目录结构完全不变</strong>，这对于覆盖部署来说极其方便。</p>
-<h2 id="1-打包所有文件"><a href="#1-打包所有文件" class="headerlink" title="1 打包所有文件"></a>1 打包所有文件</h2><p>打包<code>master</code>分支的所有文件：</p>
-<blockquote>
-<p>注：本地修改未提交的并不会打包进去</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip --output master.zip master</span></span><br></pre></td></tr></table></figure>
-
-<p>其中，输出格式为<code>zip</code>，输出文件为<code>master.zip</code>。git 支持 zip 和 tar 两种输出格式。</p>
-<p>打包当前分支当前<code>HEAD</code>的所有文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip --output head.zip HEAD</span></span><br></pre></td></tr></table></figure>
-
-<p>打包<code>v1.2</code>标签的所有文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip --output v1.2.zip v1.2</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-打包更改的文件"><a href="#2-打包更改的文件" class="headerlink" title="2 打包更改的文件"></a>2 打包更改的文件</h2><p>打包更改文件的原理是：</p>
-<ol>
-<li>用<code>git diff</code> 找出文件列表；</li>
-<li>用打包命令打包。</li>
-</ol>
-<p>也就是说，<strong>只要能用找出文件列表，就可以 git 打包出来。</strong></p>
-<h3 id="2-1-打包最后修改的文件"><a href="#2-1-打包最后修改的文件" class="headerlink" title="2.1 打包最后修改的文件"></a>2.1 打包最后修改的文件</h3><p>先通过<code>git diff</code>找到最新版本修改过的文件，再压缩打包这些文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD^)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-打包最后两个版本修改的文件"><a href="#2-2-打包最后两个版本修改的文件" class="headerlink" title="2.2 打包最后两个版本修改的文件"></a>2.2 打包最后两个版本修改的文件</h3><p>总共也是 2 个版本：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip -o update.zip HEAD $(git diff --name-only HEAD~2)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-打包两个分支之间差别的文件"><a href="#2-3-打包两个分支之间差别的文件" class="headerlink" title="2.3 打包两个分支之间差别的文件"></a>2.3 打包两个分支之间差别的文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git archive --format=zip -o update.zip HEAD $(git diff --name-only master fix-error)</span></span><br></pre></td></tr></table></figure>
-
-<p>如上，打包<code>master</code>和<code>fix-error</code>分支差异的文件。</p>
-<p><strong>参考资料：</strong></p>
-<ol>
-<li><a href="http://tosbourn.com/using-git-to-create-an-archive-of-changed-files/" target="_blank" rel="noopener">Using Git to create an archive of changed files.</a></li>
-<li><a href="http://blog.miniasp.com/post/2014/04/01/Git-Export-Only-Added-Modified-Files.aspx" target="_blank" rel="noopener">如何讓 Git 僅匯出在特定版本中新增或修改過的檔案</a></li>
-</ol>
-<p>« <a href="https://www.awaimai.com/1448.html" target="_blank" rel="noopener">UMLet 使用教程</a> <a href="https://www.awaimai.com/1513.html" target="_blank" rel="noopener">mysqldiff 实现 MySQL 数据表比较</a> »</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -598,420 +457,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/Linux同步系统时间/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/14/Linux同步系统时间/" itemprop="url">Linux同步系统时间</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T20:20:31+08:00">
-                2019-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>一、修改时区：</p>
-<ul>
-<li>方法 1:</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp  /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法 2： </li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">列出时区：timedatectl list-timezones</span><br><span class="line">设置时区：timedatectl set-timezone Asia/Shanghai</span><br><span class="line">列出时区：timedatectl list-timezones</span><br><span class="line">设置时区：timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法 3：使用  tzselect</li>
-</ul>
-<p>查看是否修改成功：date</p>
-<p>Fri Dec 14 10:48:05 CST 2018</p>
-<p>如果显示 CST 则说明时区设置成功</p>
-<p>CST：中国标准时间（China Standard Time），这个解释可能是针对 RedHat Linux。</p>
-<p>UTC：协调世界时，又称世界标准时间，简称 UTC，从英文国际时间 / 法文协调时间”Universal Time/Temps Cordonn&eacute;” 而来。中国大陆、香港、澳门、台湾、蒙古国、新加坡、马来西亚、菲律宾、澳洲西部的时间与 UTC 的时差均为 + 8，也就是 UTC+8。</p>
-<p>GMT：格林尼治标准时间（旧译格林威治平均时间或格林威治标准时间；英语：Greenwich Mean Time，GMT）是指位于英国伦敦郊区的皇家格林尼治天文台的标准时间，因为本初子午线被定义在通过那里的经线。</p>
-<p>设置完系统时间后, 还需要同步到硬件时钟上</p>
-<p>二、查看和修改时间</p>
-<ul>
-<li><p>显示时间 ：  date</p>
-</li>
-<li><p>修改时间  date -s  时间<br>如：设置当前时间为：2018 年 12 月 10 点 50 分<br><code>date -s  ‘2018-12-14 10:50:00’</code></p>
-</li>
-<li><p>根据网络同步时间<br>使用 ntp 同步标准时间，ntp：网络时间协议（network time protol）<br>安装：<code>yum install ntp</code><br>同步：<code>ntpdate pool.ntp.org</code></p>
-</li>
-</ul>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/解决Ubuntu-18-04-DHCP-ip失效问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/14/解决Ubuntu-18-04-DHCP-ip失效问题/" itemprop="url">解决Ubuntu 18.04 DHCP ip失效问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T20:16:18+08:00">
-                2019-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 clone 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 ip 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
-<p>所以就需要把 <code>/etc/machine-id</code> 给换一下。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">uuidgen | sed 's/-//g' &gt; /etc/machine-id</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
-
-<p>即可。</p>
-<p>参考资料：</p>
-<ul>
-<li><a href="https://www.freedesktop.org/software/systemd/man/networkd.conf.html" target="_blank" rel="noopener">https://www.freedesktop.org/software/systemd/man/networkd.conf.html</a></li>
-<li><a href="https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/14/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T18:13:57+08:00">
-                2019-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1019,6 +469,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1039,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1082,6 +545,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-背景"><span class="nav-number">1.</span> <span class="nav-text">1. 背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-概述"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-为什么要使用-Docker"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 为什么要使用 Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-更高效的利用系统资源"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 更高效的利用系统资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-更快速的启动时间"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 更快速的启动时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-3-一致的运行环境"><span class="nav-number">1.2.3.</span> <span class="nav-text">1.2.3 一致的运行环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-4-持续交付和部署"><span class="nav-number">1.2.4.</span> <span class="nav-text">1.2.4 持续交付和部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-5-更轻松的迁移"><span class="nav-number">1.2.5.</span> <span class="nav-text">1.2.5 更轻松的迁移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-6-更轻松的维护和扩展"><span class="nav-number">1.2.6.</span> <span class="nav-text">1.2.6 更轻松的维护和扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-7-对比传统虚拟机总结"><span class="nav-number">1.2.7.</span> <span class="nav-text">1.2.7 对比传统虚拟机总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-环境"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-卸载旧版本"><span class="nav-number">2.</span> <span class="nav-text">2. 卸载旧版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-安装Docker"><span class="nav-number">3.</span> <span class="nav-text">3. 安装Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-使用-APT-安装"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 使用 APT 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-使用脚本自动安装"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 使用脚本自动安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-查看Docker版本"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 查看Docker版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-systemd启动Docker并配置开机自启"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 systemd启动Docker并配置开机自启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-配置镜像加速器"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 配置镜像加速器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-允许Docker测试示例"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 允许Docker测试示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-查看Docker版本信息"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 查看Docker版本信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-开启Docker-Remote-API"><span class="nav-number">4.</span> <span class="nav-text">4. 开启Docker Remote API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-安装-Docker-Compose"><span class="nav-number">5.</span> <span class="nav-text">5. 安装 Docker Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-运行此命令下载最新版本的Docker-Compose"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 运行此命令下载最新版本的Docker Compose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-给可执行文件添加权限"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 给可执行文件添加权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-验证安装docker-compose-–version"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 验证安装docker-compose –version</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1215,6 +694,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
