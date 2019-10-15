@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Eric Shen Blog">
 <meta property="og:description" content="1. 背景1.1. 概述原来搭建 zookeeper 集群时，都是要一个个去搭建、配置、启动，但总体部署起来还有有点麻烦的，尤其是当你只需要一个测试环境时，就更没有必要大费周章的去搭建 zookeeper 集群了，使用了 Docker 之后，大大简化的集群搭建的步骤，而且还可以重复利用配置文件。 尤其是在测试时，大大的方便了我们搭建集群的时间。 Docker 的安装详见《Linux安装Dokcer">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-15T12:30:01.843Z">
+<meta property="og:updated_time" content="2019-10-15T12:34:56.997Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ZooKeeper Docker Cluster(ZK伪集群)">
 <meta name="twitter:description" content="1. 背景1.1. 概述原来搭建 zookeeper 集群时，都是要一个个去搭建、配置、启动，但总体部署起来还有有点麻烦的，尤其是当你只需要一个测试环境时，就更没有必要大费周章的去搭建 zookeeper 集群了，使用了 Docker 之后，大大简化的集群搭建的步骤，而且还可以重复利用配置文件。 尤其是在测试时，大大的方便了我们搭建集群的时间。 Docker 的安装详见《Linux安装Dokcer">
@@ -281,7 +281,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T17:44:09+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T20:34:13+08:00">
                 2019-10-15
               </time>
             
@@ -369,7 +369,7 @@
 <blockquote>
 <p><code>net</code>为容器所使用的的<code>network</code>，若未通过<code>docker-compose.yml</code>指定，默认为<code>$pwd_dafult,</code></p>
 <p>通过<code>docker inspect zoo1 | grep Networks -A 20</code>可以查看所使用的network名称</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&gt; &quot;Networks&quot;: &#123;</span><br><span class="line">&gt;                 &quot;pseudo_cluster_default&quot;: &#123; # network名称</span><br><span class="line">&gt;                     &quot;IPAMConfig&quot;: null,</span><br><span class="line">&gt;                     &quot;Links&quot;: null,</span><br><span class="line">&gt;                     &quot;Aliases&quot;: [</span><br><span class="line">&gt;                         &quot;ad0acab9b92f&quot;,</span><br><span class="line">&gt;                         &quot;zoo1&quot;</span><br><span class="line">&gt;                     ],</span><br><span class="line">&gt;                     &quot;NetworkID&quot;: &quot;c40c9639a37ebc901369a762ec69dedd137bcdf22a1277811e592790fdaf9f08&quot;,</span><br><span class="line">&gt;                     &quot;EndpointID&quot;: &quot;708837900be7d8fda10d7469791bc58f335e13804718c46267b37a908e3f9140&quot;,</span><br><span class="line">&gt;                     &quot;Gateway&quot;: &quot;172.28.0.1&quot;,</span><br><span class="line">&gt;                     &quot;IPAddress&quot;: &quot;172.28.0.3&quot;,</span><br><span class="line">&gt;                     &quot;IPPrefixLen&quot;: 16,</span><br><span class="line">&gt;                     &quot;IPv6Gateway&quot;: &quot;&quot;,</span><br><span class="line">&gt;                     &quot;GlobalIPv6Address&quot;: &quot;&quot;,</span><br><span class="line">&gt;                     &quot;GlobalIPv6PrefixLen&quot;: 0,</span><br><span class="line">&gt;                     &quot;MacAddress&quot;: &quot;02:42:ac:1c:00:03&quot;,</span><br><span class="line">&gt;                     &quot;DriverOpts&quot;: null</span><br><span class="line">&gt;                 &#125;</span><br><span class="line">&gt;             &#125;</span><br><span class="line">&gt;         &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&gt; &quot;Networks&quot;: &#123;</span><br><span class="line">&gt;              &quot;pseudo_cluster_default&quot;: &#123; # network名称</span><br><span class="line">&gt;                  &quot;IPAMConfig&quot;: null,</span><br><span class="line">&gt;                  &quot;Links&quot;: null,</span><br><span class="line">&gt;                  &quot;Aliases&quot;: [</span><br><span class="line">&gt;                      &quot;ad0acab9b92f&quot;,</span><br><span class="line">&gt;                      &quot;zoo1&quot;</span><br><span class="line">&gt;                  ],</span><br><span class="line">&gt;                  &quot;NetworkID&quot;: &quot;c40c9639a37ebc901369a762ec69dedd137bcdf22a1277811e592790fdaf9f08&quot;,</span><br><span class="line">&gt;                  &quot;EndpointID&quot;: &quot;708837900be7d8fda10d7469791bc58f335e13804718c46267b37a908e3f9140&quot;,</span><br><span class="line">&gt;                  &quot;Gateway&quot;: &quot;172.28.0.1&quot;,</span><br><span class="line">&gt;                  &quot;IPAddress&quot;: &quot;172.28.0.3&quot;,</span><br><span class="line">&gt;                  &quot;IPPrefixLen&quot;: 16,</span><br><span class="line">&gt;                  &quot;IPv6Gateway&quot;: &quot;&quot;,</span><br><span class="line">&gt;                  &quot;GlobalIPv6Address&quot;: &quot;&quot;,</span><br><span class="line">&gt;                  &quot;GlobalIPv6PrefixLen&quot;: 0,</span><br><span class="line">&gt;                  &quot;MacAddress&quot;: &quot;02:42:ac:1c:00:03&quot;,</span><br><span class="line">&gt;                  &quot;DriverOpts&quot;: null</span><br><span class="line">&gt;              &#125;</span><br><span class="line">&gt;          &#125;</span><br><span class="line">&gt;      &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
 </blockquote>
@@ -387,10 +387,10 @@
 </blockquote>
 <ul>
 <li>执行<br><code>zkCli -server 192.192.1.12:2181,192.192.1.12:2182,192.192.1.12:2183</code></li>
-<li>结果<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Connecting to 192.192.1.12:2181,192.192.1.12:2182,192.192.1.12:2183</span><br><span class="line">Welcome to ZooKeeper!</span><br><span class="line">JLine support is enabled</span><br><span class="line">[zk: 192.192.1.12:2181,192.192.1.12:2182,192.192.1.12:2183(CONNECTING) 0] # 连接成功，进入命令行交互模式</span><br></pre></td></tr></table></figure>
-
-</li>
+<li>结果</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Connecting to 192.192.1.12:2181,192.192.1.12:2182,192.192.1.12:2183</span><br><span class="line">Welcome to ZooKeeper!</span><br><span class="line">JLine support is enabled</span><br><span class="line">[zk: 192.192.1.12:2181,192.192.1.12:2182,192.192.1.12:2183(CONNECTING) 0] # 连接成功，进入命令行交互模式</span><br></pre></td></tr></table></figure>
+
 <h3 id="3-4-以docker-exec交互方式进入容器查看"><a href="#3-4-以docker-exec交互方式进入容器查看" class="headerlink" title="3.4 以docker exec交互方式进入容器查看"></a>3.4 以docker exec交互方式进入容器查看</h3><ul>
 <li><p>宿主机内执行<code>docker exec -it zoo1  /bin/bash</code>进入容器，修改<code>container_name</code>为<code>zoo2</code>或<code>zoo3</code>即可查看其他zk节点</p>
 </li>
@@ -416,7 +416,7 @@
 </ul>
 <p><strong>参考资料</strong></p>
 <ol>
-<li><a href="https://docs.docker.com/samples/library/zookeeper/" target="_blank" rel="noopener">Zookeeper 镜像文档</a></li>
+<li>[Zookeeper 镜像文档](</li>
 </ol>
 
       
@@ -442,8 +442,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/15/Linux安装Dokcer-CE/" rel="next" title="Linux安装Dokcer CE">
-                <i class="fa fa-chevron-left"></i> Linux安装Dokcer CE
+              <a href="/2019/10/15/Redis-Sentinel-集群部署/" rel="next" title="Redis Sentinel 集群部署">
+                <i class="fa fa-chevron-left"></i> Redis Sentinel 集群部署
               </a>
             
           </div>
@@ -451,10 +451,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/15/Redis-Sentinel-集群部署/" rel="prev" title="Redis Sentinel 集群部署">
-                Redis Sentinel 集群部署 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
