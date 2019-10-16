@@ -252,6 +252,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/Gitlab持续集成CICD(Gitlab Runner篇)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Shen">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Shen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/16/Gitlab持续集成CICD(Gitlab Runner篇)/" itemprop="url">Gitlab持续集成CI/CD(Gitlab Runner篇)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-16T11:04:16+08:00">
+                2019-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-GitLab-Runner-简介"><a href="#1-GitLab-Runner-简介" class="headerlink" title="1. GitLab Runner 简介"></a>1. GitLab Runner 简介</h1><p>一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。</p>
+<p>GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！</p>
+<p>因为 GitLab Runner 可以安装到不同的机器上，所以在构建任务运行期间并不会影响到 GitLab 的性能</p>
+<h1 id="2-基于-Docker-安装-GitLab-Runner"><a href="#2-基于-Docker-安装-GitLab-Runner" class="headerlink" title="2. 基于 Docker 安装 GitLab Runner"></a>2. 基于 Docker 安装 GitLab Runner</h1><blockquote>
+<p>环境</p>
+</blockquote>
+<ul>
+<li>Ubuntu: 18.04.3 LTS</li>
+<li>Docker: 19.03.3, build a872fc2f86</li>
+<li>Docker-compose: 1.24.0, build 0aa59064</li>
+<li>Harbor: v1.9.0 （可用nexus或者registry替代）</li>
+<li>Gilab中文社区版: twang2218/gitlab-ce-zh:11.1.4</li>
+</ul>
+<h2 id="2-1-准备工作"><a href="#2-1-准备工作" class="headerlink" title="2.1 准备工作"></a>2.1 准备工作</h2><ul>
+<li>创建工作目录 </li>
+</ul>
+<p><code>mkdir -p /usr/local/docker/runner</code></p>
+<ul>
+<li>创建构建目录 </li>
+</ul>
+<p><code>mkdir -p /usr/local/docker/runner/environment</code></p>
+<ul>
+<li><p>下载 <a href="https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html" target="_blank" rel="noopener"><code>jdk-8u152-linux-x64.tar.gz</code> </a></p>
+</li>
+<li><p>下载  <a href="https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.1/apache-maven-3.6.1-bin.tar.gz" target="_blank" rel="noopener"><code>apache-maven-3.6.1-bin.tar.gz</code></a></p>
+</li>
+<li><p><code>cp jdk-8u152-linux-x64.tar.gz /usr/local/docker/runner/environment</code></p>
+</li>
+<li><p><code>cp apache-maven-3.6.1-bin.tar.gz /usr/local/docker/runner/environment</code></p>
+<blockquote>
+<p>可选：若有nexus伺服</p>
+<p>配置<code>maven</code>的<code>setting.xml</code>文件至<code>/usr/local/docker/runner/environment</code>目录下</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="2-2-daemon-json"><a href="#2-2-daemon-json" class="headerlink" title="2.2 daemon.json"></a>2.2 daemon.json</h2><p>在 <code>/usr/local/docker/runner/environment</code> 目录下创建 daemon.json，用于配置镜像加速器和仓库地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo tee /usr/local/docker/runner/environment/daemon.json &lt;&lt;-&apos;EOF&apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [</span><br><span class="line">  &quot;https://registry.docker-cn.com&quot; #docker-cn加速器</span><br><span class="line">  ],</span><br><span class="line">  &quot;insecure-registries&quot;: [</span><br><span class="line">    &quot;192.168.10.133:5000&quot;   #harbor仓库地址</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>推荐配置阿里云镜像加速器，可参考<a href="[https://ericshen.coding.me/2019/10/15/Linux%E5%AE%89%E8%A3%85Dokcer-CE/](https://ericshen.coding.me/2019/10/15/Linux安装Dokcer-CE/)">Linux安装Dokcer CE 3.5节</a></p>
+</blockquote>
+<h2 id="2-3-Dockerfile"><a href="#2-3-Dockerfile" class="headerlink" title="2.3 Dockerfile"></a>2.3 Dockerfile</h2><p>在<code>/usr/local/docker/runner/environment</code> 目录下创建 <code>Dockerfile</code></p>
+<p><code>vim /usr/local/docker/runner/environment/Dockerfile</code></p>
+<p><strong>内容如下</strong></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> gitlab/gitlab-runner</span><br><span class="line"><span class="keyword">MAINTAINER</span> EricShen &lt;ahsbt@<span class="number">126</span>.com&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改软件源</span></span><br><span class="line"><span class="keyword">RUN</span> echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse' &gt; /etc/apt/sources.list &amp;&amp; \</span><br><span class="line">    echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse' &gt;&gt; /etc/apt/sources.list &amp;&amp; \</span><br><span class="line">    echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse' &gt;&gt; /etc/apt/sources.list &amp;&amp; \</span><br><span class="line">    echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse' &gt;&gt; /etc/apt/sources.list &amp;&amp; \</span><br><span class="line">    apt-get update -y &amp;&amp; \</span><br><span class="line">    apt-get clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过官方脚本安装 Docker</span></span><br><span class="line"><span class="keyword">RUN</span> curl -fsSL get.docker.com -o get-docker.sh &amp;&amp; \</span><br><span class="line">    sh get-docker.sh --mirror Aliyun</span><br><span class="line"><span class="keyword">COPY</span> daemon.json /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Docker Compose</span></span><br><span class="line"><span class="keyword">WORKDIR</span> /usr/local/bin</span><br><span class="line"><span class="keyword">RUN</span> wget https://raw.githubusercontent.com/topsale/resources/master/docker/docker-compose</span><br><span class="line"><span class="keyword">RUN</span> chmod +x docker-compose</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Java</span></span><br><span class="line"><span class="keyword">RUN</span> mkdir -p /usr/local/java</span><br><span class="line"><span class="keyword">WORKDIR</span> /usr/local/java</span><br><span class="line"><span class="keyword">COPY</span> jdk-8u152-linux-x64.tar.gz /usr/local/java</span><br><span class="line"><span class="keyword">RUN</span> tar -zxvf jdk-8u152-linux-x64.tar.gz &amp;&amp; \</span><br><span class="line">    rm -fr jdk-8u152-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Maven</span></span><br><span class="line"><span class="keyword">RUN</span> mkdir -p /usr/local/maven</span><br><span class="line"><span class="keyword">WORKDIR</span> /usr/local/maven</span><br><span class="line"><span class="comment"># 若未下载maven，此处可下载</span></span><br><span class="line"><span class="comment"># RUN wget https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.6.1/apache-maven-3.6.1-bin.tar.gz</span></span><br><span class="line"><span class="keyword">COPY</span> apache-maven-3.6.1-bin.tar.gz /usr/local/maven</span><br><span class="line"><span class="keyword">RUN</span> tar -zxvf apache-maven-3.6.1-bin.tar.gz &amp;&amp; \</span><br><span class="line">    rm -fr apache-maven-3.6.1-bin.tar.gz</span><br><span class="line"><span class="comment"># 可选：配置maven的setting.xml</span></span><br><span class="line"><span class="comment"># COPY settings.xml /usr/local/maven/apache-maven-3.6.1/conf/settings.xml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/local/java/jdk1.<span class="number">8.0</span>_152</span><br><span class="line"><span class="keyword">ENV</span> MAVEN_HOME /usr/local/maven/apache-maven-<span class="number">3.6</span>.<span class="number">1</span></span><br><span class="line"><span class="keyword">ENV</span> PATH $PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin</span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span> /</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-4-docker-compose-yml"><a href="#2-4-docker-compose-yml" class="headerlink" title="2.4 docker-compose.yml"></a>2.4 docker-compose.yml</h2><p>在 <code>/usr/local/docker/runner</code> 目录下创建 <code>docker-compose.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3.1'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  gitlab-runner:</span></span><br><span class="line"><span class="attr">    build:</span> <span class="string">environment</span> <span class="comment">#指定构建路径</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">gitlab-runner</span></span><br><span class="line"><span class="attr">    privileged:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./config:/etc/gitlab-runner</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-5-构建镜像"><a href="#2-5-构建镜像" class="headerlink" title="2.5 构建镜像"></a>2.5 构建镜像</h2><blockquote>
+<p>确认所需文件</p>
+</blockquote>
+<p><code>ls /usr/local/docker/runner</code> 有</p>
+<ul>
+<li><code>docker-compose.yml</code>文件</li>
+</ul>
+<p><code>ls /usr/local/docker/runner/environment</code>有</p>
+<ul>
+<li><p><code>apache-maven-3.6.1-bin.tar.gz</code></p>
+</li>
+<li><p><code>daemon.json</code>  </p>
+</li>
+<li><p><code>Dockerfile</code>  </p>
+</li>
+<li><p><code>jdk-8u152-linux-x64.tar.gz</code>  </p>
+</li>
+<li><p><code>setting.xml</code></p>
+</li>
+</ul>
+<p><strong>构建镜像</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/docker/runner</span><br><span class="line">docker-compose build</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...省略...</span><br><span class="line">Successfully build xxxxxxx</span><br><span class="line">Successfully tagged runner_gitlab-runner # 构建成功</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker images #查看镜像</span><br><span class="line">REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">runner_gitlab-runner                     latest              74b8379cca15        41 hours ago        1.37GB</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-注册-Runner"><a href="#3-注册-Runner" class="headerlink" title="3. 注册 Runner"></a>3. 注册 Runner</h1><p>首先获取<code>Gitlab项目路径&gt;&gt;设置&gt;&gt;CI/CD&gt;&gt;Runner&gt;&gt;Setup a specific Runner manually</code>下<code>Gitlab</code>地址和<code>token</code></p>
+<ul>
+<li>Gitlab中文社区版</li>
+</ul>
+<p><img src="https://i.loli.net/2019/10/16/vFhE859ZPDTlSc6.png" alt="Gitlab中文社区版"></p>
+<ul>
+<li>英文原版Gitlab社区版</li>
+</ul>
+<p><img src="https://i.loli.net/2019/10/16/YgnpH2NKRLmi8ac.png" alt="英文原版Gitlab社区版"></p>
+<p>然后到服务器中执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 执行</span></span><br><span class="line">docker <span class="built_in">exec</span> -it gitlab-runner gitlab-runner register </span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入 GitLab 地址</span></span><br><span class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):</span><br><span class="line">http://192.192.1.12/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入 GitLab Token</span></span><br><span class="line">Please enter the gitlab-ci token <span class="keyword">for</span> this runner:</span><br><span class="line">PgC_sRjg3qZgrU4WGvjY</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入 Runner 的描述</span></span><br><span class="line">Please enter the gitlab-ci description <span class="keyword">for</span> this runner:</span><br><span class="line"><span class="comment"># 可以为空</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置 Tag，可以用于指定在构建规定的 tag 时触发 ci</span></span><br><span class="line">Please enter the gitlab-ci tags <span class="keyword">for</span> this runner (comma separated):</span><br><span class="line">deploy</span><br><span class="line"></span><br><span class="line">Registering runner... succeeded                     runner=PgC_sRjg</span><br><span class="line"><span class="comment"># 选择 runner 执行器，这里我们选择的是 shell</span></span><br><span class="line">Please enter the executor: virtualbox, docker+machine, parallels, shell, ssh, docker-ssh+machine, kubernetes, docker, docker-ssh:</span><br><span class="line">shell</span><br><span class="line"></span><br><span class="line">Runner registered successfully. Feel free to start it, but <span class="keyword">if</span> it<span class="string">'s running already the config should be automatically reloaded!</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="4-使用-Runner"><a href="#4-使用-Runner" class="headerlink" title="4. 使用 Runner"></a>4. 使用 Runner</h1><p>在项目工程下编写 <code>.gitlab-ci.yml</code> 配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">stages:</span><br><span class="line">  - install_deps</span><br><span class="line">  - test</span><br><span class="line">  - build</span><br><span class="line">  - deploy_test</span><br><span class="line">  - deploy_production</span><br><span class="line"></span><br><span class="line">cache:</span><br><span class="line">  key: $&#123;CI_BUILD_REF_NAME&#125;</span><br><span class="line">  paths:</span><br><span class="line">    - node_modules/</span><br><span class="line">    - dist/</span><br><span class="line"></span><br><span class="line"># 安装依赖</span><br><span class="line">install_deps:</span><br><span class="line">  stage: install_deps</span><br><span class="line">  only:</span><br><span class="line">    - develop</span><br><span class="line">    - master</span><br><span class="line">  script:</span><br><span class="line">    - npm install</span><br><span class="line"></span><br><span class="line"># 运行测试用例</span><br><span class="line">test:</span><br><span class="line">  stage: test</span><br><span class="line">  only:</span><br><span class="line">    - develop</span><br><span class="line">    - master</span><br><span class="line">  script:</span><br><span class="line">    - npm run test</span><br><span class="line"></span><br><span class="line"># 编译</span><br><span class="line">build:</span><br><span class="line">  stage: build</span><br><span class="line">  only:</span><br><span class="line">    - develop</span><br><span class="line">    - master</span><br><span class="line">  script:</span><br><span class="line">    - npm run clean</span><br><span class="line">    - npm run build:client</span><br><span class="line">    - npm run build:server</span><br><span class="line"></span><br><span class="line"># 部署测试服务器</span><br><span class="line">deploy_test:</span><br><span class="line">  stage: deploy_test</span><br><span class="line">  only:</span><br><span class="line">    - develop</span><br><span class="line">  script:</span><br><span class="line">    - pm2 delete app || true</span><br><span class="line">    - pm2 start app.js --name app</span><br><span class="line"></span><br><span class="line"># 部署生产服务器</span><br><span class="line">deploy_production:</span><br><span class="line">  stage: deploy_production</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br><span class="line">  script:</span><br><span class="line">    - bash scripts/deploy/deploy.sh</span><br></pre></td></tr></table></figure>
+
+<p>上面的配置把一次 Pipeline 分成五个阶段：</p>
+<ul>
+<li>安装依赖(install_deps)</li>
+<li>运行测试(test)</li>
+<li>编译(build)</li>
+<li>部署测试服务器(deploy_test)</li>
+<li>部署生产服务器(deploy_production)</li>
+</ul>
+<p><strong>注意：</strong> 设置 Job.only 后，只有当 develop 分支和 master 分支有提交的时候才会触发相关的 Jobs。</p>
+<p>节点说明：</p>
+<ul>
+<li>stages：定义构建阶段，这里只有一个阶段 deploy</li>
+<li>deploy：构建阶段 deploy 的详细配置也就是任务配置</li>
+<li>script：需要执行的 shell 脚本</li>
+<li>only：这里的 master 指在提交到 master 时执行</li>
+<li>tags：与注册 runner 时的 tag 匹配</li>
+</ul>
+<h1 id="5-测试集成效果"><a href="#5-测试集成效果" class="headerlink" title="5. 测试集成效果"></a>5. 测试集成效果</h1><p>所有操作完成后 <code>push</code> 代码到服务器，Gitlab中查看是否成功：</p>
+<p><img src="https://i.loli.net/2019/10/16/8mq5QSo4YNl2h6F.png" alt="image.png"></p>
+<h1 id="6-其它命令"><a href="#6-其它命令" class="headerlink" title="6. 其它命令"></a>6. 其它命令</h1><ul>
+<li><p>删除注册信息<br><code>docker exec -it gitlab-runner gitlab-runner --name &quot;名称&quot;</code></p>
+</li>
+<li><p>删除所有注册信息</p>
+<p><code>docker exec -it gitlab-runner gitlab-runner  unregister --all-runners</code></p>
+</li>
+<li><p>查看注册列表<br><code>docker exec -it gitlab-runner gitlab-runner list</code></p>
+</li>
+</ul>
+<h1 id="附：项目配置-Dockerfile-案例"><a href="#附：项目配置-Dockerfile-案例" class="headerlink" title="附：项目配置 Dockerfile 案例"></a>附：项目配置 Dockerfile 案例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">FROM openjdk:8-jre</span><br><span class="line">MAINTAINER EricShen &lt;ahsbt@126.com&gt;</span><br><span class="line"></span><br><span class="line">ENV APP_VERSION 1.0.0-SNAPSHOT</span><br><span class="line">ENV DOCKERIZE_VERSION v0.6.1</span><br><span class="line">RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \</span><br><span class="line">    &amp;&amp; tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \</span><br><span class="line">    &amp;&amp; rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz</span><br><span class="line"></span><br><span class="line">RUN mkdir /app</span><br><span class="line"></span><br><span class="line">COPY app-$APP_VERSION.jar /app/app.jar</span><br><span class="line">ENTRYPOINT [&quot;dockerize&quot;, &quot;-timeout&quot;, &quot;5m&quot;, &quot;-wait&quot;, &quot;tcp://192.192.1.12:3306&quot;, &quot;java&quot;, &quot;-Djava.security.egd=file:/dev/./urandom&quot;, &quot;-jar&quot;, &quot;/app/app.jar&quot;]</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/15/ZooKeeper-Docker-Cluster-ZK伪集群/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -418,10 +658,6 @@
 <li><code>ZOO_SYNC_LIMIT</code> 默认 2. ZooKeeper 的 <code>syncLimit</code></li>
 <li><code>ZOO_MAX_CLIENT_CNXNS</code> 默认 60. ZooKeeper 的 <code>maxClientCnxns</code></li>
 </ul>
-<p><strong>参考资料</strong></p>
-<ol>
-<li>[Zookeeper 镜像文档](</li>
-</ol>
 
           
         
@@ -763,7 +999,7 @@
 
 <h3 id="3-4-systemd启动Docker并配置开机自启"><a href="#3-4-systemd启动Docker并配置开机自启" class="headerlink" title="3.4 systemd启动Docker并配置开机自启"></a>3.4 systemd启动Docker并配置开机自启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker.service</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> docker.service</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-5-配置镜像加速器"><a href="#3-5-配置镜像加速器" class="headerlink" title="3.5 配置镜像加速器"></a>3.5 配置镜像加速器</h3><p>由于国内的网络原因需要使用阿里的镜像加速器, 登录自己的阿里云官网，找到镜像加速器，根据提示进行配置</p>
+<h3 id="3-5-配置镜像加速器"><a href="#3-5-配置镜像加速器" class="headerlink" title="3.5 配置镜像加速器"></a>3.5 配置镜像加速器</h3><p>由于国内的网络原因需要使用阿里的镜像加速器, 登录自己的阿里云官网，找到<a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors" target="_blank" rel="noopener">镜像加速器</a>，根据提示进行配置</p>
 <p><img src="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png" alt></p>
 <h3 id="3-6-允许Docker测试示例"><a href="#3-6-允许Docker测试示例" class="headerlink" title="3.6 允许Docker测试示例"></a>3.6 允许Docker测试示例</h3><p><code>docker run hello-world</code></p>
 <p><strong>输出如下</strong></p>
@@ -805,7 +1041,7 @@
 <p>参考资料:</p>
 </blockquote>
 <ol>
-<li>Docker 官方安装文档](<a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">https://docs.docker.com/install/linux/docker-ce/centos/</a>)</li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">Docker 官方安装文档</a></li>
 <li><a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">Docker Compose 官网安装文档</a></li>
 </ol>
 
@@ -963,7 +1199,6 @@
 <li><a href="http://tosbourn.com/using-git-to-create-an-archive-of-changed-files/" target="_blank" rel="noopener">Using Git to create an archive of changed files.</a></li>
 <li><a href="http://blog.miniasp.com/post/2014/04/01/Git-Export-Only-Added-Modified-Files.aspx" target="_blank" rel="noopener">如何讓 Git 僅匯出在特定版本中新增或修改過的檔案</a></li>
 </ol>
-<p>« <a href="https://www.awaimai.com/1448.html" target="_blank" rel="noopener">UMLet 使用教程</a> <a href="https://www.awaimai.com/1513.html" target="_blank" rel="noopener">mysqldiff 实现 MySQL 数据表比较</a> »</p>
 
           
         
@@ -1232,15 +1467,189 @@
       
         
           
-            <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 clone 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 ip 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
+            <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 <code>clone</code> 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 <code>ip</code> 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
 <p>所以就需要把 <code>/etc/machine-id</code> 给换一下。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">uuidgen | sed 's/-//g' &gt; /etc/machine-id</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">uuidgen | sed <span class="string">'s/-//g'</span> &gt; /etc/machine-id</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
 
 <p>即可。</p>
 <p>参考资料：</p>
 <ul>
 <li><a href="https://www.freedesktop.org/software/systemd/man/networkd.conf.html" target="_blank" rel="noopener">https://www.freedesktop.org/software/systemd/man/networkd.conf.html</a></li>
 <li><a href="https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/456763/new-ip-address-whereas-dhcp-lease-time-not-out</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/解决Linux下Harbor开机启动失败/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Shen">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Shen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/14/解决Linux下Harbor开机启动失败/" itemprop="url">解决Linux下Harbor开机启动失败</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T18:39:58+08:00">
+                2019-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Harbor 是一个用于存储和分发 Docker 镜像的企业级 Registry 服务器，通过添加一些企业必需的功能特性，例如安全、标识和管理等，扩展了开源 Docker Distribution。作为一个企业级私有 Registry 服务器，Harbor 提供了更好的性能和安全。提升用户使用 Registry 构建和运行环境传输镜像的效率。Harbor 支持安装在多个 Registry 节点的镜像资源复制，镜像全部保存在私有 Registry 中， 确保数据和知识产权在公司内部网络中管控。另外，Harbor 也提供了高级的安全特性，诸如用户管理，访问控制和活动审计等。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装参见官方文档：<a href="https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md" target="_blank" rel="noopener">Harbor - Installation and Configuration Guide</a>，  </p>
+<p>修改 <code>harbor.yml</code> 时，需要注意的有：</p>
+<ol>
+<li>使用 https 时，要自己生成证书，然后在 <code>harbor.yml</code> 里配置好证书的路径。<ul>
+<li>客户端也需要安装你生成的这个证书，否则会报错。（所以证书要做好备份）</li>
+<li>详见 <a href="https://docs.docker.com/registry/insecure/" target="_blank" rel="noopener">Docker - Use self-signed certificates</a></li>
+</ul>
+</li>
+<li><code>data_volume</code> 可以指定为 <code>/data/harbor</code>，然后要定期备份这个文件夹。（或者直接在新机器上装个 harbor，用 harbor 自带的仓库复制功能做定期备份。）</li>
+<li>企业的话，可能还需要配置 ldap 集成验证。</li>
+</ol>
+<p>然后赋权<code>sudo chomod +x ./install.sh</code></p>
+<p>执行 <code>sudo ./install.sh</code> 安装 harbor（貌似必须用 sudo，因为生成出来的配置文件的 owner 都是 root，而且权限设得很严格。）  </p>
+<p>安装完成后会自动启动 harbor.</p>
+<h2 id="自动启动"><a href="#自动启动" class="headerlink" title="自动启动"></a>自动启动</h2><p>查看 harbor 目录下的自动生成的 <code>docker-compose.yml</code> 会发现，所有的 <code>containers</code> 都配置了 <code>restart: always</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2.3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  log:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">goharbor/harbor-log:v1.9.0</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">harbor-log</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="string">·····省略·······</span></span><br><span class="line">      </span><br><span class="line"><span class="attr">  proxy:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">goharbor/nginx-photon:v1.9.0</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    cap_drop:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">ALL</span></span><br><span class="line"><span class="attr">    cap_add:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">CHOWN</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">SETGID</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">SETUID</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">NET_BIND_SERVICE</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./common/config/nginx:/etc/nginx:z</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">harbor</span></span><br><span class="line"><span class="attr">    dns_search:</span> <span class="string">.</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">9090</span><span class="string">:8080</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">registry</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">core</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">portal</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">log</span></span><br><span class="line"><span class="attr">    logging:</span></span><br><span class="line"><span class="attr">      driver:</span> <span class="string">"syslog"</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        syslog-address:</span> <span class="string">"tcp://127.0.0.1:1514"</span></span><br><span class="line"><span class="attr">        tag:</span> <span class="string">"proxy"</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line"><span class="attr">  harbor:</span></span><br><span class="line"><span class="attr">    external:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>这表示所有的容器在<strong>意外关闭</strong>后都会自动重启，比如 <code>docker</code> 重启或服务器重启。（手动 <code>stop</code> 不会自动重启）</p>
+<p>但是我在手动运行 <code>docker-compose up -d</code>，然后重启服务器后，发现有几个 container 并没有自动重启：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ryan@ryan-pc ~]$ docker ps -a</span><br><span class="line">CONTAINER ID        IMAGE                                               COMMAND                  CREATED             STATUS                             PORTS                       NAMES</span><br><span class="line">f30d802002a4        goharbor/nginx-photon:v1.8.1                        &quot;nginx -g &apos;daemon of…&quot;   13 hours ago        Exited (128) 27 minutes ago        0.0.0.0:80-&gt;80/tcp          nginx</span><br><span class="line">21472ce8a993        goharbor/harbor-portal:v1.8.1                       &quot;nginx -g &apos;daemon of…&quot;   13 hours ago        Exited (128) 27 minutes ago        80/tcp                      harbor-portal</span><br><span class="line">5d866bb17c58        goharbor/harbor-jobservice:v1.8.1                   &quot;/harbor/start.sh&quot;       13 hours ago        Exited (137) 26 minutes ago                                    harbor-jobservice</span><br><span class="line">0cf0f93b5a87        goharbor/harbor-core:v1.8.1                         &quot;/harbor/start.sh&quot;       13 hours ago        Up 11 seconds (health: starting)                               harbor-core</span><br><span class="line">cba280d9b945        goharbor/redis-photon:v1.8.1                        &quot;docker-entrypoint.s…&quot;   13 hours ago        Exited (137) 26 minutes ago        6379/tcp                    redis</span><br><span class="line">473e46d1f746        goharbor/harbor-registryctl:v1.8.1                  &quot;/harbor/start.sh&quot;       13 hours ago        Up 11 seconds (health: starting)                               registryctl</span><br><span class="line">51f105f1691d        goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1   &quot;/entrypoint.sh /etc…&quot;   13 hours ago        Exited (137) 26 minutes ago        5000/tcp                    registry</span><br><span class="line">c41594ec7779        goharbor/harbor-db:v1.8.1                           &quot;/entrypoint.sh post…&quot;   13 hours ago        Up 11 seconds (health: starting)   5432/tcp                    harbor-db</span><br><span class="line">713bd4961772        goharbor/harbor-log:v1.8.1                          &quot;/bin/sh -c /usr/loc…&quot;   13 hours ago        Up 11 seconds (health: starting)   127.0.0.1:1514-&gt;10514/tcp   harbor-log</span><br></pre></td></tr></table></figure>
+
+<p>可以看到下列五个容器都处于 Exited 状态：</p>
+<ol>
+<li><code>goharbor/nginx-photon:v1.8.1</code></li>
+<li><code>goharbor/harbor-portal:v1.8.1</code></li>
+<li><code>goharbor/harbor-jobservice:v1.8.1</code></li>
+<li><code>goharbor/redis-photon:v1.8.1</code></li>
+<li><code>goharbor/registry-photon:v2.7.1-patch-2819-v1.8.1</code></li>
+</ol>
+<p>搜索发现有人提过这个 <code>issue</code>: <a href="https://github.com/goharbor/harbor/issues/7008" target="_blank" rel="noopener">https://github.com/goharbor/harbor/issues/7008</a></p>
+<p>于是尝试将 harbor 配成<strong><code>systemd</code></strong>的服务，添加配置文件 <code>/lib/systemd/system/harbor.service</code>，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Harbor</span><br><span class="line">After=docker.service systemd-networkd.service systemd-resolved.service</span><br><span class="line">Requires=docker.service</span><br><span class="line">Documentation=http://github.com/vmware/harbor</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">ExecStart=/usr/local/bin/docker-compose -f $harbor_path/harbor/docker-compose.yml up</span><br><span class="line">ExecStop=/usr/local/bin/docker-compose -f $harbor_path/harbor/docker-compose.yml down</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>其中<strong><code>$harbor_path</code></strong> 换成自己的 harbor 安装路径。  </p>
+<p>还有 docker-compose 的绝对路径，请通过 <code>which docker-compose</code> 查看，默认路径为<code>/usr/local/bin/docker-compose</code>。</p>
+<p>此时通过<code>docker-compose down</code>关闭harbor</p>
+<p>然后通过systemd设置为开机启动并启动该项服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable harbor</span><br><span class="line">sudo systemctl start harbor</span><br></pre></td></tr></table></figure>
+
+<p>若提示找不到<code>harbor.servce</code>，则执行<code>systemctl daemon-reload</code>重启<code>systemd</code>服务</p>
+<p><code>systemctl status harobr</code>查看 <code>harbor.service</code> 的情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">● harbor.service - Harbor</span><br><span class="line">   Loaded: loaded (/lib/systemd/system/harbor.service; enabled; vendor preset: enabled)</span><br><span class="line">   Active: active (running) since Mon 2019-10-14 18:55:28 CST; 49s ago</span><br><span class="line">     Docs: http://github.com/vmware/harbor</span><br><span class="line"> Main PID: 15706 (docker-compose)</span><br><span class="line">    Tasks: 12 (limit: 2312)</span><br><span class="line">   CGroup: /system.slice/harbor.service</span><br><span class="line">           ├─15706 /usr/local/bin/docker-compose -f /usr/local/harbor/harbor/docker-compose.yml up</span><br><span class="line">           └─15717 /usr/local/bin/docker-compose -f /usr/local/harbor/harbor/docker-compose.yml up</span><br><span class="line"></span><br><span class="line">.....省略.....</span><br></pre></td></tr></table></figure>
+
+<p>状态为：<code>active</code></p>
+<p>重启再看，发现 harbor 容器组终于全部 up 了：</p>
+<p><code>docker-compose ps</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">      Name                     Command                  State                 Ports</span><br><span class="line">---------------------------------------------------------------------------------------------</span><br><span class="line">harbor-core         /harbor/harbor_core              Up (healthy)</span><br><span class="line">harbor-db           /docker-entrypoint.sh            Up (healthy)   5432/tcp</span><br><span class="line">harbor-jobservice   /harbor/harbor_jobservice  ...   Up (healthy)</span><br><span class="line">harbor-log          /bin/sh -c /usr/local/bin/ ...   Up (healthy)   127.0.0.1:1514-&gt;10514/tcp</span><br><span class="line">harbor-portal       nginx -g daemon off;             Up (healthy)   8080/tcp</span><br><span class="line">nginx               nginx -g daemon off;             Up (healthy)   0.0.0.0:9090-&gt;8080/tcp</span><br><span class="line">redis               redis-server /etc/redis.conf     Up (healthy)   6379/tcp</span><br><span class="line">registry            /entrypoint.sh /etc/regist ...   Up (healthy)   5000/tcp</span><br><span class="line">registryctl         /harbor/start.sh                 Up (healthy)</span><br></pre></td></tr></table></figure>
+
+<p>Web端Harbor也可正常访问:</p>
+<p><img src="https://i.loli.net/2019/10/14/MFGgetjQuJ5NPCA.png" alt="image.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://github.com/goharbor/harbor/issues/7008" target="_blank" rel="noopener">Harbor containers fail to start on docker startup</a></li>
+<li><a href="https://www.cnblogs.com/kirito-c/p/10331598.html" target="_blank" rel="noopener">通过 systemctl 设置自定义 Service</a></li>
 </ul>
 
           
@@ -1457,7 +1866,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1470,7 +1879,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

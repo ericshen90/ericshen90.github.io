@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Eric Shen Blog">
 <meta property="og:description" content="解决Ubuntu 18.04 DHCP ip失效问题今天在准备弄一个虚拟机集群，自然是装好一个，然后 clone 成三份。但是有一个问题，clone 的时候虽然选择了更换 MAC 地址，但是 起来之后发现 ip 地址还是没变。原来是 systemd-networkd 的老 bug。它不是根据 MAC 地址来决定是否换 IP，而是根据 /etc/machine-id 来计算出来一个值，如果这个值发生">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-15T09:42:55.301Z">
+<meta property="og:updated_time" content="2019-10-16T02:10:25.582Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决Ubuntu 18.04 DHCP ip失效问题">
 <meta name="twitter:description" content="解决Ubuntu 18.04 DHCP ip失效问题今天在准备弄一个虚拟机集群，自然是装好一个，然后 clone 成三份。但是有一个问题，clone 的时候虽然选择了更换 MAC 地址，但是 起来之后发现 ip 地址还是没变。原来是 systemd-networkd 的老 bug。它不是根据 MAC 地址来决定是否换 IP，而是根据 /etc/machine-id 来计算出来一个值，如果这个值发生">
@@ -320,9 +320,9 @@
       
 
       
-        <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 clone 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 ip 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
+        <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 <code>clone</code> 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 <code>ip</code> 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
 <p>所以就需要把 <code>/etc/machine-id</code> 给换一下。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">uuidgen | sed 's/-//g' &gt; /etc/machine-id</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line">uuidgen | sed <span class="string">'s/-//g'</span> &gt; /etc/machine-id</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
 
 <p>即可。</p>
 <p>参考资料：</p>
@@ -360,8 +360,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/14/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/10/14/解决Linux下Harbor开机启动失败/" rel="next" title="解决Linux下Harbor开机启动失败">
+                <i class="fa fa-chevron-left"></i> 解决Linux下Harbor开机启动失败
               </a>
             
           </div>
@@ -451,7 +451,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -464,7 +464,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

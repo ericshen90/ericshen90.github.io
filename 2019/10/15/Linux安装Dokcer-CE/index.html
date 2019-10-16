@@ -88,7 +88,7 @@
 <meta property="og:description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png">
-<meta property="og:updated_time" content="2019-10-15T09:43:07.757Z">
+<meta property="og:updated_time" content="2019-10-16T05:29:33.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux安装Dokcer CE">
 <meta name="twitter:description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
@@ -385,7 +385,7 @@
 
 <h3 id="3-4-systemd启动Docker并配置开机自启"><a href="#3-4-systemd启动Docker并配置开机自启" class="headerlink" title="3.4 systemd启动Docker并配置开机自启"></a>3.4 systemd启动Docker并配置开机自启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker.service</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> docker.service</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-5-配置镜像加速器"><a href="#3-5-配置镜像加速器" class="headerlink" title="3.5 配置镜像加速器"></a>3.5 配置镜像加速器</h3><p>由于国内的网络原因需要使用阿里的镜像加速器, 登录自己的阿里云官网，找到镜像加速器，根据提示进行配置</p>
+<h3 id="3-5-配置镜像加速器"><a href="#3-5-配置镜像加速器" class="headerlink" title="3.5 配置镜像加速器"></a>3.5 配置镜像加速器</h3><p>由于国内的网络原因需要使用阿里的镜像加速器, 登录自己的阿里云官网，找到<a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors" target="_blank" rel="noopener">镜像加速器</a>，根据提示进行配置</p>
 <p><img src="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png" alt></p>
 <h3 id="3-6-允许Docker测试示例"><a href="#3-6-允许Docker测试示例" class="headerlink" title="3.6 允许Docker测试示例"></a>3.6 允许Docker测试示例</h3><p><code>docker run hello-world</code></p>
 <p><strong>输出如下</strong></p>
@@ -427,7 +427,7 @@
 <p>参考资料:</p>
 </blockquote>
 <ol>
-<li>Docker 官方安装文档](<a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">https://docs.docker.com/install/linux/docker-ce/centos/</a>)</li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">Docker 官方安装文档</a></li>
 <li><a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">Docker Compose 官网安装文档</a></li>
 </ol>
 
@@ -551,7 +551,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -564,7 +564,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
