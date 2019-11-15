@@ -252,6 +252,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/13/Linux同步系统时间/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Eric Shen">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Shen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/13/Linux同步系统时间/" itemprop="url">Linux同步系统时间</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-13T20:20:31+08:00">
+                2018-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一、修改时区：</p>
+<ul>
+<li>方法 1:</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法 2： </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">timedatectl list-timezones <span class="comment">#列出时区</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-timezone Asia/Shanghai <span class="comment">#设置时区为亚洲/上海</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法 3：使用  tzselect</li>
+</ul>
+<p>查看是否修改成功：<code>date</code></p>
+<p>Fri Dec 14 10:48:05 CST 2018</p>
+<p>如果显示 CST 则说明时区设置成功</p>
+<blockquote>
+<p>CST：中国标准时间（China Standard Time），这个解释可能是针对 RedHat Linux。</p>
+</blockquote>
+<blockquote>
+<p>UTC：协调世界时，又称世界标准时间，简称 UTC，从英文国际时间 / 法文协调时间”Universal Time/Temps Cordonn&eacute;” 而来。中国大陆、香港、澳门、台湾、蒙古国、新加坡、马来西亚、菲律宾、澳洲西部的时间与 UTC 的时差均为 + 8，也就是 UTC+8。</p>
+</blockquote>
+<blockquote>
+<p>GMT：格林尼治标准时间（旧译格林威治平均时间或格林威治标准时间；英语：Greenwich Mean Time，GMT）是指位于英国伦敦郊区的皇家格林尼治天文台的标准时间，因为本初子午线被定义在通过那里的经线。</p>
+</blockquote>
+<p>设置完系统时间后, 还需要同步到硬件时钟上</p>
+<p>二、查看和修改时间</p>
+<ul>
+<li><p>显示时间: <code>date</code></p>
+</li>
+<li><p>修改时间: <code>date -s  时间</code><br>如：设置当前时间为：2018 年 12 月 10 点 50 分<br><code>date -s  ‘2018-12-14 10:50:00’</code></p>
+</li>
+<li><p>根据网络同步时间<br>使用 ntp 同步标准时间，ntp：网络时间协议（network time protol）<br>安装：<code>yum install ntp</code><br>同步：<code>ntpdate pool.ntp.org</code></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/14/解决Ubuntu-18-04-DHCP-ip失效问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -552,7 +707,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
