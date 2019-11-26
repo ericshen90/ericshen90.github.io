@@ -1,136 +1,82 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="en">
-<head><meta name="generator" content="Hexo 3.9.0">
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="gitlab,docker,gitlab-runner,CI/CD,">
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="1. GitLab Runner 简介一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。 GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！ 因为 G">
-<meta name="keywords" content="gitlab,docker,gitlab-runner,CI&#x2F;CD">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Gitlab持续集成CI CD(Gitlab Runner篇)">
-<meta property="og:url" content="http://yoursite.com/2019/10/16/Gitlab持续集成CI CD(Gitlab Runner篇)/index.html">
-<meta property="og:site_name" content="Eric Shen Blog">
-<meta property="og:description" content="1. GitLab Runner 简介一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。 GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！ 因为 G">
-<meta property="og:locale" content="en">
-<meta property="og:image" content="https://i.loli.net/2019/10/16/vFhE859ZPDTlSc6.png">
-<meta property="og:image" content="https://i.loli.net/2019/10/16/YgnpH2NKRLmi8ac.png">
-<meta property="og:image" content="https://i.loli.net/2019/10/16/1hJDtilvoK89Qzu.png">
-<meta property="og:image" content="https://i.loli.net/2019/10/16/8mq5QSo4YNl2h6F.png">
-<meta property="og:image" content="https://i.loli.net/2019/10/16/WsRMSiQz1kqp7X6.png">
-<meta property="og:updated_time" content="2019-11-13T01:14:16.250Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gitlab持续集成CI CD(Gitlab Runner篇)">
-<meta name="twitter:description" content="1. GitLab Runner 简介一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。 GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！ 因为 G">
-<meta name="twitter:image" content="https://i.loli.net/2019/10/16/vFhE859ZPDTlSc6.png">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
+<script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
+    hostname: new URL('https://ericshen.coding.me').hostname,
     root: '/',
     scheme: 'Gemini',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
     algolia: {
-      applicationID: '',
+      appID: '',
       apiKey: '',
       indexName: '',
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
   };
 </script>
 
+  <meta name="description" content="1. GitLab Runner 简介一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。 GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！ 因为 G">
+<meta name="keywords" content="gitlab,docker,gitlab-runner,CI&#x2F;CD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gitlab持续集成CI CD(Gitlab Runner篇)">
+<meta property="og:url" content="https:&#x2F;&#x2F;ericshen.coding.me&#x2F;2019&#x2F;10&#x2F;16&#x2F;Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)&#x2F;index.html">
+<meta property="og:site_name" content="Eric Shen Blog">
+<meta property="og:description" content="1. GitLab Runner 简介一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。 GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！ 因为 G">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;vFhE859ZPDTlSc6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;YgnpH2NKRLmi8ac.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;1hJDtilvoK89Qzu.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;8mq5QSo4YNl2h6F.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;WsRMSiQz1kqp7X6.png">
+<meta property="og:updated_time" content="2019-11-26T06:42:58.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;vFhE859ZPDTlSc6.png">
+
+<link rel="canonical" href="https://ericshen.coding.me/2019/10/16/Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)/">
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/16/Gitlab持续集成CI CD(Gitlab Runner篇)/">
-
-
-
-
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
 
   <title>Gitlab持续集成CI CD(Gitlab Runner篇) | Eric Shen Blog</title>
   
@@ -140,190 +86,171 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
 
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="en">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
 
-    <div class="custom-logo-site-title">
+    <div>
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Eric Shen Blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
   </div>
 
   <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
   </div>
 </div>
 
+
 <nav class="site-nav">
   
-
-  
-    <ul id="menu" class="menu">
-      
-        
+  <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
-            
-            Home
-          </a>
-        </li>
-      
-        
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
-            
-            Tags
-          </a>
-        </li>
-      
-        
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
         <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
-            
-            Categories
-          </a>
-        </li>
-      
-        
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive //归档"></i> <br>
-            
-            Archives
-          </a>
-        </li>
-      
 
-      
-    </ul>
-  
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
-  
+  </li>
+  </ul>
+
 </nav>
-
-
-
- </div>
+</div>
     </header>
 
-    <main id="main" class="main">
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
       <div class="main-inner">
         <div class="content-wrap">
-          <div id="content" class="content">
+          
+
+          <div class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
-
-  
-
+  <div class="posts-expand">
+      
   
   
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/Gitlab持续集成CI CD(Gitlab Runner篇)/">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ericshen.coding.me/2019/10/16/Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
       <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400">
+      <meta itemprop="description" content="Fake Geeker, Hoops Lover!">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Eric Shen Blog">
     </span>
-
-    
       <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">Gitlab持续集成CI CD(Gitlab Runner篇)</h1>
-        
+        <h1 class="post-title" itemprop="name headline">
+          Gitlab持续集成CI CD(Gitlab Runner篇)
+        </h1>
 
         <div class="post-meta">
-          <span class="post-time">
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-16T11:04:16+08:00">
-                2019-10-16
-              </time>
-            
+              <span class="post-meta-item-text">发表于</span>
 
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
+              <time title="创建时间：2019-10-16 11:04:16" itemprop="dateCreated datePublished" datetime="2019-10-16T11:04:16+08:00">2019-10-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-26 14:42:58" itemprop="dateModified" datetime="2019-11-26T14:42:58+08:00">2019-11-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PaSS/" itemprop="url" rel="index">
+                    <span itemprop="name">PaSS</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PaSS/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+            </span>
 
           
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
 
       
         <h1 id="1-GitLab-Runner-简介"><a href="#1-GitLab-Runner-简介" class="headerlink" title="1. GitLab Runner 简介"></a>1. GitLab Runner 简介</h1><p>一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。</p>
@@ -368,7 +295,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo tee /usr/<span class="built_in">local</span>/docker/runner/environment/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [</span><br><span class="line">  <span class="string">"https://registry.docker-cn.com"</span> <span class="comment">#docker-cn加速器</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"insecure-registries"</span>: [</span><br><span class="line">    <span class="string">"192.168.10.133:5000"</span>   <span class="comment">#harbor仓库地址</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>推荐配置阿里云镜像加速器，可参考<a href="https://ericshen.coding.me/2019/10/15/Linux安装Dokcer-CE/" target="_blank" rel="noopener">Linux安装Dokcer CE 3.5</a></p>
+<p>推荐配置阿里云镜像加速器，可参考<a href="https://ericshen.coding.me/2019/10/15/Linux安装Dokcer-CE/">Linux安装Dokcer CE 3.5</a></p>
 </blockquote>
 <h2 id="2-3-Dockerfile"><a href="#2-3-Dockerfile" class="headerlink" title="2.3 Dockerfile"></a>2.3 Dockerfile</h2><p>在<code>/usr/local/docker/runner/environment</code> 目录下创建 <code>Dockerfile</code></p>
 <p><code>vim /usr/local/docker/runner/environment/Dockerfile</code></p>
@@ -401,9 +328,8 @@
 <p><strong>构建镜像</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/docker/runner</span><br><span class="line">docker-compose build</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...省略...</span><br><span class="line">Successfully build xxxxxxx</span><br><span class="line">Successfully tagged runner_gitlab-runner # 构建成功</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker images #查看镜像</span><br><span class="line">REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">runner_gitlab-runner                     latest              74b8379cca15        41 hours ago        1.37GB</span><br></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">...</span>省略<span class="string">...</span></span><br><span class="line">Successfully build xxxxxxx</span><br><span class="line">Successfully tagged runner_gitlab-runner <span class="comment"># 构建成功</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker images <span class="comment">#查看镜像</span></span><br><span class="line">REPOSITORY                               <span class="keyword">TAG</span>                 <span class="title">IMAGE</span> ID            CREATED             SIZE</span><br><span class="line">runner_gitlab-runner                     latest              <span class="number">74</span>b8379cca15        <span class="number">41</span> hours ago        <span class="number">1.37</span>GB</span><br></pre></td></tr></table></figure>
 
 <h1 id="3-注册-Runner"><a href="#3-注册-Runner" class="headerlink" title="3. 注册 Runner"></a>3. 注册 Runner</h1><p>首先获取<code>Gitlab上项目路径=&gt;设置=&gt;CI/CD=&gt;Runner=&gt;Setup a specific Runner manually</code>下<code>Gitlab</code>地址和<code>token</code></p>
 <ul>
@@ -416,6 +342,8 @@
 <p><img src="https://i.loli.net/2019/10/16/YgnpH2NKRLmi8ac.png" alt="英文原版Gitlab社区版"></p>
 <p>然后到服务器中执行</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 执行</span></span><br><span class="line">docker <span class="built_in">exec</span> -it gitlab-runner gitlab-runner register </span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入 GitLab 地址</span></span><br><span class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):</span><br><span class="line">http://192.192.1.12/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入 GitLab Token</span></span><br><span class="line">Please enter the gitlab-ci token <span class="keyword">for</span> this runner:</span><br><span class="line">PgC_sRjg3qZgrU4WGvjY</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入 Runner 的描述</span></span><br><span class="line">Please enter the gitlab-ci description <span class="keyword">for</span> this runner:</span><br><span class="line"><span class="comment"># 可以为空</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置 Tag，可以用于指定在构建规定的 tag 时触发 ci</span></span><br><span class="line">Please enter the gitlab-ci tags <span class="keyword">for</span> this runner (comma separated):</span><br><span class="line">deploy</span><br><span class="line"></span><br><span class="line">Registering runner... succeeded                     runner=PgC_sRjg</span><br><span class="line"><span class="comment"># 选择 runner 执行器，这里我们选择的是 shell</span></span><br><span class="line">Please enter the executor: virtualbox, docker+machine, parallels, shell, ssh, docker-ssh+machine, kubernetes, docker, docker-ssh:</span><br><span class="line">shell</span><br><span class="line"></span><br><span class="line">Runner registered successfully. Feel free to start it, but <span class="keyword">if</span> it<span class="string">'s running already the config should be automatically reloaded!</span></span><br></pre></td></tr></table></figure>
+
+
 
 <h1 id="4-使用-Runner"><a href="#4-使用-Runner" class="headerlink" title="4. 使用 Runner"></a>4. 使用 Runner</h1><blockquote>
 <p>进入你想要进行CI/CD的项目中（FYI: 通过<a href="https://start.spring.io/" target="_blank" rel="noopener">Spring Initializr</a>快速构架一个基于maven构建的Spring Boot项目）</p>
@@ -455,218 +383,140 @@
 </li>
 </ul>
 
-      
     </div>
+
     
     
     
 
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/gitlab/" rel="tag"># gitlab</a>
-          
-            <a href="/tags/docker/" rel="tag"># docker</a>
-          
-            <a href="/tags/gitlab-runner/" rel="tag"># gitlab-runner</a>
-          
-            <a href="/tags/CI-CD/" rel="tag"># CI/CD</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/09/25/Redis-Sentinel-集群部署/" rel="next" title="Redis Sentinel 集群部署">
-                <i class="fa fa-chevron-left"></i> Redis Sentinel 集群部署
-              </a>
-            
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/gitlab/" rel="tag"># gitlab</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/gitlab-runner/" rel="tag"># gitlab-runner</a>
+              <a href="/tags/CI-CD/" rel="tag"># CI/CD</a>
           </div>
 
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-
-
-
-        </div>
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/25/Redis-Sentinel-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" rel="prev" title="Redis Sentinel 集群部署">
+      <i class="fa fa-chevron-left"></i> Redis Sentinel 集群部署
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
-  <aside id="sidebar" class="sidebar">
-    
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
     <div class="sidebar-inner">
 
-      
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400" alt="Eric Shen">
-            
-              <p class="site-author-name" itemprop="name">Eric Shen</p>
-              <p class="site-description motion-element" itemprop="description">Fake Geeker, Hoops Lover!</p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/">
-              
-                  <span class="site-state-item-count">13</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
-                  <span class="site-state-item-name">tags</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-GitLab-Runner-简介"><span class="nav-number">1.</span> <span class="nav-text">1. GitLab Runner 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-基于-Docker-安装-GitLab-Runner"><span class="nav-number">2.</span> <span class="nav-text">2. 基于 Docker 安装 GitLab Runner</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-daemon-json"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 daemon.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Dockerfile"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Dockerfile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-docker-compose-yml"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 docker-compose.yml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-构建镜像"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 构建镜像</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-注册-Runner"><span class="nav-number">3.</span> <span class="nav-text">3. 注册 Runner</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-使用-Runner"><span class="nav-number">4.</span> <span class="nav-text">4. 使用 Runner</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-测试集成效果"><span class="nav-number">5.</span> <span class="nav-text">5. 测试集成效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-其它命令"><span class="nav-number">6.</span> <span class="nav-text">6. 其它命令</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-GitLab-Runner-简介"><span class="nav-number">1.</span> <span class="nav-text">1. GitLab Runner 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-基于-Docker-安装-GitLab-Runner"><span class="nav-number">2.</span> <span class="nav-text">2. 基于 Docker 安装 GitLab Runner</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-daemon-json"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 daemon.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Dockerfile"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Dockerfile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-docker-compose-yml"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 docker-compose.yml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-构建镜像"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 构建镜像</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-注册-Runner"><span class="nav-number">3.</span> <span class="nav-text">3. 注册 Runner</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-使用-Runner"><span class="nav-number">4.</span> <span class="nav-text">4. 使用 Runner</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-测试集成效果"><span class="nav-number">5.</span> <span class="nav-text">5. 测试集成效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-其它命令"><span class="nav-number">6.</span> <span class="nav-text">6. 其它命令</span></a></li></ol></div>
+      </div>
       <!--/noindex-->
-      
 
-      
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Eric Shen"
+      src="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
+  <p class="site-author-name" itemprop="name">Eric Shen</p>
+  <div class="site-description" itemprop="description">Fake Geeker, Hoops Lover!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
 
     </div>
   </aside>
+  <div id="sidebar-dimmer"></div>
 
 
-        
       </div>
     </main>
 
-    <footer id="footer" class="footer">
+    <footer class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Eric Shen</span>
-
-  
 </div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
   <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
-
-
-
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
 
         
+
 
 
 
@@ -677,31 +527,15 @@
         
       </div>
     </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
   </div>
 
   
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
 
 
 
@@ -718,118 +552,9 @@
 
 
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
 
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
 
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
 
   
 

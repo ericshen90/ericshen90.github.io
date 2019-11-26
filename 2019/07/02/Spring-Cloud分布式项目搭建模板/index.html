@@ -1,162 +1,109 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="en">
-<head><meta name="generator" content="Hexo 3.9.0">
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT">
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="Spring-Cloud分布式项目搭建模板概念引入EurekaEureka: 服务注册中心。通过Eureka可以监控各个服务的运行状态。它具有如下几个角色：  Eureka Server： 提供服务注册与发现 Service Provider: 服务提供方。将自身注册到Eureka，供消费者使用 Service Consumer:  服务消费方。从Eureka中获取服务器提供方列表，从而消费服务">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Spring-Cloud分布式项目搭建模板">
-<meta property="og:url" content="http://yoursite.com/2019/07/02/Spring-Cloud分布式项目搭建模板/index.html">
-<meta property="og:site_name" content="Eric Shen Blog">
-<meta property="og:description" content="Spring-Cloud分布式项目搭建模板概念引入EurekaEureka: 服务注册中心。通过Eureka可以监控各个服务的运行状态。它具有如下几个角色：  Eureka Server： 提供服务注册与发现 Service Provider: 服务提供方。将自身注册到Eureka，供消费者使用 Service Consumer:  服务消费方。从Eureka中获取服务器提供方列表，从而消费服务">
-<meta property="og:locale" content="en">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/O7VLhv5gmTUioEX.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/2rpeySQnmYPkvRM.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/I2DozuMlL3gWQ61.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/Vf9DvhrYsFmpgTC.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/vhbmQpCikURyDJe.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/UcqQY278mZfA3ko.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/DZXc49fqLjGvgao.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/a4JBlPqKbQc2AEw.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/Fa6oiXsYTHI7Lx3.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/EDgaLsp8vkRxJdQ.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/etEUOThk3rXIdMf.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/lO6KjUqHCGpYovA.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/18ZU9HbWRMVpAKf.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/8gIpa9RoBfkyZYG.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/qHsrO8RSLc6lkFI.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/4cxAfe1k2m8IhNO.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/m3MTD45Urevkacs.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/ZobVIiUnG3tAcuN.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/r9znF72vs1BXtLW.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/XRZJfxuKYnMb4gy.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/uXk1PAfrUYSpoMB.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/TdC8DXRcMfe9hBF.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/PesWG7ox5p2TFda.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/73WazdrIYmPUZMo.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/e5DpFjgnPI74oRQ.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/uyKLf9UqRDgdnrO.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/JcD7NU4stz3uXT1.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/S7MaD9iBk63dhXq.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/XlWT2mLDJjaSbtr.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/Rkva3ECl4jHrJNB.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/HC2DmONLYzblswB.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/12/N25ROMD8uhKdxX1.png">
-<meta property="og:updated_time" content="2019-11-13T01:18:46.687Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring-Cloud分布式项目搭建模板">
-<meta name="twitter:description" content="Spring-Cloud分布式项目搭建模板概念引入EurekaEureka: 服务注册中心。通过Eureka可以监控各个服务的运行状态。它具有如下几个角色：  Eureka Server： 提供服务注册与发现 Service Provider: 服务提供方。将自身注册到Eureka，供消费者使用 Service Consumer:  服务消费方。从Eureka中获取服务器提供方列表，从而消费服务">
-<meta name="twitter:image" content="https://i.loli.net/2019/11/12/O7VLhv5gmTUioEX.png">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
+<script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
+    hostname: new URL('https://ericshen.coding.me').hostname,
     root: '/',
     scheme: 'Gemini',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
     algolia: {
-      applicationID: '',
+      appID: '',
       apiKey: '',
       indexName: '',
       hits: {"per_page":10},
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
   };
 </script>
 
+  <meta name="description" content="Spring-Cloud分布式项目搭建模板概念引入EurekaEureka: 服务注册中心。通过Eureka可以监控各个服务的运行状态。它具有如下几个角色：  Eureka Server： 提供服务注册与发现 Service Provider: 服务提供方。将自身注册到Eureka，供消费者使用 Service Consumer:  服务消费方。从Eureka中获取服务器提供方列表，从而消费服务">
+<meta name="keywords" content="Spring Cloud,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring-Cloud分布式项目搭建模板">
+<meta property="og:url" content="https:&#x2F;&#x2F;ericshen.coding.me&#x2F;2019&#x2F;07&#x2F;02&#x2F;Spring-Cloud%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E6%A8%A1%E6%9D%BF&#x2F;index.html">
+<meta property="og:site_name" content="Eric Shen Blog">
+<meta property="og:description" content="Spring-Cloud分布式项目搭建模板概念引入EurekaEureka: 服务注册中心。通过Eureka可以监控各个服务的运行状态。它具有如下几个角色：  Eureka Server： 提供服务注册与发现 Service Provider: 服务提供方。将自身注册到Eureka，供消费者使用 Service Consumer:  服务消费方。从Eureka中获取服务器提供方列表，从而消费服务">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;O7VLhv5gmTUioEX.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;2rpeySQnmYPkvRM.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;I2DozuMlL3gWQ61.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;Vf9DvhrYsFmpgTC.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;vhbmQpCikURyDJe.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;UcqQY278mZfA3ko.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;DZXc49fqLjGvgao.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;a4JBlPqKbQc2AEw.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;Fa6oiXsYTHI7Lx3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;EDgaLsp8vkRxJdQ.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;etEUOThk3rXIdMf.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;lO6KjUqHCGpYovA.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;18ZU9HbWRMVpAKf.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;8gIpa9RoBfkyZYG.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;qHsrO8RSLc6lkFI.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;4cxAfe1k2m8IhNO.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;m3MTD45Urevkacs.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;ZobVIiUnG3tAcuN.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;r9znF72vs1BXtLW.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;XRZJfxuKYnMb4gy.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;uXk1PAfrUYSpoMB.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;TdC8DXRcMfe9hBF.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;PesWG7ox5p2TFda.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;73WazdrIYmPUZMo.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;e5DpFjgnPI74oRQ.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;uyKLf9UqRDgdnrO.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;JcD7NU4stz3uXT1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;S7MaD9iBk63dhXq.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;XlWT2mLDJjaSbtr.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;Rkva3ECl4jHrJNB.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;HC2DmONLYzblswB.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;N25ROMD8uhKdxX1.png">
+<meta property="og:updated_time" content="2019-11-26T06:43:16.609Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;11&#x2F;12&#x2F;O7VLhv5gmTUioEX.png">
+
+<link rel="canonical" href="https://ericshen.coding.me/2019/07/02/Spring-Cloud%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E6%A8%A1%E6%9D%BF/">
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/07/02/Spring-Cloud分布式项目搭建模板/">
-
-
-
-
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
 
   <title>Spring-Cloud分布式项目搭建模板 | Eric Shen Blog</title>
   
@@ -166,190 +113,165 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
 
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="en">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
 
-    <div class="custom-logo-site-title">
+    <div>
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Eric Shen Blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
   </div>
 
   <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
   </div>
 </div>
 
+
 <nav class="site-nav">
   
-
-  
-    <ul id="menu" class="menu">
-      
-        
+  <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
-            
-            Home
-          </a>
-        </li>
-      
-        
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
-            
-            Tags
-          </a>
-        </li>
-      
-        
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
         <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
-            
-            Categories
-          </a>
-        </li>
-      
-        
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive //归档"></i> <br>
-            
-            Archives
-          </a>
-        </li>
-      
 
-      
-    </ul>
-  
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
-  
+  </li>
+  </ul>
+
 </nav>
-
-
-
- </div>
+</div>
     </header>
 
-    <main id="main" class="main">
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
       <div class="main-inner">
         <div class="content-wrap">
-          <div id="content" class="content">
+          
+
+          <div class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
-
-  
-
+  <div class="posts-expand">
+      
   
   
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/02/Spring-Cloud分布式项目搭建模板/">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ericshen.coding.me/2019/07/02/Spring-Cloud%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E6%A8%A1%E6%9D%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
       <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400">
+      <meta itemprop="description" content="Fake Geeker, Hoops Lover!">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Eric Shen Blog">
     </span>
-
-    
       <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">Spring-Cloud分布式项目搭建模板</h1>
-        
+        <h1 class="post-title" itemprop="name headline">
+          Spring-Cloud分布式项目搭建模板
+        </h1>
 
         <div class="post-meta">
-          <span class="post-time">
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-02T10:37:47+08:00">
-                2019-07-02
-              </time>
-            
+              <span class="post-meta-item-text">发表于</span>
 
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
+              <time title="创建时间：2019-07-02 10:37:47" itemprop="dateCreated datePublished" datetime="2019-07-02T10:37:47+08:00">2019-07-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-26 14:43:16" itemprop="dateModified" datetime="2019-11-26T14:43:16+08:00">2019-11-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Cloud</span>
+                  </a>
+                </span>
+            </span>
 
           
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
 
       
         <h1 id="Spring-Cloud分布式项目搭建模板"><a href="#Spring-Cloud分布式项目搭建模板" class="headerlink" title="Spring-Cloud分布式项目搭建模板"></a>Spring-Cloud分布式项目搭建模板</h1><h1 id="概念引入"><a href="#概念引入" class="headerlink" title="概念引入"></a>概念引入</h1><h2 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h2><p><strong>Eureka:</strong> 服务注册中心。通过Eureka可以监控各个服务的运行状态。它具有如下几个角色：</p>
@@ -359,7 +281,7 @@
 <li>Service Consumer:  服务消费方。从Eureka中获取服务器提供方列表，从而消费服务</li>
 </ul>
 <p>举个栗子：</p>
-<p><img src="https://i.loli.net/2019/11/12/O7VLhv5gmTUioEX.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/O7VLhv5gmTUioEX.png" alt=""></p>
 <blockquote>
 <p>  问题引入：</p>
 </blockquote>
@@ -368,7 +290,7 @@
 <p>  解决办法：</p>
 </blockquote>
 <p>显然上述的方式是不可取的。按照之前开发SSM框架前后端不分离时，通常页面直接请求的内部服务接口，从不考虑服务的具体IP地址，因为默认使用的此服务的IP地址。那么在微服务架构中也应该这样设计。所以我们加一个 <strong>GateWay网关服务</strong>，前端APP直接请求请求网关，仅需要记录网关的IP地址即可，这样就将后端服务接口寻址调用的工作交给了服务端完成。举个栗子：</p>
-<p><img src="https://i.loli.net/2019/11/12/2rpeySQnmYPkvRM.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/2rpeySQnmYPkvRM.png" alt=""></p>
 <blockquote>
 <p>  问题引入：</p>
 </blockquote>
@@ -377,7 +299,7 @@
 <p>  解决办法：</p>
 </blockquote>
 <p>所以，需要一个服务，他能记录系统中所有的微服务IP地址；并且有类似负载均衡的算法，对于服务集群配置，该服务能知道调用哪些服务才能平均分配请求的压力；并且，如果哪个服务崩溃，该服务还能快速知道并不再向崩溃的服务发送请求。于是，<strong>Eureka</strong>诞生了。</p>
-<p><img src="https://i.loli.net/2019/11/12/I2DozuMlL3gWQ61.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/I2DozuMlL3gWQ61.png" alt=""></p>
 <p>Eureka是服务注册中心，其他具体服务可以向这个Eureka注册中心注册自己。当前端发送请求时，首先前端APP会直接请求网关，当然网关服务也注册在Eureka注册中心上，然后网关把接收到的请求交由Eureka处理，Eureka接收到这些请求，会从自己的服务注册列表中寻找对应的服务地址，然后实现调用具体的服务。</p>
 <h2 id="Feign"><a href="#Feign" class="headerlink" title="Feign"></a>Feign</h2><blockquote>
 <p>  问题引入：</p>
@@ -408,7 +330,7 @@
 </blockquote>
 <p>提供了<code>hystrix-dashboard</code>工具实现实时监控Hystrix熔断器的状态。</p>
 <h2 id="Zuul"><a href="#Zuul" class="headerlink" title="Zuul"></a>Zuul</h2><p><strong>Zuul</strong>路由网关。举个栗子：</p>
-<p><img src="https://i.loli.net/2019/11/12/Vf9DvhrYsFmpgTC.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/Vf9DvhrYsFmpgTC.png" alt=""></p>
 <p>如上是一个基本的微服务架构图，先抛开左侧的配置服务，如果前端APP请求后台接口，显然前端无法记录后端那么多服务的API地址，按照SSM框架的开发思路，前端APP仅需要记录一个IP地址即可，所有的请求都应该是请求这个IP中的某个接口。</p>
 <p>那么<strong>Zuul</strong>路由网关的作用就是如此，他实现将客户端<strong>按照一定约束</strong>的不同请求转发到对应的服务，这样就实现客户端仅记录一个IP地址就能实现请求不同服务的接口。</p>
 <h2 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h2><p>如果系统服务模块非常多时，每次修改服务配置都要修改服务<code>src/main/resources</code>下的<code>application.yml</code>可能会很麻烦，<code>spring-cloud-config</code>就解决了这个问题，Config Server端实现将配置文件内容以接口的形式暴露，Client端通过该接口得到配置文件内容，并以此初始化自己的应用。</p>
@@ -441,7 +363,7 @@
 <ol start="5">
 <li>启动<code>EurekaApplication.java</code>中的main方法，浏览器访问：<code>localhost:8080</code></li>
 </ol>
-<p><img src="https://i.loli.net/2019/11/12/vhbmQpCikURyDJe.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/vhbmQpCikURyDJe.png" alt=""></p>
 <p>可以看到此时没有任何服务注册到Eureka注册中心。</p>
 <h2 id="搭建生产者服务"><a href="#搭建生产者服务" class="headerlink" title="搭建生产者服务"></a>搭建生产者服务</h2><ol>
 <li>在<code>cloud-template</code>下创建<code>template-admin</code>文件夹</li>
@@ -468,7 +390,7 @@
 <ol start="6">
 <li>运行<code>AdminApplication.java</code>中的main方法，刷新<code>localhost:8080</code>地址：</li>
 </ol>
-<p><img src="https://i.loli.net/2019/11/12/UcqQY278mZfA3ko.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/UcqQY278mZfA3ko.png" alt=""></p>
 <p>可看到，<code>template-admin</code>服务已经注册到了Eureka注册中心</p>
 <ol start="7">
 <li>在<code>template-admin</code>服务中创建一个Controller类：</li>
@@ -478,7 +400,7 @@
 <ol start="8">
 <li>重启<code>template-admin</code>服务，访问：`localhost:9001/hello/kobe:</li>
 </ol>
-<p><img src="https://i.loli.net/2019/11/12/DZXc49fqLjGvgao.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/DZXc49fqLjGvgao.png" alt=""></p>
 <h2 id="搭建消费者服务"><a href="#搭建消费者服务" class="headerlink" title="搭建消费者服务"></a>搭建消费者服务</h2><p>上面搭建了 <code>template-admin</code> 生产者服务，它暴露了Rest接口，那么其他服务想要调用生产者服务的接口，就必须实现与生产者服务的通信。最开始<strong>概念引入</strong>部分我们提到了<code>SpringCloud</code>实现服务间通信的两种方式，这里我们直接使用<strong>Feign</strong>实现。</p>
 <ol>
 <li>在<code>cloud-template</code>下创建<code>template-auth</code>文件夹</li>
@@ -510,9 +432,9 @@
 <ol start="7">
 <li>启动项目，访问<code>localhost:8080</code></li>
 </ol>
-<p><img src="https://i.loli.net/2019/11/12/a4JBlPqKbQc2AEw.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/a4JBlPqKbQc2AEw.png" alt=""></p>
 <p>可以看到该服务已经注册到了Eureka注册中心了。继续访问<code>http://localhost:9002/hello/james</code>：</p>
-<p><img src="https://i.loli.net/2019/11/12/Fa6oiXsYTHI7Lx3.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/Fa6oiXsYTHI7Lx3.png" alt=""></p>
 <ol start="8">
 <li>在<code>template-auth</code>服务下创建<code>feign/service</code>文件夹，并在其中创建<code>AuthFeignService.java</code>接口：</li>
 </ol>
@@ -532,7 +454,7 @@
 
 <p>如上，这个<code>/feignHello/{name}</code>请求接口将调用<code>AuthFeignService</code>的<code>hello</code>方法，而<code>AuthFeignService</code>的<code>hello</code>方法最终由Feign调用<code>template-admin</code>中的<code>/hello</code>请求接口。</p>
 <p>所以，<code>template-auth</code>服务中的<code>/feignHello/{name}</code>接口最终调用了<code>template-admin</code>服务中的<code>/hello/{name}</code>接口。重启<code>template-auth</code>服务，访问：<code>localhost:9002/feignHello/tycoding</code>:</p>
-<p><img src="https://i.loli.net/2019/11/12/EDgaLsp8vkRxJdQ.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/EDgaLsp8vkRxJdQ.png" alt=""></p>
 <p>显然，我们的分析都是正确的，使用Feign声明式服务调用，仅通过<code>@FeignClient</code>注解就能完成服务间通信。</p>
 <h2 id="配置Hystrix熔断机制"><a href="#配置Hystrix熔断机制" class="headerlink" title="配置Hystrix熔断机制"></a>配置Hystrix熔断机制</h2><p>前面提到了Hystrix主要用于在多个服务间存在通信，而通信的某一方因为压力过大、响应时间过长而导致不可用，Hystrix就会阻止Eureka再给该服务分配请求，从而保证服务的高可用。</p>
 <p>因此，Hystrix主要配置在存在服务间通信的地方。因为我们使用的Feign，Feign正是用来实现服务间通信的。所以我们只需要在自己创建的Feign接口中配置熔断器即可。因为Feign已经内置了Hystrix，我们只需要配置启用hystrix即可。</p>
@@ -550,9 +472,9 @@
 <ol start="3">
 <li>重启<code>template-auth</code>服务，访问<code>localhost:9002/feignHello/james发现正常访问。此时关闭</code>template-admin`服务：</li>
 </ol>
-<p><img src="https://i.loli.net/2019/11/12/etEUOThk3rXIdMf.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/etEUOThk3rXIdMf.png" alt=""></p>
 <p>该服务已关闭，继续访问：<code>localhost:9002/feignHello/james</code>:</p>
-<p><img src="https://i.loli.net/2019/11/12/lO6KjUqHCGpYovA.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/lO6KjUqHCGpYovA.png" alt=""></p>
 <p>可以看到访问该URL时，浏览器直接显示的<code>AuthFeignServiceFallbackImpl.java</code>中的响应数据，而不是再加载一下请求<code>AuthFeignService.java</code>中的请求。就是说如果被调用方服务一旦不可用，Hystrix就<strong>立刻</strong>熔断与该服务之间的通信。</p>
 <h2 id="配置Hystrix-Dashboard"><a href="#配置Hystrix-Dashboard" class="headerlink" title="配置Hystrix-Dashboard"></a>配置Hystrix-Dashboard</h2><p>可以通过<code>hystrix-dashboard</code>工具实现对熔断器Hystrix的实时监控。因为我们在<code>template-auth</code>服务中使用了Feign远程调用，并且使用了Hystrix熔断器，所以我们只需要在<code>template-auth</code>服务中配置熔断监控：</p>
 <ol>
@@ -575,13 +497,13 @@
 <ol start="4">
 <li>重启<code>template-auth</code>服务，访问：<code>localhost:9002/hystrix</code></li>
 </ol>
-<p><img src="https://i.loli.net/2019/11/12/18ZU9HbWRMVpAKf.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/18ZU9HbWRMVpAKf.png" alt=""></p>
 <p>在<code>http...</code>输入框中输入``localhost:9002/hystrix.stream<code>，其中</code>Delay`是每隔几毫秒刷新一次</p>
-<p><img src="https://i.loli.net/2019/11/12/8gIpa9RoBfkyZYG.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/8gIpa9RoBfkyZYG.png" alt=""></p>
 <p>显示Loading说明连接成功，但是因为没有触发Hystrix熔断器，所以监控没有显示数据。我们继续访问：<code>localhost:9002/feignHello/james</code>，重复刷新5次网页：</p>
-<p><img src="https://i.loli.net/2019/11/12/qHsrO8RSLc6lkFI.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/qHsrO8RSLc6lkFI.png" alt=""></p>
 <p>因为，所有的服务都是启动的，所以熔断器没有熔断。此时关掉<code>template-admin</code>服务，再次刷新<code>localhost:9002/feignHello/james</code>接口7次：</p>
-<p><img src="https://i.loli.net/2019/11/12/4cxAfe1k2m8IhNO.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/4cxAfe1k2m8IhNO.png" alt=""></p>
 <h2 id="配置Zuul路由网关"><a href="#配置Zuul路由网关" class="headerlink" title="配置Zuul路由网关"></a>配置Zuul路由网关</h2><ol>
 <li><p>在<code>cloud-template</code>下创建<code>template-zuul</code>文件夹</p>
 </li>
@@ -613,17 +535,17 @@
 <ul>
 <li>访问：<code>localhost:9003/api/admin/hello/curry</code>:</li>
 </ul>
-<p><img src="https://i.loli.net/2019/11/12/m3MTD45Urevkacs.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/m3MTD45Urevkacs.png" alt=""></p>
 <ul>
 <li>访问：<code>localhost:9003/api/auth/hello/curry</code>:</li>
 </ul>
-<p><img src="https://i.loli.net/2019/11/12/ZobVIiUnG3tAcuN.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/ZobVIiUnG3tAcuN.png" alt=""></p>
 <ul>
 <li>访问：<code>localhost:9003/api/auth/feignHello/curry</code>:</li>
 </ul>
-<p><img src="https://i.loli.net/2019/11/12/r9znF72vs1BXtLW.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/r9znF72vs1BXtLW.png" alt=""></p>
 <p>如此，通过<code>template-zuul</code>服务的路由转发功能，实现了仅仅通过请求<code>9003</code>这一个IP地址就能访问多个服务的接口。但实际测试中你可能还会遇到如下的错误：</p>
-<p><img src="https://i.loli.net/2019/11/12/XRZJfxuKYnMb4gy.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/XRZJfxuKYnMb4gy.png" alt=""></p>
 <p>这就是一个服务不可用的现象，Eureka会直接熔断与该服务的链接。而产生的原因与本地电脑的性能有关，所以就可能在项目运行中出现服务链接不上而被Eureka熔断的情况。</p>
 <h3 id="配置Zuul的错误回调"><a href="#配置Zuul的错误回调" class="headerlink" title="配置Zuul的错误回调"></a>配置Zuul的错误回调</h3><p>上面图中就一个Zuul网关路由错误的情况，而出现错误，肯定不能弹出Spring内置的错误页面，而需要定制一个错误信息，通常是JSON格式。</p>
 <p>在<code>/fallback</code>目录下创建：<code>AuthFeignFallbackProvider.java</code></p>
@@ -631,7 +553,7 @@
 
 <p>这里要强调一个细节，如果Zuul路由服务失败不应该给客户端返回404、500等错误，因为客户端直接请求的是<code>template-zuul</code>路由网关服务，而请求<code>template-zuul</code>服务是成功的，<code>template-zuul</code>将请求转发到其他服务属于服务器内部错误，这中错误不应该暴露给客户端。除非是<code>template-zuul</code>路由网关服务自己挂了，才会返回给客户端404、500等错误。</p>
 <p>重启<code>template-zuul</code>服务，<strong>立即</strong>访问<code>http://localhost:9003/api/auth/feignHello/curry</code>，一般都会链接不上服务：</p>
-<p><img src="https://i.loli.net/2019/11/12/uXk1PAfrUYSpoMB.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/uXk1PAfrUYSpoMB.png" alt=""></p>
 <h3 id="配置Zuul服务过滤器"><a href="#配置Zuul服务过滤器" class="headerlink" title="配置Zuul服务过滤器"></a>配置Zuul服务过滤器</h3><p>如果需要对请求进行拦截过滤，比如登录时应该携带<code>Token</code>值才运行请求，那么就可以使用Zuul提供的过滤器功能。</p>
 <ul>
 <li>在<code>/filter</code>目录下创建<code>LoginFilter.java</code></li>
@@ -641,7 +563,7 @@
 <ul>
 <li>重新启动<code>template-zuul</code>服务。访问<code>localhost:9003/api/admin/hello/curry</code></li>
 </ul>
-<p><img src="https://i.loli.net/2019/11/12/TdC8DXRcMfe9hBF.png" alt></p>
+<p><img src="https://i.loli.net/2019/11/12/TdC8DXRcMfe9hBF.png" alt=""></p>
 <p>增加<code>token</code>，访问``localhost:9003/api/admin/hello/curry?token=123`</p>
 <p><img src="https://i.loli.net/2019/11/12/PesWG7ox5p2TFda.png" alt="image.png"></p>
 <h2 id="搭建Config服务"><a href="#搭建Config服务" class="headerlink" title="搭建Config服务"></a>搭建Config服务</h2><h3 id="Server端"><a href="#Server端" class="headerlink" title="Server端"></a>Server端</h3><ol>
@@ -801,7 +723,7 @@
 <li><p>按照<code>template-eureka</code>、<code>template-config</code>、<code>template-zipkin</code>、<code>template-boot-admin</code>、<code>template-admin</code>、<code>template-auth</code>、<code>template-zuul</code> 顺序依次启动服务，查看<strong>Eureka</strong>访问<code>http://localhost:8080</code>，检查各服务状态：</p>
 <p><img src="https://i.loli.net/2019/11/12/Rkva3ECl4jHrJNB.png" alt="image.png"></p>
 </li>
-<li><p>查看<strong>SpringBootAdmin</strong>，访问 <code>http://localhost:9004/</code><br><img src="https://i.loli.net/2019/11/12/HC2DmONLYzblswB.png" alt></p>
+<li><p>查看<strong>SpringBootAdmin</strong>，访问 <code>http://localhost:9004/</code><br><img src="https://i.loli.net/2019/11/12/HC2DmONLYzblswB.png" alt=""></p>
 <p><img src="https://i.loli.net/2019/11/12/N25ROMD8uhKdxX1.png" alt="image.png"></p>
 </li>
 </ol>
@@ -816,210 +738,141 @@
 <li>7.<code>template-zuul</code>: 分布式API网关</li>
 </ul>
 
-      
     </div>
+
     
     
     
 
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/06/15/ZooKeeper-Docker-Cluster-ZK伪集群/" rel="next" title="ZooKeeper Docker Cluster(ZK伪集群)">
-                <i class="fa fa-chevron-left"></i> ZooKeeper Docker Cluster(ZK伪集群)
-              </a>
-            
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Spring-Cloud/" rel="tag"># Spring Cloud</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
           </div>
 
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/30/CentOS7-Ubuntu-18-时间设置/" rel="prev" title="CentOS7 & Ubuntu 18 时间设置">
-                CentOS7 & Ubuntu 18 时间设置 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-
-
-
-        </div>
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/15/ZooKeeper-Docker-Cluster-ZK%E4%BC%AA%E9%9B%86%E7%BE%A4/" rel="prev" title="ZooKeeper Docker Cluster(ZK伪集群)">
+      <i class="fa fa-chevron-left"></i> ZooKeeper Docker Cluster(ZK伪集群)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/30/CentOS7-Ubuntu-18-%E6%97%B6%E9%97%B4%E8%AE%BE%E7%BD%AE/" rel="next" title="CentOS7 & Ubuntu 18 时间设置">
+      CentOS7 & Ubuntu 18 时间设置 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
-  <aside id="sidebar" class="sidebar">
-    
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
     <div class="sidebar-inner">
 
-      
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="https://en.gravatar.com/userimage/173145557/64ed43ba1a8370c6c33f947ded7c5c63.jpg?size=400" alt="Eric Shen">
-            
-              <p class="site-author-name" itemprop="name">Eric Shen</p>
-              <p class="site-description motion-element" itemprop="description">Fake Geeker, Hoops Lover!</p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/">
-              
-                  <span class="site-state-item-count">13</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
-                  <span class="site-state-item-name">tags</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Cloud分布式项目搭建模板"><span class="nav-number">1.</span> <span class="nav-text">Spring-Cloud分布式项目搭建模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概念引入"><span class="nav-number">2.</span> <span class="nav-text">概念引入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eureka"><span class="nav-number">2.1.</span> <span class="nav-text">Eureka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feign"><span class="nav-number">2.2.</span> <span class="nav-text">Feign</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix"><span class="nav-number">2.3.</span> <span class="nav-text">Hystrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix-Dashboard"><span class="nav-number">2.4.</span> <span class="nav-text">Hystrix-Dashboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zuul"><span class="nav-number">2.5.</span> <span class="nav-text">Zuul</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Config"><span class="nav-number">2.6.</span> <span class="nav-text">Config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZipKin"><span class="nav-number">2.7.</span> <span class="nav-text">ZipKin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot-Admin"><span class="nav-number">2.8.</span> <span class="nav-text">Spring-Boot-Admin</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目实战"><span class="nav-number">3.</span> <span class="nav-text">项目实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建Eureka服务"><span class="nav-number">3.1.</span> <span class="nav-text">搭建Eureka服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建生产者服务"><span class="nav-number">3.2.</span> <span class="nav-text">搭建生产者服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建消费者服务"><span class="nav-number">3.3.</span> <span class="nav-text">搭建消费者服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Hystrix熔断机制"><span class="nav-number">3.4.</span> <span class="nav-text">配置Hystrix熔断机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Hystrix-Dashboard"><span class="nav-number">3.5.</span> <span class="nav-text">配置Hystrix-Dashboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Zuul路由网关"><span class="nav-number">3.6.</span> <span class="nav-text">配置Zuul路由网关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Zuul的错误回调"><span class="nav-number">3.6.1.</span> <span class="nav-text">配置Zuul的错误回调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Zuul服务过滤器"><span class="nav-number">3.6.2.</span> <span class="nav-text">配置Zuul服务过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建Config服务"><span class="nav-number">3.7.</span> <span class="nav-text">搭建Config服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端"><span class="nav-number">3.7.1.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client端"><span class="nav-number">3.7.2.</span> <span class="nav-text">Client端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建ZipKin服务"><span class="nav-number">3.8.</span> <span class="nav-text">搭建ZipKin服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端-1"><span class="nav-number">3.8.1.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client端-1"><span class="nav-number">3.8.2.</span> <span class="nav-text">Client端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建SpringBootAdmin服务"><span class="nav-number">3.9.</span> <span class="nav-text">搭建SpringBootAdmin服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端-2"><span class="nav-number">3.9.1.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client端-2"><span class="nav-number">3.9.2.</span> <span class="nav-text">Client端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后续"><span class="nav-number">4.</span> <span class="nav-text">后续</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Cloud分布式项目搭建模板"><span class="nav-number">1.</span> <span class="nav-text">Spring-Cloud分布式项目搭建模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概念引入"><span class="nav-number">2.</span> <span class="nav-text">概念引入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eureka"><span class="nav-number">2.1.</span> <span class="nav-text">Eureka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feign"><span class="nav-number">2.2.</span> <span class="nav-text">Feign</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix"><span class="nav-number">2.3.</span> <span class="nav-text">Hystrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix-Dashboard"><span class="nav-number">2.4.</span> <span class="nav-text">Hystrix-Dashboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zuul"><span class="nav-number">2.5.</span> <span class="nav-text">Zuul</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Config"><span class="nav-number">2.6.</span> <span class="nav-text">Config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZipKin"><span class="nav-number">2.7.</span> <span class="nav-text">ZipKin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Boot-Admin"><span class="nav-number">2.8.</span> <span class="nav-text">Spring-Boot-Admin</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目实战"><span class="nav-number">3.</span> <span class="nav-text">项目实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建Eureka服务"><span class="nav-number">3.1.</span> <span class="nav-text">搭建Eureka服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建生产者服务"><span class="nav-number">3.2.</span> <span class="nav-text">搭建生产者服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建消费者服务"><span class="nav-number">3.3.</span> <span class="nav-text">搭建消费者服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Hystrix熔断机制"><span class="nav-number">3.4.</span> <span class="nav-text">配置Hystrix熔断机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Hystrix-Dashboard"><span class="nav-number">3.5.</span> <span class="nav-text">配置Hystrix-Dashboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Zuul路由网关"><span class="nav-number">3.6.</span> <span class="nav-text">配置Zuul路由网关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Zuul的错误回调"><span class="nav-number">3.6.1.</span> <span class="nav-text">配置Zuul的错误回调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Zuul服务过滤器"><span class="nav-number">3.6.2.</span> <span class="nav-text">配置Zuul服务过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建Config服务"><span class="nav-number">3.7.</span> <span class="nav-text">搭建Config服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端"><span class="nav-number">3.7.1.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client端"><span class="nav-number">3.7.2.</span> <span class="nav-text">Client端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建ZipKin服务"><span class="nav-number">3.8.</span> <span class="nav-text">搭建ZipKin服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端-1"><span class="nav-number">3.8.1.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client端-1"><span class="nav-number">3.8.2.</span> <span class="nav-text">Client端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建SpringBootAdmin服务"><span class="nav-number">3.9.</span> <span class="nav-text">搭建SpringBootAdmin服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server端-2"><span class="nav-number">3.9.1.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client端-2"><span class="nav-number">3.9.2.</span> <span class="nav-text">Client端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后续"><span class="nav-number">4.</span> <span class="nav-text">后续</span></a></li></ol></div>
+      </div>
       <!--/noindex-->
-      
 
-      
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Eric Shen"
+      src="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
+  <p class="site-author-name" itemprop="name">Eric Shen</p>
+  <div class="site-description" itemprop="description">Fake Geeker, Hoops Lover!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
 
     </div>
   </aside>
+  <div id="sidebar-dimmer"></div>
 
 
-        
       </div>
     </main>
 
-    <footer id="footer" class="footer">
+    <footer class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Eric Shen</span>
-
-  
 </div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
   <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
-
-
-
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
 
         
+
 
 
 
@@ -1030,31 +883,15 @@
         
       </div>
     </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
   </div>
 
   
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
 
 
 
@@ -1071,118 +908,9 @@
 
 
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
 
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
 
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
 
   
 
