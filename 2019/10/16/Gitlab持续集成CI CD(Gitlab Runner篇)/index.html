@@ -20,7 +20,7 @@
 <script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    hostname: new URL('https://ericshen.coding.me').hostname,
+    hostname: new URL('https://ericshen.xyz').hostname,
     root: '/',
     scheme: 'Gemini',
     version: '7.5.0',
@@ -51,7 +51,7 @@
 <meta name="keywords" content="gitlab,docker,gitlab-runner,CI&#x2F;CD">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gitlab持续集成CI CD(Gitlab Runner篇)">
-<meta property="og:url" content="https:&#x2F;&#x2F;ericshen.coding.me&#x2F;2019&#x2F;10&#x2F;16&#x2F;Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;ericshen.xyz&#x2F;2019&#x2F;10&#x2F;16&#x2F;Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)&#x2F;index.html">
 <meta property="og:site_name" content="Eric Shen Blog">
 <meta property="og:description" content="1. GitLab Runner 简介一般来说，构建任务都会占用很多的系统资源 (譬如编译代码)，而 GitLab CI 又是 GitLab 的一部分，如果由 GitLab CI 来运行构建任务的话，在执行构建任务的时候，GitLab 的性能会大幅下降。 GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做！ 因为 G">
 <meta property="og:locale" content="zh-CN">
@@ -64,7 +64,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;16&#x2F;vFhE859ZPDTlSc6.png">
 
-<link rel="canonical" href="https://ericshen.coding.me/2019/10/16/Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)/">
+<link rel="canonical" href="https://ericshen.xyz/2019/10/16/Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)/">
 
 
 <script id="page-configurations">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ericshen.coding.me/2019/10/16/Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)/">
+    <link itemprop="mainEntityOfPage" href="https://ericshen.xyz/2019/10/16/Gitlab%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90CI%20CD(Gitlab%20Runner%E7%AF%87)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
@@ -295,7 +295,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo tee /usr/<span class="built_in">local</span>/docker/runner/environment/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [</span><br><span class="line">  <span class="string">"https://registry.docker-cn.com"</span> <span class="comment">#docker-cn加速器</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"insecure-registries"</span>: [</span><br><span class="line">    <span class="string">"192.168.10.133:5000"</span>   <span class="comment">#harbor仓库地址</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>推荐配置阿里云镜像加速器，可参考<a href="https://ericshen.coding.me/2019/10/15/Linux安装Dokcer-CE/">Linux安装Dokcer CE 3.5</a></p>
+<p>推荐配置阿里云镜像加速器，可参考<a href="https://ericshen.coding.me/2019/10/15/Linux安装Dokcer-CE/" target="_blank" rel="noopener">Linux安装Dokcer CE 3.5</a></p>
 </blockquote>
 <h2 id="2-3-Dockerfile"><a href="#2-3-Dockerfile" class="headerlink" title="2.3 Dockerfile"></a>2.3 Dockerfile</h2><p>在<code>/usr/local/docker/runner/environment</code> 目录下创建 <code>Dockerfile</code></p>
 <p><code>vim /usr/local/docker/runner/environment/Dockerfile</code></p>
@@ -503,7 +503,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
