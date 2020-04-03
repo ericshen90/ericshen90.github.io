@@ -42,9 +42,9 @@
       <category term="Docker" scheme="https://ericshen.xyz/categories/PaaS/Docker/"/>
     
     
-      <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
-    
       <category term="gitlab" scheme="https://ericshen.xyz/tags/gitlab/"/>
+    
+      <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
     
       <category term="gitlab-runner" scheme="https://ericshen.xyz/tags/gitlab-runner/"/>
     
@@ -72,9 +72,9 @@
       <category term="PaaS" scheme="https://ericshen.xyz/categories/PaaS/"/>
     
     
-      <category term="linux" scheme="https://ericshen.xyz/tags/linux/"/>
-    
       <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
+    
+      <category term="linux" scheme="https://ericshen.xyz/tags/linux/"/>
     
       <category term="redis" scheme="https://ericshen.xyz/tags/redis/"/>
     
@@ -99,9 +99,9 @@
       <category term="PaaS" scheme="https://ericshen.xyz/categories/PaaS/"/>
     
     
-      <category term="linux" scheme="https://ericshen.xyz/tags/linux/"/>
-    
       <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
+    
+      <category term="linux" scheme="https://ericshen.xyz/tags/linux/"/>
     
       <category term="harbor" scheme="https://ericshen.xyz/tags/harbor/"/>
     
@@ -223,9 +223,9 @@
       <category term="PaaS" scheme="https://ericshen.xyz/categories/PaaS/"/>
     
     
-      <category term="nexus" scheme="https://ericshen.xyz/tags/nexus/"/>
-    
       <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
+    
+      <category term="nexus" scheme="https://ericshen.xyz/tags/nexus/"/>
     
   </entry>
   
@@ -251,9 +251,9 @@
       <category term="Docker" scheme="https://ericshen.xyz/categories/PaaS/Docker/"/>
     
     
-      <category term="linux" scheme="https://ericshen.xyz/tags/linux/"/>
-    
       <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
+    
+      <category term="linux" scheme="https://ericshen.xyz/tags/linux/"/>
     
   </entry>
   
