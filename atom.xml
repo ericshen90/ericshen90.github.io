@@ -42,9 +42,9 @@
       <category term="Docker" scheme="https://ericshen.xyz/categories/PaaS/Docker/"/>
     
     
-      <category term="gitlab" scheme="https://ericshen.xyz/tags/gitlab/"/>
-    
       <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
+    
+      <category term="gitlab" scheme="https://ericshen.xyz/tags/gitlab/"/>
     
       <category term="gitlab-runner" scheme="https://ericshen.xyz/tags/gitlab-runner/"/>
     
@@ -223,9 +223,9 @@
       <category term="PaaS" scheme="https://ericshen.xyz/categories/PaaS/"/>
     
     
-      <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
-    
       <category term="nexus" scheme="https://ericshen.xyz/tags/nexus/"/>
+    
+      <category term="docker" scheme="https://ericshen.xyz/tags/docker/"/>
     
   </entry>
   
