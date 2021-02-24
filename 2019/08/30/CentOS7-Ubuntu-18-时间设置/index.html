@@ -1,247 +1,244 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-  <link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="1. 基本概念1.1 GMT、UTC、CST、DST 时间
+UTC
 
-<link rel="stylesheet" href="/css/main.css">
+整个地球分为二十四时区，每个时区都有自己的本地时间。在国际无线电通信场合，为了统一起见，使用一个统一的时间，称为通用协调时(UTC, Universal Time Coordinated)。
 
+GMT
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+格林威治标准时间 (Greenwich Mean Time)指位于英国伦敦郊区的皇家格林尼治天文台的标准时间，因为本初子午线被">
+  
+  <meta name="author" content="Eric Shen">
+  <meta name="keywords" content="">
+  
+  <title>CentOS7 &amp; Ubuntu 18 时间设置 - Eric Shen Blog</title>
 
-
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    hostname: new URL('https://ericshen.xyz').hostname,
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.5.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    sidebarPadding: 40
-  };
-</script>
-
-  <meta name="description" content="1. 基本概念1.1 GMT、UTC、CST、DST 时间 UTC  整个地球分为二十四时区，每个时区都有自己的本地时间。在国际无线电通信场合，为了统一起见，使用一个统一的时间，称为通用协调时(UTC, Universal Time Coordinated)。  GMT  格林威治标准时间 (Greenwich Mean Time)指位于英国伦敦郊区的皇家格林尼治天文台的标准时间，因为本初子午线被">
-<meta name="keywords" content="linux">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CentOS7 &amp; Ubuntu 18 时间设置">
-<meta property="og:url" content="https:&#x2F;&#x2F;ericshen.xyz&#x2F;2019&#x2F;08&#x2F;30&#x2F;CentOS7-Ubuntu-18-%E6%97%B6%E9%97%B4%E8%AE%BE%E7%BD%AE&#x2F;index.html">
-<meta property="og:site_name" content="Eric Shen Blog">
-<meta property="og:description" content="1. 基本概念1.1 GMT、UTC、CST、DST 时间 UTC  整个地球分为二十四时区，每个时区都有自己的本地时间。在国际无线电通信场合，为了统一起见，使用一个统一的时间，称为通用协调时(UTC, Universal Time Coordinated)。  GMT  格林威治标准时间 (Greenwich Mean Time)指位于英国伦敦郊区的皇家格林尼治天文台的标准时间，因为本初子午线被">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-31T09:35:48.550Z">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://ericshen.xyz/2019/08/30/CentOS7-Ubuntu-18-%E6%97%B6%E9%97%B4%E8%AE%BE%E7%BD%AE/">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  <title>CentOS7 & Ubuntu 18 时间设置 | Eric Shen Blog</title>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+<link  rel="stylesheet" href="/css/main.css" />
 
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ericshen.xyz","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>EricShen's Blog</strong>&nbsp;</a>
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Eric Shen Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
-
-  </li>
-  </ul>
-
 </nav>
-</div>
-    </header>
 
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="CentOS7 & Ubuntu 18 时间设置">
+              
+            </span>
 
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-08-30 11:22" pubdate>
+        2019年8月30日 上午
+      </time>
+    </span>
+  
+</div>
 
-  <div class="posts-expand">
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
       
+      
+      42
+       分钟
+    </span>
+  
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ericshen.xyz/2019/08/30/CentOS7-Ubuntu-18-%E6%97%B6%E9%97%B4%E8%AE%BE%E7%BD%AE/">
+</div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content="Fake Geeker, Hoops Lover!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Eric Shen Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          CentOS7 & Ubuntu 18 时间设置
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-30 11:22:32" itemprop="dateCreated datePublished" datetime="2019-08-30T11:22:32+08:00">2019-08-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-31 17:35:48" itemprop="dateModified" datetime="2020-03-31T17:35:48+08:00">2020-03-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-            </span>
+            
+          </div>
 
           
-
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-        <h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1. 基本概念"></a>1. 基本概念</h2><h3 id="1-1-GMT、UTC、CST、DST-时间"><a href="#1-1-GMT、UTC、CST、DST-时间" class="headerlink" title="1.1 GMT、UTC、CST、DST 时间"></a>1.1 GMT、UTC、CST、DST 时间</h3><ul>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CentOS7 &amp; Ubuntu 18 时间设置</h1>
+            
+            <div class="markdown-body">
+              <h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1. 基本概念"></a>1. 基本概念</h2><h3 id="1-1-GMT、UTC、CST、DST-时间"><a href="#1-1-GMT、UTC、CST、DST-时间" class="headerlink" title="1.1 GMT、UTC、CST、DST 时间"></a>1.1 GMT、UTC、CST、DST 时间</h3><ul>
 <li>UTC</li>
 </ul>
 <p>整个地球分为二十四时区，每个时区都有自己的本地时间。在国际无线电通信场合，为了统一起见，使用一个统一的时间，称为通用协调时(UTC, Universal Time Coordinated)。</p>
@@ -253,7 +250,7 @@
 <li>CST</li>
 </ul>
 <p>中国标准时间 (China Standard Time)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GMT + 8 = UTC + 8 = CST</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">GMT + 8 = UTC + 8 = CST<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>DST</li>
@@ -269,25 +266,25 @@
 <li>系统时间</li>
 </ul>
 <p>一般在服务器启动时复制RTC时间，之后独立运行，保存了时间、时区和夏令时设置。</p>
-<h2 id="2-timedatectl-命令"><a href="#2-timedatectl-命令" class="headerlink" title="2. timedatectl 命令"></a>2. timedatectl 命令</h2><h3 id="2-1-使用帮助"><a href="#2-1-使用帮助" class="headerlink" title="2.1 使用帮助"></a>2.1 使用帮助</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[<span class="symbol">root@</span>localhost ~]# timedatectl -h</span><br><span class="line">timedatectl [OPTIONS...] COMMAND ...</span><br><span class="line"></span><br><span class="line">Query or change system time and date settings.</span><br><span class="line"></span><br><span class="line">  -h --help              Show <span class="keyword">this</span> help</span><br><span class="line">     --version           Show <span class="keyword">package</span> version</span><br><span class="line">     --adjust-system-clock</span><br><span class="line">                         Adjust system clock <span class="keyword">when</span> changing local RTC mode</span><br><span class="line">     --no-pager          Do not pipe output into a pager</span><br><span class="line">  -P --privileged        Acquire privileges before execution</span><br><span class="line">     --no-ask-password   Do not prompt <span class="keyword">for</span> password</span><br><span class="line">  -H --host=[<span class="symbol">USER@</span>]HOST  Operate on remote host</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line">  status                 Show current time settings</span><br><span class="line">  <span class="keyword">set</span>-time TIME          Set system time</span><br><span class="line">  <span class="keyword">set</span>-timezone ZONE      Set system timezone</span><br><span class="line">  list-timezones         Show known timezones</span><br><span class="line">  <span class="keyword">set</span>-local-rtc BOOL     Control whether RTC <span class="keyword">is</span> <span class="keyword">in</span> local time</span><br><span class="line">  <span class="keyword">set</span>-ntp BOOL           Control whether NTP <span class="keyword">is</span> enabled</span><br></pre></td></tr></table></figure>
+<h2 id="2-timedatectl-命令"><a href="#2-timedatectl-命令" class="headerlink" title="2. timedatectl 命令"></a>2. timedatectl 命令</h2><h3 id="2-1-使用帮助"><a href="#2-1-使用帮助" class="headerlink" title="2.1 使用帮助"></a>2.1 使用帮助</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs kotlin">[<span class="hljs-symbol">root@</span>localhost ~]# timedatectl -h<br>timedatectl [OPTIONS...] COMMAND ...<br><br>Query or change system time and date settings.<br><br>  -h --help              Show <span class="hljs-keyword">this</span> help<br>     --version           Show <span class="hljs-keyword">package</span> version<br>     --adjust-system-clock<br>                         Adjust system clock <span class="hljs-keyword">when</span> changing local RTC mode<br>     --no-pager          Do not pipe output into a pager<br>  -P --privileged        Acquire privileges before execution<br>     --no-ask-password   Do not prompt <span class="hljs-keyword">for</span> password<br>  -H --host=[<span class="hljs-symbol">USER@</span>]HOST  Operate on remote host<br><br>Commands:<br>  status                 Show current time settings<br>  <span class="hljs-keyword">set</span>-time TIME          Set system time<br>  <span class="hljs-keyword">set</span>-timezone ZONE      Set system timezone<br>  list-timezones         Show known timezones<br>  <span class="hljs-keyword">set</span>-local-rtc BOOL     Control whether RTC <span class="hljs-keyword">is</span> <span class="hljs-keyword">in</span> local time<br>  <span class="hljs-keyword">set</span>-ntp BOOL           Control whether NTP <span class="hljs-keyword">is</span> enabled<br></code></pre></td></tr></table></figure>
 
 <h3 id="2-2-命令示例"><a href="#2-2-命令示例" class="headerlink" title="2.2 命令示例"></a>2.2 命令示例</h3><p>1.显示系统的当前时间和日期</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">timedatectl</span><br><span class="line"><span class="comment"># timedatectl status</span></span><br><span class="line"><span class="comment"># 两条命令效果等同</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">timedatectl<br><span class="hljs-comment"># timedatectl status</span><br><span class="hljs-comment"># 两条命令效果等同</span><br></code></pre></td></tr></table></figure>
 
 <p>2.设置日期与时间</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">timedatectl <span class="built_in">set</span>-time <span class="string">"YYYY-MM-DD HH:MM:SS"</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-time <span class="string">"YYYY-MM-DD"</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-time <span class="string">"HH:MM:SS"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">timedatectl <span class="hljs-built_in">set</span>-time <span class="hljs-string">"YYYY-MM-DD HH:MM:SS"</span><br>timedatectl <span class="hljs-built_in">set</span>-time <span class="hljs-string">"YYYY-MM-DD"</span><br>timedatectl <span class="hljs-built_in">set</span>-time <span class="hljs-string">"HH:MM:SS"</span><br></code></pre></td></tr></table></figure>
 
 <p>3.查看所有可用的时区</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">timedatectl <span class="keyword">list</span>-timezones</span><br><span class="line"><span class="comment"># 亚洲</span></span><br><span class="line">timedatectl <span class="keyword">list</span>-timezones |  grep  -E <span class="string">"Asia/S.*"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php">timedatectl <span class="hljs-keyword">list</span>-timezones<br><span class="hljs-comment"># 亚洲</span><br>timedatectl <span class="hljs-keyword">list</span>-timezones |  grep  -E <span class="hljs-string">"Asia/S.*"</span><br></code></pre></td></tr></table></figure>
 
 <p>4.设置时区</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timedatectl <span class="built_in">set</span>-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">timedatectl <span class="hljs-built_in">set</span>-timezone Asia/Shanghai<br></code></pre></td></tr></table></figure>
 
 <p>5.设置硬件时间</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 硬件时间默认为UTC</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-local-rtc 1</span><br><span class="line"><span class="comment"># hwclock --systohc --localtime</span></span><br><span class="line"><span class="comment"># 两条命令效果等同</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 硬件时间默认为UTC</span><br>timedatectl <span class="hljs-built_in">set</span>-local-rtc 1<br><span class="hljs-comment"># hwclock --systohc --localtime</span><br><span class="hljs-comment"># 两条命令效果等同</span><br></code></pre></td></tr></table></figure>
 
 <p>6.启用时间同步</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">timedatectl <span class="built_in">set</span>-ntp yes</span><br><span class="line"><span class="comment"># yes或no; 1或0也可以</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">timedatectl <span class="hljs-built_in">set</span>-ntp yes<br><span class="hljs-comment"># yes或no; 1或0也可以</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="3-Chrony-服务"><a href="#3-Chrony-服务" class="headerlink" title="3. Chrony 服务"></a>3. Chrony 服务</h2><p>Chrony是网络时间协议的 (NTP) 的另一种实现，由两个程序组成，分别是chronyd和chronyc。</p>
 <p>chronyd是一个后台运行的守护进程，用于调整内核中运行的系统时钟和时钟服务器同步。它确定计算机增减时间的比率，并对此进行补偿。</p>
@@ -303,20 +300,20 @@
 <blockquote>
 <p>在CentOS7下为标配的时间同步服务，当然也可以使用以前的NTP同步方式，不过要安装NTP服务。</p>
 </blockquote>
-<h3 id="3-1-安装使用"><a href="#3-1-安装使用" class="headerlink" title="3.1 安装使用"></a>3.1 安装使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install chrony</span><br><span class="line">systemctl start chronyd</span><br><span class="line">systemctl <span class="built_in">enable</span> chronyd</span><br></pre></td></tr></table></figure>
+<h3 id="3-1-安装使用"><a href="#3-1-安装使用" class="headerlink" title="3.1 安装使用"></a>3.1 安装使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum install chrony<br>systemctl start chronyd<br>systemctl <span class="hljs-built_in">enable</span> chronyd<br></code></pre></td></tr></table></figure>
 
 <h3 id="3-2-配置文件"><a href="#3-2-配置文件" class="headerlink" title="3.2 配置文件"></a>3.2 配置文件</h3><p>当Chrony启动时，它会读取/etc/chrony.conf配置文件中的设置。也就是锁，如果需要更改时间同步的服务器，修改此配置文件即可。</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="meta"># grep -Ev <span class="meta-string">"^$|^#"</span> /etc/chrony.conf</span></span><br><span class="line"><span class="meta"># 该参数可以多次用于添加时钟服务器，必须以<span class="meta-string">"server "</span>格式使用。一般而言，你想添加多少服务器，就可以添加多少服务器。</span></span><br><span class="line">server <span class="number">0.</span>centos.pool.ntp.org iburst</span><br><span class="line">server <span class="number">1.</span>centos.pool.ntp.org iburst</span><br><span class="line">server <span class="number">2.</span>centos.pool.ntp.org iburst</span><br><span class="line">server <span class="number">3.</span>centos.pool.ntp.org iburst</span><br><span class="line"><span class="meta"># stratumweight指令设置当chronyd从可用源中选择同步源时，每个层应该添加多少距离到同步距离。默认情况下，设置为0，让chronyd在选择源时忽略源的层级。</span></span><br><span class="line">stratumweight <span class="number">0</span></span><br><span class="line"><span class="meta"># chronyd程序的主要行为之一，就是根据实际时间计算出计算机增减时间的比率，将它记录到一个文件中是最合理的，它会在重启后为系统时钟作出补偿，甚至可能的话，会从时钟服务器获得较好的估值。</span></span><br><span class="line">driftfile /var/lib/chrony/drift</span><br><span class="line"><span class="meta"># rtcsync指令将启用一个内核模式，在该模式中，系统时间每11分钟会拷贝到实时时钟（RTC）。</span></span><br><span class="line">rtcsync</span><br><span class="line"><span class="meta"># 通常，chronyd将根据需求通过减慢或加速时钟，使得系统逐步纠正所有时间偏差。在某些特定情况下，系统时钟可能会漂移过快，导致该调整过程消耗很长的时间来纠正系统时钟。</span></span><br><span class="line"><span class="meta"># 该指令强制chronyd在调整期大于某个阀值时步进调整系统时钟，但只有在因为chronyd启动时间超过指定限制（可使用负值来禁用限制），没有更多时钟更新时才生效。</span></span><br><span class="line">makestep <span class="number">10</span> <span class="number">3</span></span><br><span class="line"><span class="meta"># 这里你可以指定一台主机、子网，或者网络以允许或拒绝NTP连接到扮演时钟服务器的机器。</span></span><br><span class="line"><span class="meta">#allow 192.168/16</span></span><br><span class="line"><span class="meta"># 该指令允许你限制chronyd监听哪个网络接口的命令包（由chronyc执行）。该指令通过cmddeny机制提供了一个除上述限制以外可用的额外的访问控制等级。</span></span><br><span class="line">bindcmdaddress <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">bindcmdaddress ::<span class="number">1</span></span><br><span class="line">keyfile /etc/chrony.keys</span><br><span class="line"><span class="meta"># 指定了/etc/chrony.keys中哪一条密码被使用</span></span><br><span class="line">commandkey <span class="number">1</span></span><br><span class="line"><span class="meta"># 此参数指定了产生一个SHA1或MD5加密的密码，存放在/etc/chrony.keys中</span></span><br><span class="line">generatecommandkey</span><br><span class="line">noclientlog</span><br><span class="line">logchange <span class="number">0.5</span></span><br><span class="line">logdir /var/log/chrony</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs objectivec">[root@localhost ~]<span class="hljs-meta"># grep -Ev <span class="hljs-meta-string">"^$|^#"</span> /etc/chrony.conf</span><br><span class="hljs-meta"># 该参数可以多次用于添加时钟服务器，必须以<span class="hljs-meta-string">"server "</span>格式使用。一般而言，你想添加多少服务器，就可以添加多少服务器。</span><br>server <span class="hljs-number">0.</span>centos.pool.ntp.org iburst<br>server <span class="hljs-number">1.</span>centos.pool.ntp.org iburst<br>server <span class="hljs-number">2.</span>centos.pool.ntp.org iburst<br>server <span class="hljs-number">3.</span>centos.pool.ntp.org iburst<br><span class="hljs-meta"># stratumweight指令设置当chronyd从可用源中选择同步源时，每个层应该添加多少距离到同步距离。默认情况下，设置为0，让chronyd在选择源时忽略源的层级。</span><br>stratumweight <span class="hljs-number">0</span><br><span class="hljs-meta"># chronyd程序的主要行为之一，就是根据实际时间计算出计算机增减时间的比率，将它记录到一个文件中是最合理的，它会在重启后为系统时钟作出补偿，甚至可能的话，会从时钟服务器获得较好的估值。</span><br>driftfile /var/lib/chrony/drift<br><span class="hljs-meta"># rtcsync指令将启用一个内核模式，在该模式中，系统时间每11分钟会拷贝到实时时钟（RTC）。</span><br>rtcsync<br><span class="hljs-meta"># 通常，chronyd将根据需求通过减慢或加速时钟，使得系统逐步纠正所有时间偏差。在某些特定情况下，系统时钟可能会漂移过快，导致该调整过程消耗很长的时间来纠正系统时钟。</span><br><span class="hljs-meta"># 该指令强制chronyd在调整期大于某个阀值时步进调整系统时钟，但只有在因为chronyd启动时间超过指定限制（可使用负值来禁用限制），没有更多时钟更新时才生效。</span><br>makestep <span class="hljs-number">10</span> <span class="hljs-number">3</span><br><span class="hljs-meta"># 这里你可以指定一台主机、子网，或者网络以允许或拒绝NTP连接到扮演时钟服务器的机器。</span><br><span class="hljs-meta">#allow 192.168/16</span><br><span class="hljs-meta"># 该指令允许你限制chronyd监听哪个网络接口的命令包（由chronyc执行）。该指令通过cmddeny机制提供了一个除上述限制以外可用的额外的访问控制等级。</span><br>bindcmdaddress <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span><br>bindcmdaddress ::<span class="hljs-number">1</span><br>keyfile /etc/chrony.keys<br><span class="hljs-meta"># 指定了/etc/chrony.keys中哪一条密码被使用</span><br>commandkey <span class="hljs-number">1</span><br><span class="hljs-meta"># 此参数指定了产生一个SHA1或MD5加密的密码，存放在/etc/chrony.keys中</span><br>generatecommandkey<br>noclientlog<br>logchange <span class="hljs-number">0.5</span><br>logdir /var/log/chrony<br></code></pre></td></tr></table></figure>
 
 <p>/etc/chrony.keys文件</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">root@localhost ~</span>]<span class="meta">#  cat /etc/chrony.keys</span></span><br><span class="line"><span class="meta">#1 a_key</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span> SHA1 HEX:<span class="number">8B</span>96920E9C83612FE34A8C281C31310BD2E1F624</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp">[<span class="hljs-meta">root@localhost ~</span>]<span class="hljs-meta">#  cat /etc/chrony.keys</span><br><span class="hljs-meta">#1 a_key</span><br><br><span class="hljs-number">1</span> SHA1 HEX:<span class="hljs-number">8B</span>96920E9C83612FE34A8C281C31310BD2E1F624<br></code></pre></td></tr></table></figure>
 
 <p>内容来自 <a href="https://link.jianshu.com?t=http://www.cnblogs.com/abclife/p/4736064.html" target="_blank" rel="noopener">RHEL7 – 使用Chrony设置时间与时钟服务器同步</a></p>
 <h2 id="3-3-chronyc"><a href="#3-3-chronyc" class="headerlink" title="3.3 chronyc"></a>3.3 chronyc</h2><p>1.查看帮助</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@localhost ~]</span># <span class="selector-tag">chronyc</span> <span class="selector-tag">--help</span></span><br><span class="line"><span class="selector-tag">Usage</span>: <span class="selector-tag">chronyc</span> <span class="selector-attr">[-h HOST]</span> <span class="selector-attr">[-p PORT]</span> <span class="selector-attr">[-n]</span> <span class="selector-attr">[-4|-6]</span> <span class="selector-attr">[-a]</span> <span class="selector-attr">[-f FILE]</span> <span class="selector-attr">[-m]</span> <span class="selector-attr">[COMMAND]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-attr">[root@localhost ~]</span># <span class="hljs-selector-tag">chronyc</span> <span class="hljs-selector-tag">--help</span><br><span class="hljs-selector-tag">Usage</span>: <span class="hljs-selector-tag">chronyc</span> <span class="hljs-selector-attr">[-h HOST]</span> <span class="hljs-selector-attr">[-p PORT]</span> <span class="hljs-selector-attr">[-n]</span> <span class="hljs-selector-attr">[-4|-6]</span> <span class="hljs-selector-attr">[-a]</span> <span class="hljs-selector-attr">[-f FILE]</span> <span class="hljs-selector-attr">[-m]</span> <span class="hljs-selector-attr">[COMMAND]</span><br></code></pre></td></tr></table></figure>
 
 <p>2.查看详细的帮助信息</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# chronyc</span><br><span class="line">chrony version 2.1.1</span><br><span class="line">Copyright (C) 1997-2003, 2007, 2009-2015 Richard P. Curnow and others</span><br><span class="line">chrony comes with ABSOLUTELY NO WARRANTY.  This is free software, and</span><br><span class="line">you are welcome to redistribute it under certain conditions.  See the</span><br><span class="line">GNU General Public License version 2 for details.</span><br><span class="line"></span><br><span class="line">chronyc&gt; help</span><br><span class="line">Commands:</span><br><span class="line">accheck <span class="tag">&lt;<span class="name">address</span>&gt;</span> : Check whether NTP access is allowed to <span class="tag">&lt;<span class="name">address</span>&gt;</span></span><br><span class="line">activity : Check how many NTP sources are online/offline</span><br><span class="line">add peer <span class="tag">&lt;<span class="name">address</span>&gt;</span> ... : Add a new NTP peer</span><br><span class="line">add server <span class="tag">&lt;<span class="name">address</span>&gt;</span> ... : Add a new NTP server</span><br><span class="line">allow [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Allow NTP access to that subnet as a default</span><br><span class="line">allow all [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Allow NTP access to that subnet and all children</span><br><span class="line">burst <span class="tag">&lt;<span class="name">n-good</span>&gt;</span>/<span class="tag">&lt;<span class="name">n-max</span>&gt;</span> [<span class="tag">&lt;<span class="name">mask</span>&gt;</span>/<span class="tag">&lt;<span class="name">masked-address</span>&gt;</span>] : Start a rapid set of measurements</span><br><span class="line">clients : Report on clients that have accessed the server</span><br><span class="line">cmdaccheck <span class="tag">&lt;<span class="name">address</span>&gt;</span> : Check whether command access is allowed to <span class="tag">&lt;<span class="name">address</span>&gt;</span></span><br><span class="line">cmdallow [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Allow command access to that subnet as a default</span><br><span class="line">cmdallow all [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Allow command access to that subnet and all children</span><br><span class="line">cmddeny [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Deny command access to that subnet as a default</span><br><span class="line">cmddeny all [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Deny command access to that subnet and all children</span><br><span class="line">cyclelogs : Close and re-open logs files</span><br><span class="line">delete <span class="tag">&lt;<span class="name">address</span>&gt;</span> : Remove an NTP server or peer</span><br><span class="line">deny [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Deny NTP access to that subnet as a default</span><br><span class="line">deny all [<span class="tag">&lt;<span class="name">subnet-addr</span>&gt;</span>] : Deny NTP access to that subnet and all children</span><br><span class="line">dump : Dump all measurements to save files</span><br><span class="line">local off : Disable server capability for unsynchronised clock</span><br><span class="line">local stratum <span class="tag">&lt;<span class="name">stratum</span>&gt;</span> : Enable server capability for unsynchronised clock</span><br><span class="line">makestep [<span class="tag">&lt;<span class="name">threshold</span>&gt;</span> <span class="tag">&lt;<span class="name">updates</span>&gt;</span>] : Correct clock by stepping</span><br><span class="line">manual off|on|reset : Disable/enable/reset settime command and statistics</span><br><span class="line">manual list : Show previous settime entries</span><br><span class="line">maxdelay <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-max-delay</span>&gt;</span> : Modify maximum round-trip valid sample delay for source</span><br><span class="line">maxdelayratio <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-max-ratio</span>&gt;</span> : Modify max round-trip delay ratio for source</span><br><span class="line">maxdelaydevratio <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-max-ratio</span>&gt;</span> : Modify max round-trip delay dev ratio for source</span><br><span class="line">maxpoll <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-maxpoll</span>&gt;</span> : Modify maximum polling interval of source</span><br><span class="line">maxupdateskew <span class="tag">&lt;<span class="name">new-max-skew</span>&gt;</span> : Modify maximum skew for a clock frequency update to be made</span><br><span class="line">minpoll <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-minpoll</span>&gt;</span> : Modify minimum polling interval of source</span><br><span class="line">minstratum <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-min-stratum</span>&gt;</span> : Modify minimum stratum of source</span><br><span class="line">offline [<span class="tag">&lt;<span class="name">mask</span>&gt;</span>/<span class="tag">&lt;<span class="name">masked-address</span>&gt;</span>] : Set sources in subnet to offline status</span><br><span class="line">online [<span class="tag">&lt;<span class="name">mask</span>&gt;</span>/<span class="tag">&lt;<span class="name">masked-address</span>&gt;</span>] : Set sources in subnet to online status</span><br><span class="line">password [<span class="tag">&lt;<span class="name">new-password</span>&gt;</span>] : Set command authentication password</span><br><span class="line">polltarget <span class="tag">&lt;<span class="name">address</span>&gt;</span> <span class="tag">&lt;<span class="name">new-poll-target</span>&gt;</span> : Modify poll target of source</span><br><span class="line">reselect : Reselect synchronisation source</span><br><span class="line">rtcdata : Print current RTC performance parameters</span><br><span class="line">settime <span class="tag">&lt;<span class="name">date</span>/<span class="attr">time</span> (<span class="attr">e.g.</span> <span class="attr">Nov</span> <span class="attr">21</span>, <span class="attr">1997</span> <span class="attr">16:30:05</span> <span class="attr">or</span> <span class="attr">16:30:05</span>)&gt;</span> : Manually set the daemon time</span><br><span class="line">smoothing : Display current time smoothing state</span><br><span class="line">smoothtime reset|activate : Reset/activate time smoothing</span><br><span class="line">sources [-v] : Display information about current sources</span><br><span class="line">sourcestats [-v] : Display estimation information about current sources</span><br><span class="line">tracking : Display system time information</span><br><span class="line">trimrtc : Correct RTC relative to system clock</span><br><span class="line">waitsync [max-tries [max-correction [max-skew]]] : Wait until synchronised</span><br><span class="line">writertc : Save RTC parameters to file</span><br><span class="line"></span><br><span class="line">authhash <span class="tag">&lt;<span class="name">name</span>&gt;</span>: Set command authentication hash function</span><br><span class="line">dns -n|+n : Disable/enable resolving IP addresses to hostnames</span><br><span class="line">dns -4|-6|-46 : Resolve hostnames only to IPv4/IPv6/both addresses</span><br><span class="line">timeout <span class="tag">&lt;<span class="name">milliseconds</span>&gt;</span> : Set initial response timeout</span><br><span class="line">retries <span class="tag">&lt;<span class="name">n</span>&gt;</span> : Set maximum number of retries</span><br><span class="line">exit|quit : Leave the program</span><br><span class="line">help : Generate this help</span><br><span class="line"></span><br><span class="line">chronyc&gt; quit</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs xml">[root@localhost ~]# chronyc<br>chrony version 2.1.1<br>Copyright (C) 1997-2003, 2007, 2009-2015 Richard P. Curnow and others<br>chrony comes with ABSOLUTELY NO WARRANTY.  This is free software, and<br>you are welcome to redistribute it under certain conditions.  See the<br>GNU General Public License version 2 for details.<br><br>chronyc&gt; help<br>Commands:<br>accheck <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> : Check whether NTP access is allowed to <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span><br>activity : Check how many NTP sources are online/offline<br>add peer <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> ... : Add a new NTP peer<br>add server <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> ... : Add a new NTP server<br>allow [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Allow NTP access to that subnet as a default<br>allow all [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Allow NTP access to that subnet and all children<br>burst <span class="hljs-tag">&lt;<span class="hljs-name">n-good</span>&gt;</span>/<span class="hljs-tag">&lt;<span class="hljs-name">n-max</span>&gt;</span> [<span class="hljs-tag">&lt;<span class="hljs-name">mask</span>&gt;</span>/<span class="hljs-tag">&lt;<span class="hljs-name">masked-address</span>&gt;</span>] : Start a rapid set of measurements<br>clients : Report on clients that have accessed the server<br>cmdaccheck <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> : Check whether command access is allowed to <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span><br>cmdallow [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Allow command access to that subnet as a default<br>cmdallow all [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Allow command access to that subnet and all children<br>cmddeny [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Deny command access to that subnet as a default<br>cmddeny all [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Deny command access to that subnet and all children<br>cyclelogs : Close and re-open logs files<br>delete <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> : Remove an NTP server or peer<br>deny [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Deny NTP access to that subnet as a default<br>deny all [<span class="hljs-tag">&lt;<span class="hljs-name">subnet-addr</span>&gt;</span>] : Deny NTP access to that subnet and all children<br>dump : Dump all measurements to save files<br>local off : Disable server capability for unsynchronised clock<br>local stratum <span class="hljs-tag">&lt;<span class="hljs-name">stratum</span>&gt;</span> : Enable server capability for unsynchronised clock<br>makestep [<span class="hljs-tag">&lt;<span class="hljs-name">threshold</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">updates</span>&gt;</span>] : Correct clock by stepping<br>manual off|on|reset : Disable/enable/reset settime command and statistics<br>manual list : Show previous settime entries<br>maxdelay <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-max-delay</span>&gt;</span> : Modify maximum round-trip valid sample delay for source<br>maxdelayratio <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-max-ratio</span>&gt;</span> : Modify max round-trip delay ratio for source<br>maxdelaydevratio <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-max-ratio</span>&gt;</span> : Modify max round-trip delay dev ratio for source<br>maxpoll <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-maxpoll</span>&gt;</span> : Modify maximum polling interval of source<br>maxupdateskew <span class="hljs-tag">&lt;<span class="hljs-name">new-max-skew</span>&gt;</span> : Modify maximum skew for a clock frequency update to be made<br>minpoll <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-minpoll</span>&gt;</span> : Modify minimum polling interval of source<br>minstratum <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-min-stratum</span>&gt;</span> : Modify minimum stratum of source<br>offline [<span class="hljs-tag">&lt;<span class="hljs-name">mask</span>&gt;</span>/<span class="hljs-tag">&lt;<span class="hljs-name">masked-address</span>&gt;</span>] : Set sources in subnet to offline status<br>online [<span class="hljs-tag">&lt;<span class="hljs-name">mask</span>&gt;</span>/<span class="hljs-tag">&lt;<span class="hljs-name">masked-address</span>&gt;</span>] : Set sources in subnet to online status<br>password [<span class="hljs-tag">&lt;<span class="hljs-name">new-password</span>&gt;</span>] : Set command authentication password<br>polltarget <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">new-poll-target</span>&gt;</span> : Modify poll target of source<br>reselect : Reselect synchronisation source<br>rtcdata : Print current RTC performance parameters<br>settime <span class="hljs-tag">&lt;<span class="hljs-name">date</span>/<span class="hljs-attr">time</span> (<span class="hljs-attr">e.g.</span> <span class="hljs-attr">Nov</span> <span class="hljs-attr">21</span>, <span class="hljs-attr">1997</span> <span class="hljs-attr">16:30:05</span> <span class="hljs-attr">or</span> <span class="hljs-attr">16:30:05</span>)&gt;</span> : Manually set the daemon time<br>smoothing : Display current time smoothing state<br>smoothtime reset|activate : Reset/activate time smoothing<br>sources [-v] : Display information about current sources<br>sourcestats [-v] : Display estimation information about current sources<br>tracking : Display system time information<br>trimrtc : Correct RTC relative to system clock<br>waitsync [max-tries [max-correction [max-skew]]] : Wait until synchronised<br>writertc : Save RTC parameters to file<br><br>authhash <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>: Set command authentication hash function<br>dns -n|+n : Disable/enable resolving IP addresses to hostnames<br>dns -4|-6|-46 : Resolve hostnames only to IPv4/IPv6/both addresses<br>timeout <span class="hljs-tag">&lt;<span class="hljs-name">milliseconds</span>&gt;</span> : Set initial response timeout<br>retries <span class="hljs-tag">&lt;<span class="hljs-name">n</span>&gt;</span> : Set maximum number of retries<br>exit|quit : Leave the program<br>help : Generate this help<br><br>chronyc&gt; quit<br></code></pre></td></tr></table></figure>
 
 <p>3.常用命令</p>
 <ul>
@@ -329,21 +326,21 @@
 <li><code>tracking</code> 显示系统时间信息</li>
 </ul>
 <p>示例：查看时间同步的信息来源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># chronyc sources</span></span><br><span class="line">210 Number of sources = 3</span><br><span class="line">MS Name/IP address         Stratum Poll Reach LastRx Last sample</span><br><span class="line">===============================================================================</span><br><span class="line">^+ 202.118.1.130                 2   6    37   104  +2189us[  +23ms] +/-   27ms</span><br><span class="line">^* dns1.synet.edu.cn             2   6    77    40   +626us[  +21ms] +/-   33ms</span><br><span class="line">^? 2001:da8:9000::81             0   6     0   10y     +0ns[   +0ns] +/-    0ns</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@localhost ~]<span class="hljs-comment"># chronyc sources</span><br>210 Number of sources = 3<br>MS Name/IP address         Stratum Poll Reach LastRx Last sample<br>===============================================================================<br>^+ 202.118.1.130                 2   6    37   104  +2189us[  +23ms] +/-   27ms<br>^* dns1.synet.edu.cn             2   6    77    40   +626us[  +21ms] +/-   33ms<br>^? 2001:da8:9000::81             0   6     0   10y     +0ns[   +0ns] +/-    0ns<br></code></pre></td></tr></table></figure>
 
 <p>sources可以加-v参数查看状态信息的说明</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># chronyc sources -v</span></span><br><span class="line">210 Number of sources = 3</span><br><span class="line"></span><br><span class="line">  .-- Source mode  <span class="string">'^'</span> = server, <span class="string">'='</span> = peer, <span class="string">'#'</span> = <span class="built_in">local</span> clock.</span><br><span class="line"> / .- Source state <span class="string">'*'</span> = current synced, <span class="string">'+'</span> = combined , <span class="string">'-'</span> = not combined,</span><br><span class="line">| /   <span class="string">'?'</span> = unreachable, <span class="string">'x'</span> = time may be <span class="keyword">in</span> error, <span class="string">'~'</span> = time too variable.</span><br><span class="line">||                                                 .- xxxx [ yyyy ] +/- zzzz</span><br><span class="line">||      Reachability register (octal) -.           |  xxxx = adjusted offset,</span><br><span class="line">||      Log2(Polling interval) --.      |          |  yyyy = measured offset,</span><br><span class="line">||                                \     |          |  zzzz = estimated error.</span><br><span class="line">||                                 |    |           \</span><br><span class="line">MS Name/IP address         Stratum Poll Reach LastRx Last sample</span><br><span class="line">===============================================================================</span><br><span class="line">^+ 202.118.1.130                 2   6    37   126  +2189us[  +23ms] +/-   27ms</span><br><span class="line">^* dns1.synet.edu.cn             2   6    77    61   +626us[  +21ms] +/-   33ms</span><br><span class="line">^? 2001:da8:9000::81             0   6     0   10y     +0ns[   +0ns] +/-    0ns</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@localhost ~]<span class="hljs-comment"># chronyc sources -v</span><br>210 Number of sources = 3<br><br>  .-- Source mode  <span class="hljs-string">'^'</span> = server, <span class="hljs-string">'='</span> = peer, <span class="hljs-string">'#'</span> = <span class="hljs-built_in">local</span> clock.<br> / .- Source state <span class="hljs-string">'*'</span> = current synced, <span class="hljs-string">'+'</span> = combined , <span class="hljs-string">'-'</span> = not combined,<br>| /   <span class="hljs-string">'?'</span> = unreachable, <span class="hljs-string">'x'</span> = time may be <span class="hljs-keyword">in</span> error, <span class="hljs-string">'~'</span> = time too variable.<br>||                                                 .- xxxx [ yyyy ] +/- zzzz<br>||      Reachability register (octal) -.           |  xxxx = adjusted offset,<br>||      Log2(Polling interval) --.      |          |  yyyy = measured offset,<br>||                                \     |          |  zzzz = estimated error.<br>||                                 |    |           \<br>MS Name/IP address         Stratum Poll Reach LastRx Last sample<br>===============================================================================<br>^+ 202.118.1.130                 2   6    37   126  +2189us[  +23ms] +/-   27ms<br>^* dns1.synet.edu.cn             2   6    77    61   +626us[  +21ms] +/-   33ms<br>^? 2001:da8:9000::81             0   6     0   10y     +0ns[   +0ns] +/-    0ns<br></code></pre></td></tr></table></figure>
 
 <p>4.chronyc在桌面版提供用户界面，需要通过以下命令安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install system-config-date</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">yum -y install system-config-date<br></code></pre></td></tr></table></figure>
 
-<h2 id="4-实例"><a href="#4-实例" class="headerlink" title="4. 实例"></a>4. 实例</h2><h3 id="4-1-设置系统时间为中国时区并启用时间同步"><a href="#4-1-设置系统时间为中国时区并启用时间同步" class="headerlink" title="4.1 设置系统时间为中国时区并启用时间同步"></a>4.1 设置系统时间为中国时区并启用时间同步</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">yum install chrony</span><br><span class="line"><span class="comment"># 启用</span></span><br><span class="line">  systemctl start chronyd</span><br><span class="line">systemctl <span class="built_in">enable</span> chronyd</span><br><span class="line"><span class="comment"># 设置亚洲时区</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-timezone Asia/Shanghai</span><br><span class="line"><span class="comment"># 启用NTP同步</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-ntp yes</span><br></pre></td></tr></table></figure>
+<h2 id="4-实例"><a href="#4-实例" class="headerlink" title="4. 实例"></a>4. 实例</h2><h3 id="4-1-设置系统时间为中国时区并启用时间同步"><a href="#4-1-设置系统时间为中国时区并启用时间同步" class="headerlink" title="4.1 设置系统时间为中国时区并启用时间同步"></a>4.1 设置系统时间为中国时区并启用时间同步</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装</span><br>yum install chrony<br><span class="hljs-comment"># 启用</span><br>  systemctl start chronyd<br>systemctl <span class="hljs-built_in">enable</span> chronyd<br><span class="hljs-comment"># 设置亚洲时区</span><br>timedatectl <span class="hljs-built_in">set</span>-timezone Asia/Shanghai<br><span class="hljs-comment"># 启用NTP同步</span><br>timedatectl <span class="hljs-built_in">set</span>-ntp yes<br></code></pre></td></tr></table></figure>
 
 <p>这样服务器的时间就跟NTP服务器同步了，非常简单的操作。</p>
 <p>也可以不使用Chrony，用NTP服务的时间同步。但<strong>不推荐</strong>。</p>
-<h3 id="4-2-安装NTP服务使用其同步时间"><a href="#4-2-安装NTP服务使用其同步时间" class="headerlink" title="4.2 安装NTP服务使用其同步时间"></a>4.2 安装NTP服务使用其同步时间</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装ntp服务</span></span><br><span class="line">yum install ntp</span><br><span class="line"><span class="comment"># 开机启动服务</span></span><br><span class="line">systemctl <span class="built_in">enable</span> ntpd</span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">systemctl start ntpd</span><br><span class="line"><span class="comment"># 设置亚洲时区</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-timezone Asia/Shanghai</span><br><span class="line"><span class="comment"># 启用NTP同步</span></span><br><span class="line">timedatectl <span class="built_in">set</span>-ntp yes</span><br><span class="line"><span class="comment"># 重启ntp服务</span></span><br><span class="line">systemctl restart ntpd</span><br><span class="line"><span class="comment"># 手动同步时间</span></span><br><span class="line">ntpq -p</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-安装NTP服务使用其同步时间"><a href="#4-2-安装NTP服务使用其同步时间" class="headerlink" title="4.2 安装NTP服务使用其同步时间"></a>4.2 安装NTP服务使用其同步时间</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装ntp服务</span><br>yum install ntp<br><span class="hljs-comment"># 开机启动服务</span><br>systemctl <span class="hljs-built_in">enable</span> ntpd<br><span class="hljs-comment"># 启动服务</span><br>systemctl start ntpd<br><span class="hljs-comment"># 设置亚洲时区</span><br>timedatectl <span class="hljs-built_in">set</span>-timezone Asia/Shanghai<br><span class="hljs-comment"># 启用NTP同步</span><br>timedatectl <span class="hljs-built_in">set</span>-ntp yes<br><span class="hljs-comment"># 重启ntp服务</span><br>systemctl restart ntpd<br><span class="hljs-comment"># 手动同步时间</span><br>ntpq -p<br></code></pre></td></tr></table></figure>
 
-<h3 id="4-3-RTC设为本地时间会有告警"><a href="#4-3-RTC设为本地时间会有告警" class="headerlink" title="4.3 RTC设为本地时间会有告警"></a>4.3 RTC设为本地时间会有告警</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">root@localhost ~</span>]<span class="meta"># timedatectl set-local-rtc 1</span></span><br><span class="line">[<span class="meta">root@localhost ~</span>]<span class="meta"># timedatectl</span></span><br><span class="line">      Local time: Thu <span class="number">2016</span><span class="number">-05</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">31</span>:<span class="number">59</span> CST</span><br><span class="line">  Universal time: Thu <span class="number">2016</span><span class="number">-05</span><span class="number">-26</span> <span class="number">07</span>:<span class="number">31</span>:<span class="number">59</span> UTC</span><br><span class="line">        RTC time: Thu <span class="number">2016</span><span class="number">-05</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">31</span>:<span class="number">59</span></span><br><span class="line">       Time zone: Asia/Shanghai (CST, +<span class="number">0800</span>)</span><br><span class="line">     NTP enabled: yes</span><br><span class="line">NTP synchronized: yes</span><br><span class="line"> RTC <span class="keyword">in</span> local TZ: yes</span><br><span class="line">      DST active: n/a</span><br><span class="line"></span><br><span class="line">Warning: The system <span class="keyword">is</span> configured to read the RTC time <span class="keyword">in</span> the local time zone.</span><br><span class="line">         This mode can not be fully supported. It will create various problems</span><br><span class="line">         with time zone changes and daylight saving time adjustments. The RTC</span><br><span class="line">         time <span class="keyword">is</span> never updated, it relies <span class="keyword">on</span> external facilities to maintain it.</span><br><span class="line">         If at all possible, use RTC <span class="keyword">in</span> UTC <span class="keyword">by</span> calling</span><br><span class="line">         <span class="string">'timedatectl set-local-rtc 0'</span>.</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-RTC设为本地时间会有告警"><a href="#4-3-RTC设为本地时间会有告警" class="headerlink" title="4.3 RTC设为本地时间会有告警"></a>4.3 RTC设为本地时间会有告警</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs csharp">[<span class="hljs-meta">root@localhost ~</span>]<span class="hljs-meta"># timedatectl set-local-rtc 1</span><br>[<span class="hljs-meta">root@localhost ~</span>]<span class="hljs-meta"># timedatectl</span><br>      Local time: Thu <span class="hljs-number">2016</span><span class="hljs-number">-05</span><span class="hljs-number">-26</span> <span class="hljs-number">15</span>:<span class="hljs-number">31</span>:<span class="hljs-number">59</span> CST<br>  Universal time: Thu <span class="hljs-number">2016</span><span class="hljs-number">-05</span><span class="hljs-number">-26</span> <span class="hljs-number">07</span>:<span class="hljs-number">31</span>:<span class="hljs-number">59</span> UTC<br>        RTC time: Thu <span class="hljs-number">2016</span><span class="hljs-number">-05</span><span class="hljs-number">-26</span> <span class="hljs-number">15</span>:<span class="hljs-number">31</span>:<span class="hljs-number">59</span><br>       Time zone: Asia/Shanghai (CST, +<span class="hljs-number">0800</span>)<br>     NTP enabled: yes<br>NTP synchronized: yes<br> RTC <span class="hljs-keyword">in</span> local TZ: yes<br>      DST active: n/a<br><br>Warning: The system <span class="hljs-keyword">is</span> configured to read the RTC time <span class="hljs-keyword">in</span> the local time zone.<br>         This mode can not be fully supported. It will create various problems<br>         with time zone changes and daylight saving time adjustments. The RTC<br>         time <span class="hljs-keyword">is</span> never updated, it relies <span class="hljs-keyword">on</span> external facilities to maintain it.<br>         If at all possible, use RTC <span class="hljs-keyword">in</span> UTC <span class="hljs-keyword">by</span> calling<br>         <span class="hljs-string">'timedatectl set-local-rtc 0'</span>.<br></code></pre></td></tr></table></figure>
 
 <blockquote>
 <p>因为硬件时钟不能保存时区和夏令时调整，修改后就无法从硬件时钟中读取出准确标准时间；不建议修改。</p>
@@ -359,159 +356,152 @@
 <li><code>hwclock --systohc</code></li>
 </ol>
 
-    </div>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/linux/">linux</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/09/14/%E8%A7%A3%E5%86%B3Linux%E4%B8%8BHarbor%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%A4%B1%E8%B4%A5/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">解决Linux下Harbor开机启动失败</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/02/Spring-Cloud%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E6%A8%A1%E6%9D%BF/">
+                        <span class="hidden-mobile">Spring-Cloud分布式项目搭建模板</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-    
-    
-    
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/linux/" rel="tag"># linux</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2019/07/02/Spring-Cloud%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E6%A8%A1%E6%9D%BF/" rel="prev" title="Spring-Cloud分布式项目搭建模板">
-      <i class="fa fa-chevron-left"></i> Spring-Cloud分布式项目搭建模板
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/09/14/%E8%A7%A3%E5%86%B3Linux%E4%B8%8BHarbor%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%A4%B1%E8%B4%A5/" rel="next" title="解决Linux下Harbor开机启动失败">
-      解决Linux下Harbor开机启动失败 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-
+            
+          </article>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基本概念"><span class="nav-number">1.</span> <span class="nav-text">1. 基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-GMT、UTC、CST、DST-时间"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 GMT、UTC、CST、DST 时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-硬件时间和系统时间"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 硬件时间和系统时间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-timedatectl-命令"><span class="nav-number">2.</span> <span class="nav-text">2. timedatectl 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-使用帮助"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 使用帮助</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-命令示例"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 命令示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Chrony-服务"><span class="nav-number">3.</span> <span class="nav-text">3. Chrony 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-安装使用"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 安装使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-配置文件"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-chronyc"><span class="nav-number">4.</span> <span class="nav-text">3.3 chronyc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-实例"><span class="nav-number">5.</span> <span class="nav-text">4. 实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-设置系统时间为中国时区并启用时间同步"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 设置系统时间为中国时区并启用时间同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-安装NTP服务使用其同步时间"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 安装NTP服务使用其同步时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-RTC设为本地时间会有告警"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 RTC设为本地时间会有告警</span></a></li></ol></li></ol></div>
       </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Eric Shen"
-      src="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
-  <p class="site-author-name" itemprop="name">Eric Shen</p>
-  <div class="site-description" itemprop="description">Fake Geeker, Hoops Lover!</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">14</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="feed-link motion-element">
-    <a href="/atom.xml" rel="alternate">
-      <i class="fa fa-rss"></i>RSS
-    </a>
-  </div>
-
-
-
-      </div>
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Eric Shen</span>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
-  </div>
 
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
+    
   </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
 
 
 
@@ -519,6 +509,50 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
 
 
 
@@ -532,9 +566,12 @@
 
 
 
-  
 
-  
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
 
 </body>
 </html>

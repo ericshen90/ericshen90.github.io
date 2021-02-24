@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="Fake Geeker, Hoops Lover!">
+  
+  <meta name="author" content="Eric Shen">
+  <meta name="keywords" content="">
+  
+  <title>BeanFactory和FactoryBean和ObjectFactory - Eric Shen Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ericshen.xyz","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>EricShen's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="BeanFactory和FactoryBean和ObjectFactory">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-28 19:57" pubdate>
+        2021年1月28日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      26
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">BeanFactory和FactoryBean和ObjectFactory</h1>
+            
+            <div class="markdown-body">
+              <h1 id="Spring中的BeanFactory和FactoryBean（以及它和ObjectFactory的区别）的区别"><a href="#Spring中的BeanFactory和FactoryBean（以及它和ObjectFactory的区别）的区别" class="headerlink" title="Spring中的BeanFactory和FactoryBean（以及它和ObjectFactory的区别）的区别"></a>Spring中的BeanFactory和FactoryBean（以及它和ObjectFactory的区别）的区别</h1><h4 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h4><p>开始重视这个问题，源自一次阿里巴巴的二面面试题：说说你对 Spring 中 BeanFactory 的理解，它和 FactoryBean 有什么区别呢？</p>
+<h4 id="直接区别"><a href="#直接区别" class="headerlink" title="直接区别"></a>直接区别</h4><p>直面意思：Bean 工厂、工厂 Bean</p>
+<p><strong>BeanFactory，以 Factory 结尾，表示它是一个工厂类 (接口)，用于管理 Bean 的一个工厂。在 Spring 中，BeanFactory 是 IOC 容器的核心接口，它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。</strong></p>
+<p><strong>FactoryBean 以 Bean 结尾，表示它是一个 Bean，不同于普通 Bean 的是：它是实现了 FactoryBean<T> 接口的 Bean，根据该 Bean 的 ID 从 BeanFactory 中获取的实际上是 FactoryBean 的 getObject() 返回的对象，而不是 FactoryBean 本身，如果要获取 FactoryBean 对象，请在 id 前面加一个 &amp; 符号来获取。</strong></p>
+<h4 id="BeanFacotry"><a href="#BeanFacotry" class="headerlink" title="BeanFacotry"></a>BeanFacotry</h4><p>BeanFactory 定义了 IOC 容器的最基本形式，并提供了 IOC 容器应遵守的的最基本的接口，也就是 Spring IOC 所遵守的最底层和最基本的编程规范。</p>
+<p>Spring 代码中，BeanFactory 只是个接口，并不是 IOC 容器的具体实现，但是 Spring 容器给出了很多种实现，如 <code>DefaultListableBeanFactory</code>、<code>XmlBeanFactory</code>、<code>ApplicationContex</code>t 等，都是附加了某种功能的实现。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public interface BeanFactory &#123;<br>	<br>	<br>	String FACTORY_BEAN_PREFIX = <span class="hljs-string">"&amp;"</span>;<br>	<br>	<br>	Object get<span class="hljs-constructor">Bean(String <span class="hljs-params">name</span>)</span> throws BeansException;<br>	&lt;T&gt; T get<span class="hljs-constructor">Bean(String <span class="hljs-params">name</span>, Class&lt;T&gt; <span class="hljs-params">requiredType</span>)</span> throws BeansException;<br>	Object get<span class="hljs-constructor">Bean(String <span class="hljs-params">name</span>, Object<span class="hljs-operator">...</span> <span class="hljs-params">args</span>)</span> throws BeansException;<br>	&lt;T&gt; T get<span class="hljs-constructor">Bean(Class&lt;T&gt; <span class="hljs-params">requiredType</span>)</span> throws BeansException;<br>	&lt;T&gt; T get<span class="hljs-constructor">Bean(Class&lt;T&gt; <span class="hljs-params">requiredType</span>, Object<span class="hljs-operator">...</span> <span class="hljs-params">args</span>)</span> throws BeansException;<br><br>	<br>	&lt;T&gt; ObjectProvider&lt;T&gt; get<span class="hljs-constructor">BeanProvider(Class&lt;T&gt; <span class="hljs-params">requiredType</span>)</span>;<br>	&lt;T&gt; ObjectProvider&lt;T&gt; get<span class="hljs-constructor">BeanProvider(ResolvableType <span class="hljs-params">requiredType</span>)</span>;<br><br>	<br>	boolean contains<span class="hljs-constructor">Bean(String <span class="hljs-params">name</span>)</span>;<br><br>   <br>	boolean is<span class="hljs-constructor">Singleton(String <span class="hljs-params">name</span>)</span> throws NoSuchBeanDefinitionException;<br>	boolean is<span class="hljs-constructor">Prototype(String <span class="hljs-params">name</span>)</span> throws NoSuchBeanDefinitionException;<br>	boolean is<span class="hljs-constructor">TypeMatch(String <span class="hljs-params">name</span>, ResolvableType <span class="hljs-params">typeToMatch</span>)</span> throws NoSuchBeanDefinitionException;<br>	boolean is<span class="hljs-constructor">TypeMatch(String <span class="hljs-params">name</span>, Class&lt;?&gt; <span class="hljs-params">typeToMatch</span>)</span> throws NoSuchBeanDefinitionException;<br>	<br>	<br>	@Nullable<br>	Class&lt;?&gt; get<span class="hljs-constructor">Type(String <span class="hljs-params">name</span>)</span> throws NoSuchBeanDefinitionException;<br>	String<span class="hljs-literal">[]</span> get<span class="hljs-constructor">Aliases(String <span class="hljs-params">name</span>)</span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在 Spring 中，<strong>所有的 Bean</strong> 都是由 BeanFactory(也就是 IOC 容器) 来进行管理的。但对 FactoryBean 而言，这个 Bean 不是简单的 Bean，而是一个能生产或者修饰对象生成的工厂 Bean, 它的实现与设计模式中的工厂模式和修饰器模式类似</p>
+<p>BeanFacotry 是 spring 中比较原始的 Factory。如 XMLBeanFactory 就是一种典型的 BeanFactory。原始的 BeanFactory 无法支持 spring 的许多插件，如 AOP 功能、Web 应用等。ApplicationContext 接口, 它由 BeanFactory 接口派生而来，</p>
+<blockquote>
+<p>ApplicationContext 包含 BeanFactory 的所有功能，通常建议比 BeanFactory 优先</p>
+</blockquote>
+<p>ApplicationContext 以一种<strong>更向面向框架的方式工作以及对上下文进行分层和实现继承</strong>，ApplicationContext 包还提供了以下的功能：</p>
+<ul>
+<li>MessageSource, 提供国际化的消息访问</li>
+<li>资源访问，如 URL 和文件</li>
+<li>事件传播</li>
+<li>载入多个（有继承关系）上下文 ，使得每一个上下文都专<strong>注于一个特定的层次</strong>，比如应用的 web 层;</li>
+</ul>
+<h6 id="常见的初始化例子"><a href="#常见的初始化例子" class="headerlink" title="常见的初始化例子"></a>常见的初始化例子</h6><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">Resource<span class="hljs-built_in"> resource </span>= new FileSystemResource(<span class="hljs-string">"beans.xml"</span>);<br>BeanFactory factory = new XmlBeanFactory(resource);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">ClassPathResource<span class="hljs-built_in"> resource </span>= new ClassPathResource(<span class="hljs-string">"beans.xml"</span>);<br>BeanFactory factory = new XmlBeanFactory(resource);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">ApplicationContext <span class="hljs-built_in">context</span> = new ClassPathXmlApplicationContext(new String[] &#123;<span class="hljs-string">"applicationContext.xml"</span>, <span class="hljs-string">"applicationContext-part2.xml"</span>&#125;)<span class="hljs-comment">;</span><br><span class="hljs-keyword">BeanFactory </span>factory = (<span class="hljs-keyword">BeanFactory) </span><span class="hljs-built_in">context</span><span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>分析了从 BeanFactory 到 ConfigurableListableBeanFactory 接口的概要功能：</p>
+<ul>
+<li>BeanFactory–&gt;<code>SpringIoC容器顶级接口,定义了对单个bean的获取,对bean的作用域判断,获取bean类型,获取bean别名的功能</code></li>
+<li>ListableBeanFactory–&gt;<code>扩展了BeanFactory接口,并提供了对bean的枚举能力</code></li>
+<li>HierarchicalBeanFactory–&gt;<code>扩展了BeanFactory接口,并提供了访问父容器的能力</code></li>
+<li>AutowireCapableBeanFactory–&gt;<code>扩展了BeanFactory接口,并提供了自动装配能力</code></li>
+<li>ConfigurableBeanFactory–&gt;<code>扩展了HierarchicalBeanFactory,并提供了对容器的配置能力</code></li>
+<li>ConfigurableListableBeanFactory–&gt;<code>扩展了ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory接口,并提供了忽略依赖,自动装配判断,冻结bean的定义,枚举所有bean名称的功能</code></li>
+</ul>
+<h4 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h4><blockquote>
+<p>这是个特殊的 Bean 他是个工厂 Bean，可以产生 Bean 的 Bean</p>
+</blockquote>
+<p>一般情况下，Spring 通过反射机制利用 <bean> 的 class 属性指定实现类实例化 Bean，<strong>在某些情况下，实例化 Bean 过程比较复杂，如果按照传统的方式，则需要在 <bean> 中提供大量的配置信息。</strong></p>
+<p>配置方式的灵活性是受限的，这时采用编码的方式可能会得到一个简单的方案。Spring 为此提供了一个 org.springframework.bean.factory.FactoryBean 的工厂类接口，用户可以通过实现该接口定制实例化 Bean 的逻辑。</p>
+<p>FactoryBean 接口对于 Spring 框架来说占用重要的地位，Spring 自身就提供了 70 多个 FactoryBean 的实现。</p>
+<blockquote>
+<p>第三方框架要继承进 Spring，往往就是通过实现 FactoryBean 来集成的。比如 MyBatis 的 SqlSessionFactoryBean、RedisRepositoryFactoryBean、EhCacheManagerFactoryBean 等等</p>
+</blockquote>
+<p>当然，我们也可以自己手动来实现一个 FactoryBean，用来代理一个对象。从而可以很方便的在对象前后都做出对应的操作，比如输出一句日志：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyFactoryBean</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">FactoryBean</span>&lt;<span class="hljs-title">Object</span>&gt; </span>&#123;<br><br>       <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Logger logger = LoggerFactory.getLogger(MyFactoryBean.class);<br>    <span class="hljs-keyword">private</span> Class&lt;?&gt; interfaceClazz; <br>    <span class="hljs-keyword">private</span> Object <span class="hljs-keyword">target</span>; <br>    <span class="hljs-keyword">private</span> Object proxyObj;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MyFactoryBean</span><span class="hljs-params">(Class&lt;?&gt; interfaceClazz, Object <span class="hljs-keyword">target</span>)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.interfaceClazz = interfaceClazz;<br>        <span class="hljs-keyword">this</span>.<span class="hljs-keyword">target</span> = <span class="hljs-keyword">target</span>;<br>        <span class="hljs-keyword">this</span>.proxyObj = Proxy.newProxyInstance(<br>                <span class="hljs-keyword">this</span>.getClass().getClassLoader(),<br>                <span class="hljs-keyword">new</span> Class[]&#123;interfaceClazz&#125;, <br>                (proxy, method, args) -&gt; &#123;<br>                    logger.debug(<span class="hljs-string">"invoke method......"</span> + method.getName());<br>                    logger.debug(<span class="hljs-string">"invoke method before......"</span> + System.currentTimeMillis());<br>                    Object result = method.invoke(<span class="hljs-keyword">target</span>, args);<br>                    logger.debug(<span class="hljs-string">"invoke method after......"</span> + System.currentTimeMillis());<br><br>                    <span class="hljs-keyword">return</span> result;<br>                &#125;);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function">Object <span class="hljs-title">getObject</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> proxyObj; <br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Class&lt;?&gt; getObjectType() &#123;<br>        <span class="hljs-keyword">return</span> proxyObj == <span class="hljs-keyword">null</span> ? Object.class : proxyObj.getClass();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">isSingleton</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>有了这个工厂 Bean，我们出去的 Bean 都将是代理 Bean。 main 方法单元测试：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> void main(<span class="hljs-keyword">String</span>[] args) &#123;<br>        MyFactoryBean factoryBean = <span class="hljs-keyword">new</span> <span class="hljs-type">MyFactoryBean</span>(UserService.class, <span class="hljs-keyword">new</span> <span class="hljs-type">UserServiceImpl</span>());<br><br>        UserService userService = (UserService) factoryBean.getObject();<br>        System.out.println(userService.sayHello());<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">UserService</span> </span>&#123;<br>        <span class="hljs-keyword">String</span> sayHello();<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserServiceImpl</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">MyFactoryBean</span></span>.<span class="hljs-title">UserService</span> </span>&#123;<br><br>        @Override<br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">String</span> sayHello() &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">"hello world"</span>;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>控制台输出：</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs oxygene"><span class="hljs-number">16</span>:<span class="hljs-number">17</span>:<span class="hljs-number">05.330</span> [main] DEBUG com.fsx.single.temp.MyFactoryBean - invoke <span class="hljs-function"><span class="hljs-keyword">method</span>......<span class="hljs-title">sayHello</span><br>16:</span><span class="hljs-number">17</span>:<span class="hljs-number">05.334</span> [main] DEBUG com.fsx.single.temp.MyFactoryBean - invoke <span class="hljs-function"><span class="hljs-keyword">method</span> <span class="hljs-title">before</span>......1545121025334<br>16:</span><span class="hljs-number">17</span>:<span class="hljs-number">05.334</span> [main] DEBUG com.fsx.single.temp.MyFactoryBean - invoke <span class="hljs-function"><span class="hljs-keyword">method</span> <span class="hljs-title">after</span>......1545121025334<br><span class="hljs-title">hello</span> <span class="hljs-title">world</span></span><br></code></pre></td></tr></table></figure>
+
+<h4 id="ObjectFactory"><a href="#ObjectFactory" class="headerlink" title="ObjectFactory"></a>ObjectFactory</h4><p>通过接口内容来看，两者都是属于工厂模式用来创建对象使用的。 啥都不说，先看个例子吧：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RootConfig</span> </span>&#123;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> FactoryBean <span class="hljs-title">myFactoryBean</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> MyFactoryBean();<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ObjectFactory <span class="hljs-title">myObjectFactory</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> MyObjectFactory();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyFactoryBean</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">FactoryBean</span>&lt;<span class="hljs-title">Daughter</span>&gt; </span>&#123;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Daughter <span class="hljs-title">getObject</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Daughter();<br>        &#125;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> Class&lt;?&gt; getObjectType() &#123;<br>            <span class="hljs-keyword">return</span> Daughter.class;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyObjectFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ObjectFactory</span>&lt;<span class="hljs-title">Son</span>&gt; </span>&#123;<br><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Son <span class="hljs-title">getObject</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> BeansException </span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Son();<br>        &#125;<br>    &#125;<br><br>&#125;<br><br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> ApplicationContext applicationContext;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RootConfig.MyFactoryBean myFactoryBean;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RootConfig.MyObjectFactory myObjectFactory;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> Daughter daughter;<br>    <br>    <br><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/hello"</span>)<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">helloGet</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        <br>        System.out.println(applicationContext); <br>        System.out.println(applicationContext.getParent()); <br><br>        <br>        System.out.println(myFactoryBean); <br>        <br>        System.out.println(myObjectFactory.getObject()); <br>        System.out.println(daughter); <br><br>        <br>        System.out.println(myFactoryBean.getObject() == myFactoryBean.getObject()); <br>        System.out.println(myObjectFactory.getObject() == myObjectFactory.getObject()); <br>        <span class="hljs-keyword">return</span> <span class="hljs-string">"hello...Get"</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>从上面的现象打印值的不同，可以看出<code>FactoryBean和ObjectFactory</code>最直接的区别。上面已经介绍了 FactoryBean，这里简单先介绍下</p>
+<h6 id="ObjectFactory："><a href="#ObjectFactory：" class="headerlink" title="ObjectFactory："></a><code>ObjectFactory</code>：</h6><p>ObjectFactory 则只是一个<strong>普通的</strong>对象工厂接口。在查看 AbstractBeanFacotry 的 doGetBean(…) 部分的源码时，可以看到 spring 对 ObjectFactory 的应用之一就是，将创建对象<strong>的步骤封装到 ObjectFactory 中</strong> 交给自定义的 Scope 来选择是否需要创建对象来灵活的实现 scope</p>
+<p><strong>区别：</strong> <code>FactoryBean</code>的着重于自定义创建对象<strong>过程</strong>，<strong>由 BeanFactory 通过 FactoryBean</strong> 来获取目标对象，而如果是 isSingleton 返回 true 的话，spring 会利用<strong>单例缓存来缓存通过 FactoryBean 创建的对象</strong>。</p>
+<p>而<code>ObjectFactory</code>就是一个<strong>普通的工厂对象接口</strong>，对于 spring 在 doGetBean 处的使用时，在于创建对象的过程由框架通过 ObjectFactory 定义，而创建的时机交给拓展接口 Scope，<strong>除此之外 ObjectFactory 就是一个普通的接口</strong> 此外在将给依赖注入列表注册一个 ObjectFactory 类型的对象，在<strong>注入过程中</strong>会调用<code>objectFactory.getObject()</code>来创建目标对象注入进去。<code>（如beanFactory.registerResolvableDependency(HttpSession.class, new SessionObjectFactory());）</code></p>
+<blockquote>
+<p>简单来说就是通过 FactoryBean 你可以控制对象如何创建，而 ObjectFactory 借助 Scope 接口自定义 scope 你可以控制对象的创建时机</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/27/thinking-in-spirng/">
+                        <span class="hidden-mobile">thinking-in-spirng</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

@@ -1,255 +1,237 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-  <link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
+  
+  <meta name="author" content="Eric Shen">
+  <meta name="keywords" content="">
+  
+  <title>Ubuntu&amp;CentOS安装Dokcer-CE - Eric Shen Blog</title>
 
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
-
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    hostname: new URL('https://ericshen.xyz').hostname,
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.5.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    sidebarPadding: 40
-  };
-</script>
-
-  <meta name="description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
-<meta name="keywords" content="docker,linux">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu&amp;CentOS安装Dokcer-CE">
-<meta property="og:url" content="https:&#x2F;&#x2F;ericshen.xyz&#x2F;2019&#x2F;04&#x2F;15&#x2F;Ubuntu&amp;CentOS%E5%AE%89%E8%A3%85Dokcer-CE&#x2F;index.html">
-<meta property="og:site_name" content="Eric Shen Blog">
-<meta property="og:description" content="1. 背景1.1 概述Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;15&#x2F;ipMF4SNyKjTqJ8z.png">
-<meta property="og:updated_time" content="2020-06-28T09:25:02.278Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;10&#x2F;15&#x2F;ipMF4SNyKjTqJ8z.png">
-
-<link rel="canonical" href="https://ericshen.xyz/2019/04/15/Ubuntu&CentOS%E5%AE%89%E8%A3%85Dokcer-CE/">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
-  };
-</script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  <title>Ubuntu&CentOS安装Dokcer-CE | Eric Shen Blog</title>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
   
 
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
+<link  rel="stylesheet" href="/css/main.css" />
 
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ericshen.xyz","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>EricShen's Blog</strong>&nbsp;</a>
 
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Eric Shen Blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
-
-  </li>
-  </ul>
-
 </nav>
-</div>
-    </header>
 
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Ubuntu&CentOS安装Dokcer-CE">
+              
+            </span>
 
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content">
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-04-15 16:44" pubdate>
+        2019年4月15日 下午
+      </time>
+    </span>
+  
+</div>
 
-  <div class="posts-expand">
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.7k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
       
+      
+      37
+       分钟
+    </span>
+  
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ericshen.xyz/2019/04/15/Ubuntu&CentOS%E5%AE%89%E8%A3%85Dokcer-CE/">
+</div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
-      <meta itemprop="name" content="Eric Shen">
-      <meta itemprop="description" content="Fake Geeker, Hoops Lover!">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Eric Shen Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Ubuntu&CentOS安装Dokcer-CE
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-04-15 16:44:55" itemprop="dateCreated datePublished" datetime="2019-04-15T16:44:55+08:00">2019-04-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-28 17:25:02" itemprop="dateModified" datetime="2020-06-28T17:25:02+08:00">2020-06-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PaaS/" itemprop="url" rel="index">
-                    <span itemprop="name">PaaS</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PaaS/Docker/" itemprop="url" rel="index">
-                    <span itemprop="name">Docker</span>
-                  </a>
-                </span>
-            </span>
+            
+          </div>
 
           
-
         </div>
-      </header>
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-        <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><p>Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.11 开始，则进一步演进为使用 runC 和 containerd。</p>
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Ubuntu&amp;CentOS安装Dokcer-CE</h1>
+            
+            <div class="markdown-body">
+              <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><p>Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于 操作 系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容 器。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.11 开始，则进一步演进为使用 runC 和 containerd。</p>
 <p>Docker 在容器的基础上，进行了进一步的封装，从文件系统、网络互联到进程隔离等等，极 大的简化了容器的创建和维护。使得 Docker 技术比虚拟机技术更为轻便、快捷。</p>
 <a id="more"></a>
 
@@ -303,21 +285,21 @@
 <h2 id="2-卸载旧版本"><a href="#2-卸载旧版本" class="headerlink" title="2. 卸载旧版本"></a>2. 卸载旧版本</h2><ul>
 <li>Ubuntu</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove docker docker-engine</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get remove docker docker-engine<br></code></pre></td></tr></table></figure>
 <ul>
-<li>CentOS<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo yum remove docker \</span><br><span class="line">docker-common \</span><br><span class="line">container-selinux \</span><br><span class="line">docker-selinux \</span><br><span class="line">docker-engine</span><br></pre></td></tr></table></figure>
+<li>CentOS<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo yum remove docker \<br>docker-common \<br>container-selinux \<br>docker-selinux \<br>docker-engine<br></code></pre></td></tr></table></figure>
 
 </li>
 </ul>
 <h2 id="3-安装Docker"><a href="#3-安装Docker" class="headerlink" title="3. 安装Docker"></a>3. 安装Docker</h2><blockquote>
 <p>APT/YUM安装和脚本安装二选一即可</p>
 </blockquote>
-<h3 id="3-1-Ubuntu使用-APT-安装"><a href="#3-1-Ubuntu使用-APT-安装" class="headerlink" title="3.1 Ubuntu使用 APT 安装"></a>3.1 Ubuntu使用 APT 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新数据源</span></span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># 安装所需依赖</span></span><br><span class="line">sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common</span><br><span class="line"><span class="comment"># 安装 GPG 证书</span></span><br><span class="line">sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -</span><br><span class="line"><span class="comment"># 新增数据源</span></span><br><span class="line">sudo add-apt-repository <span class="string">"deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu <span class="variable">$(lsb_release -cs)</span> stable"</span></span><br><span class="line"><span class="comment"># 更新并安装 Docker CE</span></span><br><span class="line">sudo apt-get update &amp;&amp; apt-get install -y docker-ce</span><br></pre></td></tr></table></figure>
+<h3 id="3-1-Ubuntu使用-APT-安装"><a href="#3-1-Ubuntu使用-APT-安装" class="headerlink" title="3.1 Ubuntu使用 APT 安装"></a>3.1 Ubuntu使用 APT 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 更新数据源</span><br>sudo apt-get update<br><span class="hljs-comment"># 安装所需依赖</span><br>sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common<br><span class="hljs-comment"># 安装 GPG 证书</span><br>sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -<br><span class="hljs-comment"># 新增数据源</span><br>sudo add-apt-repository <span class="hljs-string">"deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu <span class="hljs-variable">$(lsb_release -cs)</span> stable"</span><br><span class="hljs-comment"># 更新并安装 Docker CE</span><br>sudo apt-get update &amp;&amp; apt-get install -y docker-ce<br></code></pre></td></tr></table></figure>
 
-<h3 id="3-2-CentOS使用YUM安装"><a href="#3-2-CentOS使用YUM安装" class="headerlink" title="3.2 CentOS使用YUM安装"></a>3.2 CentOS使用YUM安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装yum-utils</span></span><br><span class="line">sudo yum install -y yum-utils</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装repo</span></span><br><span class="line">sudo yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装docker-ce</span></span><br><span class="line">sudo yum install docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-CentOS使用YUM安装"><a href="#3-2-CentOS使用YUM安装" class="headerlink" title="3.2 CentOS使用YUM安装"></a>3.2 CentOS使用YUM安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 安装yum-utils</span><br>sudo yum install -y yum-utils<br><span class="hljs-meta">#</span><span class="bash"> 安装repo</span><br>sudo yum-config-manager \<br>    --add-repo \<br>    https://download.docker.com/linux/centos/docker-ce.repo<br><span class="hljs-meta">#</span><span class="bash"> 安装docker-ce</span><br>sudo yum install docker-ce docker-ce-cli containerd.io<br></code></pre></td></tr></table></figure>
 
 <h3 id="3-3-使用脚本自动安装"><a href="#3-3-使用脚本自动安装" class="headerlink" title="3.3 使用脚本自动安装"></a>3.3 使用脚本自动安装</h3><p>在测试或开发环境中 Docker 官方为了简化安装流程，提供了一套便捷的安装脚本，Ubuntu 系统上可以使用这套脚本安装，另外可以通过 <code>--mirror</code> 选项使用国内源进行安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL get.docker.com -o get-docker.sh</span><br><span class="line">sudo sh get-docker.sh --mirror Aliyun</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -fsSL get.docker.com -o get-docker.sh<br>sudo sh get-docker.sh --mirror Aliyun<br></code></pre></td></tr></table></figure>
 
 <p>执行这个命令后，脚本就会自动的将一切准备工作做好，并且把 Docker CE 的稳定(stable)版本安装在系统中。</p>
 <blockquote>
@@ -325,9 +307,9 @@
 <p><code>curl -sSL https://get.daocloud.io/docker | sh</code></p>
 </blockquote>
 <h3 id="3-4-查看Docker版本"><a href="#3-4-查看Docker版本" class="headerlink" title="3.4 查看Docker版本"></a>3.4 查看Docker版本</h3><p><code>sudo docker version</code><br><strong>输出如下</strong></p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Client: Docker Engine - Community</span><br><span class="line"> Version:           <span class="number">19.03</span><span class="number">.2</span></span><br><span class="line"> API version:       <span class="number">1.40</span></span><br><span class="line"> Go version:        go1<span class="number">.12</span><span class="number">.8</span></span><br><span class="line"> Git commit:        <span class="number">6</span>a30dfc</span><br><span class="line"> Built:             Thu Aug <span class="number">29</span> <span class="number">05</span>:<span class="number">29</span>:<span class="number">11</span> <span class="number">2019</span></span><br><span class="line"> OS/Arch:           linux/amd64</span><br><span class="line"> Experimental:      <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">Server: Docker Engine - Community</span><br><span class="line"> Engine:</span><br><span class="line">  Version:          <span class="number">19.03</span><span class="number">.2</span></span><br><span class="line">  API version:      <span class="number">1.40</span> (minimum version <span class="number">1.12</span>)</span><br><span class="line">  Go version:       go1<span class="number">.12</span><span class="number">.8</span></span><br><span class="line">  Git commit:       <span class="number">6</span>a30dfc</span><br><span class="line">  Built:            Thu Aug <span class="number">29</span> <span class="number">05</span>:<span class="number">27</span>:<span class="number">45</span> <span class="number">2019</span></span><br><span class="line">  OS/Arch:          linux/amd64</span><br><span class="line">  Experimental:     <span class="literal">false</span></span><br><span class="line"> containerd:</span><br><span class="line">  Version:          <span class="number">1.2</span><span class="number">.6</span></span><br><span class="line">  GitCommit:        <span class="number">894</span>b81a4b802e4eb2a91d1ce216b8817763c29fb</span><br><span class="line"> runc:</span><br><span class="line">  Version:          <span class="number">1.0</span><span class="number">.0</span>-rc8</span><br><span class="line">  GitCommit:        <span class="number">425e105</span>d5a03fabd737a126ad93d62a9eeede87f</span><br><span class="line"> docker-init:</span><br><span class="line">  Version:          <span class="number">0.18</span><span class="number">.0</span></span><br><span class="line">  GitCommit:        fec3683</span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">Client: Docker Engine - Community<br> Version:           <span class="hljs-number">19.03</span><span class="hljs-number">.2</span><br> API version:       <span class="hljs-number">1.40</span><br> Go version:        go1<span class="hljs-number">.12</span><span class="hljs-number">.8</span><br> Git commit:        <span class="hljs-number">6</span>a30dfc<br> Built:             Thu Aug <span class="hljs-number">29</span> <span class="hljs-number">05</span>:<span class="hljs-number">29</span>:<span class="hljs-number">11</span> <span class="hljs-number">2019</span><br> OS/Arch:           linux/amd64<br> Experimental:      <span class="hljs-literal">false</span><br><br>Server: Docker Engine - Community<br> Engine:<br>  Version:          <span class="hljs-number">19.03</span><span class="hljs-number">.2</span><br>  API version:      <span class="hljs-number">1.40</span> (minimum version <span class="hljs-number">1.12</span>)<br>  Go version:       go1<span class="hljs-number">.12</span><span class="hljs-number">.8</span><br>  Git commit:       <span class="hljs-number">6</span>a30dfc<br>  Built:            Thu Aug <span class="hljs-number">29</span> <span class="hljs-number">05</span>:<span class="hljs-number">27</span>:<span class="hljs-number">45</span> <span class="hljs-number">2019</span><br>  OS/Arch:          linux/amd64<br>  Experimental:     <span class="hljs-literal">false</span><br> containerd:<br>  Version:          <span class="hljs-number">1.2</span><span class="hljs-number">.6</span><br>  GitCommit:        <span class="hljs-number">894</span>b81a4b802e4eb2a91d1ce216b8817763c29fb<br> runc:<br>  Version:          <span class="hljs-number">1.0</span><span class="hljs-number">.0</span>-rc8<br>  GitCommit:        <span class="hljs-number">425e105</span>d5a03fabd737a126ad93d62a9eeede87f<br> docker-init:<br>  Version:          <span class="hljs-number">0.18</span><span class="hljs-number">.0</span><br>  GitCommit:        fec3683<br></code></pre></td></tr></table></figure>
 
-<h3 id="3-5-systemd启动Docker并配置开机自启"><a href="#3-5-systemd启动Docker并配置开机自启" class="headerlink" title="3.5 systemd启动Docker并配置开机自启"></a>3.5 systemd启动Docker并配置开机自启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure>
+<h3 id="3-5-systemd启动Docker并配置开机自启"><a href="#3-5-systemd启动Docker并配置开机自启" class="headerlink" title="3.5 systemd启动Docker并配置开机自启"></a>3.5 systemd启动Docker并配置开机自启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo systemctl start docker<br>sudo systemctl <span class="hljs-built_in">enable</span> docker<br></code></pre></td></tr></table></figure>
 
 <h3 id="3-6-配置镜像加速器"><a href="#3-6-配置镜像加速器" class="headerlink" title="3.6 配置镜像加速器"></a>3.6 配置镜像加速器</h3><blockquote>
 <p>阿里云、DaoCloud、USTC镜像三选一即可</p>
@@ -335,53 +317,53 @@
 <ul>
 <li>阿里云镜像镜像加速器，登录自己的阿里云官网，找到<a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors" target="_blank" rel="noopener">镜像加速器</a>，根据提示进行配置</li>
 </ul>
-<p><img src="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png" alt=""></p>
+<p><img src="https://i.loli.net/2019/10/15/ipMF4SNyKjTqJ8z.png" srcset="/img/loading.gif" alt=""></p>
 <ul>
 <li>DaoCloud 镜像站</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://f1361db2.m.daocloud.io</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">http://f1361db2.m.daocloud.io<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>USTC镜像</li>
 </ul>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">https:</span><span class="comment">//docker.mirrors.ustc.edu.cn</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">https:</span><span class="hljs-comment">//docker.mirrors.ustc.edu.cn</span><br></code></pre></td></tr></table></figure>
 
 
 <h3 id="3-7-允许Docker测试示例"><a href="#3-7-允许Docker测试示例" class="headerlink" title="3.7 允许Docker测试示例"></a>3.7 允许Docker测试示例</h3><p><code>docker run hello-world</code></p>
 <p><strong>输出如下</strong></p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Unable <span class="built_in">to</span> find image <span class="string">'hello-world:latest'</span> locally  <span class="comment"># 本地无镜像</span></span><br><span class="line">latest: Pulling <span class="built_in">from</span> library/hello-world <span class="comment">#从远程仓库拉取</span></span><br><span class="line"><span class="number">1</span>b930d010525: Pull complete</span><br><span class="line">Digest: sha256:c3b4ada4687bbaa170745b3e4dd8ac3f194ca95b2d0518b417fb47e5879d9b5f</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> hello-world:latest</span><br><span class="line"></span><br><span class="line">Hello <span class="built_in">from</span> Docker!</span><br><span class="line">This message shows that your installation appears <span class="built_in">to</span> be working correctly.</span><br><span class="line"></span><br><span class="line">To generate this message, Docker took <span class="keyword">the</span> following steps:</span><br><span class="line"> <span class="number">1.</span> The Docker client contacted <span class="keyword">the</span> Docker daemon.</span><br><span class="line"> <span class="number">2.</span> The Docker daemon pulled <span class="keyword">the</span> <span class="string">"hello-world"</span> image <span class="built_in">from</span> <span class="keyword">the</span> Docker Hub.</span><br><span class="line">    (amd64)</span><br><span class="line"> <span class="number">3.</span> The Docker daemon created <span class="keyword">a</span> <span class="built_in">new</span> container <span class="built_in">from</span> that image which runs <span class="keyword">the</span></span><br><span class="line">    executable that produces <span class="keyword">the</span> output you are currently reading.</span><br><span class="line"> <span class="number">4.</span> The Docker daemon streamed that output <span class="built_in">to</span> <span class="keyword">the</span> Docker client, which sent <span class="keyword">it</span></span><br><span class="line">    <span class="built_in">to</span> your terminal.</span><br><span class="line"></span><br><span class="line">To <span class="keyword">try</span> something more ambitious, you can run <span class="keyword">an</span> Ubuntu container <span class="keyword">with</span>:</span><br><span class="line"> $ docker run -<span class="keyword">it</span> ubuntu bash</span><br><span class="line"></span><br><span class="line">Share images, automate workflows, <span class="keyword">and</span> more <span class="keyword">with</span> <span class="keyword">a</span> free Docker ID:</span><br><span class="line"> <span class="keyword">https</span>://hub.docker.com/</span><br><span class="line"></span><br><span class="line">For more examples <span class="keyword">and</span> ideas, visit:</span><br><span class="line"> <span class="keyword">https</span>://docs.docker.com/<span class="built_in">get</span>-started/</span><br></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">Unable <span class="hljs-built_in">to</span> find image <span class="hljs-string">'hello-world:latest'</span> locally  <span class="hljs-comment"># 本地无镜像</span><br>latest: Pulling <span class="hljs-built_in">from</span> library/hello-world <span class="hljs-comment">#从远程仓库拉取</span><br><span class="hljs-number">1</span>b930d010525: Pull complete<br>Digest: sha256:c3b4ada4687bbaa170745b3e4dd8ac3f194ca95b2d0518b417fb47e5879d9b5f<br>Status: Downloaded newer image <span class="hljs-keyword">for</span> hello-world:latest<br><br>Hello <span class="hljs-built_in">from</span> Docker!<br>This message shows that your installation appears <span class="hljs-built_in">to</span> be working correctly.<br><br>To generate this message, Docker took <span class="hljs-keyword">the</span> following steps:<br> <span class="hljs-number">1.</span> The Docker client contacted <span class="hljs-keyword">the</span> Docker daemon.<br> <span class="hljs-number">2.</span> The Docker daemon pulled <span class="hljs-keyword">the</span> <span class="hljs-string">"hello-world"</span> image <span class="hljs-built_in">from</span> <span class="hljs-keyword">the</span> Docker Hub.<br>    (amd64)<br> <span class="hljs-number">3.</span> The Docker daemon created <span class="hljs-keyword">a</span> <span class="hljs-built_in">new</span> container <span class="hljs-built_in">from</span> that image which runs <span class="hljs-keyword">the</span><br>    executable that produces <span class="hljs-keyword">the</span> output you are currently reading.<br> <span class="hljs-number">4.</span> The Docker daemon streamed that output <span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> Docker client, which sent <span class="hljs-keyword">it</span><br>    <span class="hljs-built_in">to</span> your terminal.<br><br>To <span class="hljs-keyword">try</span> something more ambitious, you can run <span class="hljs-keyword">an</span> Ubuntu container <span class="hljs-keyword">with</span>:<br> $ docker run -<span class="hljs-keyword">it</span> ubuntu bash<br><br>Share images, automate workflows, <span class="hljs-keyword">and</span> more <span class="hljs-keyword">with</span> <span class="hljs-keyword">a</span> free Docker ID:<br> <span class="hljs-keyword">https</span>://hub.docker.com/<br><br>For more examples <span class="hljs-keyword">and</span> ideas, visit:<br> <span class="hljs-keyword">https</span>://docs.docker.com/<span class="hljs-built_in">get</span>-started/<br></code></pre></td></tr></table></figure>
 
 <h3 id="3-8-查看Docker版本信息"><a href="#3-8-查看Docker版本信息" class="headerlink" title="3.8 查看Docker版本信息"></a>3.8 查看Docker版本信息</h3><p><code>sudo docker info</code></p>
 <p><strong>输出如下</strong></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Client:</span></span><br><span class="line"> <span class="string">Debug</span> <span class="attr">Mode:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Server:</span></span><br><span class="line"><span class="attr"> Containers:</span> <span class="number">0</span>                   <span class="comment"># 容器数</span></span><br><span class="line"><span class="attr">  Running:</span> <span class="number">0</span>                     <span class="comment"># 运行容器数</span></span><br><span class="line"><span class="attr">  Paused:</span> <span class="number">0</span>                      <span class="comment"># 暂停容器数</span></span><br><span class="line"><span class="attr">  Stopped:</span> <span class="number">0</span>                     <span class="comment"># 停止容器数</span></span><br><span class="line"><span class="attr">  Images:</span> <span class="number">0</span></span><br><span class="line"> <span class="string">Server</span> <span class="attr">Version:</span> <span class="number">19.03</span><span class="number">.2</span></span><br><span class="line"> <span class="string">Storage</span> <span class="attr">Driver:</span> <span class="string">overlay2</span></span><br><span class="line">  <span class="string">Backing</span> <span class="attr">Filesystem:</span> <span class="string">extfs</span></span><br><span class="line">  <span class="string">Supports</span> <span class="attr">d_type:</span> <span class="literal">true</span></span><br><span class="line">  <span class="string">Native</span> <span class="string">Overlay</span> <span class="attr">Diff:</span> <span class="literal">true</span></span><br><span class="line"> <span class="string">Logging</span> <span class="attr">Driver:</span> <span class="string">json-file</span></span><br><span class="line"> <span class="string">Cgroup</span> <span class="attr">Driver:</span> <span class="string">cgroupfs</span></span><br><span class="line"><span class="attr"> Plugins:</span></span><br><span class="line"><span class="attr">  Volume:</span> <span class="string">local</span></span><br><span class="line"><span class="attr">  Network:</span> <span class="string">bridge</span> <span class="string">host</span> <span class="string">ipvlan</span> <span class="string">macvlan</span> <span class="literal">null</span> <span class="string">overlay</span></span><br><span class="line"><span class="attr">  Log:</span> <span class="string">awslogs</span> <span class="string">fluentd</span> <span class="string">gcplogs</span> <span class="string">gelf</span> <span class="string">journald</span> <span class="string">json-file</span> <span class="string">local</span> <span class="string">logentries</span> <span class="string">splunk</span> <span class="string">syslog</span></span><br><span class="line"><span class="attr"> Swarm:</span> <span class="string">inactive</span></span><br><span class="line"><span class="attr"> Runtimes:</span> <span class="string">runc</span></span><br><span class="line"> <span class="string">Default</span> <span class="attr">Runtime:</span> <span class="string">runc</span></span><br><span class="line"> <span class="string">Init</span> <span class="attr">Binary:</span> <span class="string">docker-init</span></span><br><span class="line"> <span class="string">containerd</span> <span class="attr">version:</span> <span class="number">894</span><span class="string">b81a4b802e4eb2a91d1ce216b8817763c29fb</span></span><br><span class="line"> <span class="string">runc</span> <span class="attr">version:</span> <span class="number">425e105</span><span class="string">d5a03fabd737a126ad93d62a9eeede87f</span></span><br><span class="line"> <span class="string">init</span> <span class="attr">version:</span> <span class="string">fec3683</span></span><br><span class="line"> <span class="string">Security</span> <span class="attr">Options:</span></span><br><span class="line">  <span class="string">apparmor</span></span><br><span class="line">  <span class="string">seccomp</span></span><br><span class="line"><span class="attr">   Profile:</span> <span class="string">default</span></span><br><span class="line"> <span class="string">Kernel</span> <span class="attr">Version:</span> <span class="number">4.15</span><span class="number">.0</span><span class="bullet">-65</span><span class="bullet">-generic</span></span><br><span class="line"> <span class="string">Operating</span> <span class="attr">System:</span> <span class="string">Ubuntu</span> <span class="number">18.04</span><span class="number">.3</span> <span class="string">LTS</span></span><br><span class="line"><span class="attr"> OSType:</span> <span class="string">linux</span></span><br><span class="line"><span class="attr"> Architecture:</span> <span class="string">x86_64</span></span><br><span class="line"><span class="attr"> CPUs:</span> <span class="number">2</span></span><br><span class="line"> <span class="string">Total</span> <span class="attr">Memory:</span> <span class="number">3.847</span><span class="string">GiB</span></span><br><span class="line"><span class="attr"> Name:</span> <span class="string">Paas</span></span><br><span class="line"><span class="attr"> ID:</span> <span class="number">6</span><span class="attr">VRF:YBNF:N6ZG:MLAW:WS7P:ULYU:UJJT:CC43:H43S:XQNJ:PO4K:FALJ</span></span><br><span class="line"> <span class="string">Docker</span> <span class="string">Root</span> <span class="attr">Dir:</span> <span class="string">/var/lib/docker</span></span><br><span class="line"> <span class="string">Debug</span> <span class="attr">Mode:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr"> Registry:</span> <span class="attr">https://index.docker.io/v1/</span></span><br><span class="line"><span class="attr"> Labels:</span></span><br><span class="line"><span class="attr"> Experimental:</span> <span class="literal">false</span></span><br><span class="line"> <span class="string">Registry</span> <span class="attr">Mirrors:</span></span><br><span class="line"><span class="attr">  https:</span><span class="string">//xxxxxx.mirror.aliyuncs.com/</span></span><br><span class="line"> <span class="string">Live</span> <span class="string">Restore</span> <span class="attr">Enabled:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">WARNING:</span> <span class="literal">No</span> <span class="string">swap</span> <span class="string">limit</span> <span class="string">support</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Client:</span><br> <span class="hljs-string">Debug</span> <span class="hljs-attr">Mode:</span> <span class="hljs-literal">false</span><br><br><span class="hljs-attr">Server:</span><br><span class="hljs-attr"> Containers:</span> <span class="hljs-number">0</span>                   <span class="hljs-comment"># 容器数</span><br><span class="hljs-attr">  Running:</span> <span class="hljs-number">0</span>                     <span class="hljs-comment"># 运行容器数</span><br><span class="hljs-attr">  Paused:</span> <span class="hljs-number">0</span>                      <span class="hljs-comment"># 暂停容器数</span><br><span class="hljs-attr">  Stopped:</span> <span class="hljs-number">0</span>                     <span class="hljs-comment"># 停止容器数</span><br><span class="hljs-attr">  Images:</span> <span class="hljs-number">0</span><br> <span class="hljs-string">Server</span> <span class="hljs-attr">Version:</span> <span class="hljs-number">19.03</span><span class="hljs-number">.2</span><br> <span class="hljs-string">Storage</span> <span class="hljs-attr">Driver:</span> <span class="hljs-string">overlay2</span><br>  <span class="hljs-string">Backing</span> <span class="hljs-attr">Filesystem:</span> <span class="hljs-string">extfs</span><br>  <span class="hljs-string">Supports</span> <span class="hljs-attr">d_type:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-string">Native</span> <span class="hljs-string">Overlay</span> <span class="hljs-attr">Diff:</span> <span class="hljs-literal">true</span><br> <span class="hljs-string">Logging</span> <span class="hljs-attr">Driver:</span> <span class="hljs-string">json-file</span><br> <span class="hljs-string">Cgroup</span> <span class="hljs-attr">Driver:</span> <span class="hljs-string">cgroupfs</span><br><span class="hljs-attr"> Plugins:</span><br><span class="hljs-attr">  Volume:</span> <span class="hljs-string">local</span><br><span class="hljs-attr">  Network:</span> <span class="hljs-string">bridge</span> <span class="hljs-string">host</span> <span class="hljs-string">ipvlan</span> <span class="hljs-string">macvlan</span> <span class="hljs-literal">null</span> <span class="hljs-string">overlay</span><br><span class="hljs-attr">  Log:</span> <span class="hljs-string">awslogs</span> <span class="hljs-string">fluentd</span> <span class="hljs-string">gcplogs</span> <span class="hljs-string">gelf</span> <span class="hljs-string">journald</span> <span class="hljs-string">json-file</span> <span class="hljs-string">local</span> <span class="hljs-string">logentries</span> <span class="hljs-string">splunk</span> <span class="hljs-string">syslog</span><br><span class="hljs-attr"> Swarm:</span> <span class="hljs-string">inactive</span><br><span class="hljs-attr"> Runtimes:</span> <span class="hljs-string">runc</span><br> <span class="hljs-string">Default</span> <span class="hljs-attr">Runtime:</span> <span class="hljs-string">runc</span><br> <span class="hljs-string">Init</span> <span class="hljs-attr">Binary:</span> <span class="hljs-string">docker-init</span><br> <span class="hljs-string">containerd</span> <span class="hljs-attr">version:</span> <span class="hljs-number">894</span><span class="hljs-string">b81a4b802e4eb2a91d1ce216b8817763c29fb</span><br> <span class="hljs-string">runc</span> <span class="hljs-attr">version:</span> <span class="hljs-number">425e105</span><span class="hljs-string">d5a03fabd737a126ad93d62a9eeede87f</span><br> <span class="hljs-string">init</span> <span class="hljs-attr">version:</span> <span class="hljs-string">fec3683</span><br> <span class="hljs-string">Security</span> <span class="hljs-attr">Options:</span><br>  <span class="hljs-string">apparmor</span><br>  <span class="hljs-string">seccomp</span><br><span class="hljs-attr">   Profile:</span> <span class="hljs-string">default</span><br> <span class="hljs-string">Kernel</span> <span class="hljs-attr">Version:</span> <span class="hljs-number">4.15</span><span class="hljs-number">.0</span><span class="hljs-bullet">-65</span><span class="hljs-bullet">-generic</span><br> <span class="hljs-string">Operating</span> <span class="hljs-attr">System:</span> <span class="hljs-string">Ubuntu</span> <span class="hljs-number">18.04</span><span class="hljs-number">.3</span> <span class="hljs-string">LTS</span><br><span class="hljs-attr"> OSType:</span> <span class="hljs-string">linux</span><br><span class="hljs-attr"> Architecture:</span> <span class="hljs-string">x86_64</span><br><span class="hljs-attr"> CPUs:</span> <span class="hljs-number">2</span><br> <span class="hljs-string">Total</span> <span class="hljs-attr">Memory:</span> <span class="hljs-number">3.847</span><span class="hljs-string">GiB</span><br><span class="hljs-attr"> Name:</span> <span class="hljs-string">Paas</span><br><span class="hljs-attr"> ID:</span> <span class="hljs-number">6</span><span class="hljs-attr">VRF:YBNF:N6ZG:MLAW:WS7P:ULYU:UJJT:CC43:H43S:XQNJ:PO4K:FALJ</span><br> <span class="hljs-string">Docker</span> <span class="hljs-string">Root</span> <span class="hljs-attr">Dir:</span> <span class="hljs-string">/var/lib/docker</span><br> <span class="hljs-string">Debug</span> <span class="hljs-attr">Mode:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr"> Registry:</span> <span class="hljs-attr">https://index.docker.io/v1/</span><br><span class="hljs-attr"> Labels:</span><br><span class="hljs-attr"> Experimental:</span> <span class="hljs-literal">false</span><br> <span class="hljs-string">Registry</span> <span class="hljs-attr">Mirrors:</span><br><span class="hljs-attr">  https:</span><span class="hljs-string">//xxxxxx.mirror.aliyuncs.com/</span><br> <span class="hljs-string">Live</span> <span class="hljs-string">Restore</span> <span class="hljs-attr">Enabled:</span> <span class="hljs-literal">false</span><br><br><span class="hljs-attr">WARNING:</span> <span class="hljs-literal">No</span> <span class="hljs-string">swap</span> <span class="hljs-string">limit</span> <span class="hljs-string">support</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="4-开启Docker-Remote-API"><a href="#4-开启Docker-Remote-API" class="headerlink" title="4. 开启Docker Remote API"></a>4. 开启Docker Remote API</h2><p>修改配置文件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/lib/systemd/system/docker.service</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /usr/lib/systemd/system/docker.service<br></code></pre></td></tr></table></figure>
 
 <p>找到<code>ExecStart=/usr/bin/dockerd</code>行，修改如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/usr/bin/dockerd  -H tcp://0.0.0.0:2375  -H unix:///var/run/docker.sock</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ExecStart=/usr/bin/dockerd  -H tcp://0.0.0.0:2375  -H unix:///var/run/docker.sock<br></code></pre></td></tr></table></figure>
 
 <p>编辑配置文件<code>vim /etc/profile</code>, 写入一下内容, 执行<code>source /etc/profile</code>刷新</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> DOCKER_HOST=127.0.0.1:2375</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> DOCKER_HOST=127.0.0.1:2375<br></code></pre></td></tr></table></figure>
 
 <p>执行命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl daemon-reload<br>systemctl restart docker<br></code></pre></td></tr></table></figure>
 
 <p>执行<code>curl http://127.0.0.1:2375/info</code>验证</p>
 <p>输出如下</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"ID"</span>:<span class="string">"HPZP:XIWJ:BZP7:YI47:UOLX:YLMM:LBF7:KV4E:Y2A7:ED6B:BHWB:FE4R"</span>,<span class="attr">"Containers"</span>:<span class="number">2</span>,<span class="attr">"ContainersRunning"</span>:<span class="number">0</span>,<span class="attr">"ContainersPaused"</span>:<span class="number">0</span>,<span class="attr">"ContainersStopped"</span>:<span class="number">2</span>,<span class="attr">"Images"</span>:<span class="number">2</span>,<span class="attr">"Driver"</span>:<span class="string">"overlay2"</span>,<span class="attr">"DriverStatus"</span>:[[<span class="string">"Backing Filesystem"</span>,<span class="string">"xfs"</span>],[<span class="string">"Supports d_type"</span>,<span class="string">"true"</span>],[<span class="string">"Native Overlay Diff"</span>,<span class="string">"true"</span>]],<span class="attr">"SystemStatus"</span>:<span class="literal">null</span>,<span class="attr">"Plugins"</span>:&#123;<span class="attr">"Volume"</span>:[<span class="string">"local"</span>],<span class="attr">"Network"</span>:[<span class="string">"bridge"</span>,<span class="string">"host"</span>,<span class="string">"macvlan"</span>,<span class="string">"null"</span>,<span class="string">"overlay"</span>],<span class="attr">"Authorization"</span>:<span class="literal">null</span>,<span class="attr">"Log"</span>:[<span class="string">"awslogs"</span>,<span class="string">"fluentd"</span>,<span class="string">"gcplogs"</span>,<span class="string">"gelf"</span>,<span class="string">"journald"</span>,<span class="string">"json-file"</span>,<span class="string">"logentries"</span>,<span class="string">"splunk"</span>,<span class="string">"syslog"</span>]&#125;,<span class="attr">"MemoryLimit"</span>:<span class="literal">true</span>,<span class="attr">"SwapLimit"</span>:<span class="literal">true</span>,<span class="attr">"KernelMemory"</span>:<span class="literal">true</span>,<span class="attr">"CpuCfsPeriod"</span>:<span class="literal">true</span>,<span class="attr">"CpuCfsQuota"</span>:<span class="literal">true</span>,<span class="attr">"CPUShares"</span>:<span class="literal">true</span>,<span class="attr">"CPUSet"</span>:<span class="literal">true</span>,<span class="attr">"IPv4Forwarding"</span>:<span class="literal">true</span>,<span class="attr">"BridgeNfIptables"</span>:<span class="literal">true</span>,<span class="attr">"BridgeNfIp6tables"</span>:<span class="literal">true</span>,<span class="attr">"Debug"</span>:<span class="literal">false</span>,<span class="attr">"NFd"</span>:<span class="number">20</span>,<span class="attr">"OomKillDisable"</span>:<span class="literal">true</span>,<span class="attr">"NGoroutines"</span>:<span class="number">33</span>,<span class="attr">"SystemTime"</span>:<span class="string">"2018-04-08T15:41:52.725705339+08:00"</span>,<span class="attr">"LoggingDriver"</span>:<span class="string">"json-file"</span>,<span class="attr">"CgroupDriver"</span>:<span class="string">"cgroupfs"</span>,<span class="attr">"NEventsListener"</span>:<span class="number">0</span>,<span class="attr">"KernelVersion"</span>:<span class="string">"3.10.0-693.21.1.el7.x86_64"</span>,<span class="attr">"OperatingSystem"</span>:<span class="string">"CentOS Linux 7 (Core)"</span>,<span class="attr">"OSType"</span>:<span class="string">"linux"</span>,<span class="attr">"Architecture"</span>:<span class="string">"x86_64"</span>,<span class="attr">"IndexServerAddress"</span>:<span class="string">"https://index.docker.io/v1/"</span>,<span class="attr">"RegistryConfig"</span>:&#123;<span class="attr">"AllowNondistributableArtifactsCIDRs"</span>:[],<span class="attr">"AllowNondistributableArtifactsHostnames"</span>:[],<span class="attr">"InsecureRegistryCIDRs"</span>:[<span class="string">"127.0.0.0/8"</span>],<span class="attr">"IndexConfigs"</span>:&#123;<span class="attr">"docker.io"</span>:&#123;<span class="attr">"Name"</span>:<span class="string">"docker.io"</span>,<span class="attr">"Mirrors"</span>:[<span class="string">"https://0zs97su8.mirror.aliyuncs.com/"</span>],<span class="attr">"Secure"</span>:<span class="literal">true</span>,<span class="attr">"Official"</span>:<span class="literal">true</span>&#125;&#125;,<span class="attr">"Mirrors"</span>:[<span class="string">"https://0zs97su8.mirror.aliyuncs.com/"</span>]&#125;,<span class="attr">"NCPU"</span>:<span class="number">1</span>,<span class="attr">"MemTotal"</span>:<span class="number">1022570496</span>,<span class="attr">"GenericResources"</span>:<span class="literal">null</span>,<span class="attr">"DockerRootDir"</span>:<span class="string">"/var/lib/docker"</span>,<span class="attr">"HttpProxy"</span>:<span class="string">""</span>,<span class="attr">"HttpsProxy"</span>:<span class="string">""</span>,<span class="attr">"NoProxy"</span>:<span class="string">""</span>,<span class="attr">"Name"</span>:<span class="string">"localhost"</span>,<span class="attr">"Labels"</span>:[],<span class="attr">"ExperimentalBuild"</span>:<span class="literal">false</span>,<span class="attr">"ServerVersion"</span>:<span class="string">"18.03.0-ce"</span>,<span class="attr">"ClusterStore"</span>:<span class="string">""</span>,<span class="attr">"ClusterAdvertise"</span>:<span class="string">""</span>,<span class="attr">"Runtimes"</span>:&#123;<span class="attr">"runc"</span>:&#123;<span class="attr">"path"</span>:<span class="string">"docker-runc"</span>&#125;&#125;,<span class="attr">"DefaultRuntime"</span>:<span class="string">"runc"</span>,<span class="attr">"Swarm"</span>:&#123;<span class="attr">"NodeID"</span>:<span class="string">""</span>,<span class="attr">"NodeAddr"</span>:<span class="string">""</span>,<span class="attr">"LocalNodeState"</span>:<span class="string">"inactive"</span>,<span class="attr">"ControlAvailable"</span>:<span class="literal">false</span>,<span class="attr">"Error"</span>:<span class="string">""</span>,<span class="attr">"RemoteManagers"</span>:<span class="literal">null</span>&#125;,<span class="attr">"LiveRestoreEnabled"</span>:<span class="literal">false</span>,<span class="attr">"Isolation"</span>:<span class="string">""</span>,<span class="attr">"InitBinary"</span>:<span class="string">"docker-init"</span>,<span class="attr">"ContainerdCommit"</span>:&#123;<span class="attr">"ID"</span>:<span class="string">"cfd04396dc68220d1cecbe686a6cc3aa5ce3667c"</span>,<span class="attr">"Expected"</span>:<span class="string">"cfd04396dc68220d1cecbe686a6cc3aa5ce3667c"</span>&#125;,<span class="attr">"RuncCommit"</span>:&#123;<span class="attr">"ID"</span>:<span class="string">"4fc53a81fb7c994640722ac585fa9ca548971871"</span>,<span class="attr">"Expected"</span>:<span class="string">"4fc53a81fb7c994640722ac585fa9ca548971871"</span>&#125;,<span class="attr">"InitCommit"</span>:&#123;<span class="attr">"ID"</span>:<span class="string">"949e6fa"</span>,<span class="attr">"Expected"</span>:<span class="string">"949e6fa"</span>&#125;,<span class="attr">"SecurityOptions"</span>:[<span class="string">"]&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json">&#123;<span class="hljs-attr">"ID"</span>:<span class="hljs-string">"HPZP:XIWJ:BZP7:YI47:UOLX:YLMM:LBF7:KV4E:Y2A7:ED6B:BHWB:FE4R"</span>,<span class="hljs-attr">"Containers"</span>:<span class="hljs-number">2</span>,<span class="hljs-attr">"ContainersRunning"</span>:<span class="hljs-number">0</span>,<span class="hljs-attr">"ContainersPaused"</span>:<span class="hljs-number">0</span>,<span class="hljs-attr">"ContainersStopped"</span>:<span class="hljs-number">2</span>,<span class="hljs-attr">"Images"</span>:<span class="hljs-number">2</span>,<span class="hljs-attr">"Driver"</span>:<span class="hljs-string">"overlay2"</span>,<span class="hljs-attr">"DriverStatus"</span>:[[<span class="hljs-string">"Backing Filesystem"</span>,<span class="hljs-string">"xfs"</span>],[<span class="hljs-string">"Supports d_type"</span>,<span class="hljs-string">"true"</span>],[<span class="hljs-string">"Native Overlay Diff"</span>,<span class="hljs-string">"true"</span>]],<span class="hljs-attr">"SystemStatus"</span>:<span class="hljs-literal">null</span>,<span class="hljs-attr">"Plugins"</span>:&#123;<span class="hljs-attr">"Volume"</span>:[<span class="hljs-string">"local"</span>],<span class="hljs-attr">"Network"</span>:[<span class="hljs-string">"bridge"</span>,<span class="hljs-string">"host"</span>,<span class="hljs-string">"macvlan"</span>,<span class="hljs-string">"null"</span>,<span class="hljs-string">"overlay"</span>],<span class="hljs-attr">"Authorization"</span>:<span class="hljs-literal">null</span>,<span class="hljs-attr">"Log"</span>:[<span class="hljs-string">"awslogs"</span>,<span class="hljs-string">"fluentd"</span>,<span class="hljs-string">"gcplogs"</span>,<span class="hljs-string">"gelf"</span>,<span class="hljs-string">"journald"</span>,<span class="hljs-string">"json-file"</span>,<span class="hljs-string">"logentries"</span>,<span class="hljs-string">"splunk"</span>,<span class="hljs-string">"syslog"</span>]&#125;,<span class="hljs-attr">"MemoryLimit"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"SwapLimit"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"KernelMemory"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"CpuCfsPeriod"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"CpuCfsQuota"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"CPUShares"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"CPUSet"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"IPv4Forwarding"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"BridgeNfIptables"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"BridgeNfIp6tables"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"Debug"</span>:<span class="hljs-literal">false</span>,<span class="hljs-attr">"NFd"</span>:<span class="hljs-number">20</span>,<span class="hljs-attr">"OomKillDisable"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"NGoroutines"</span>:<span class="hljs-number">33</span>,<span class="hljs-attr">"SystemTime"</span>:<span class="hljs-string">"2018-04-08T15:41:52.725705339+08:00"</span>,<span class="hljs-attr">"LoggingDriver"</span>:<span class="hljs-string">"json-file"</span>,<span class="hljs-attr">"CgroupDriver"</span>:<span class="hljs-string">"cgroupfs"</span>,<span class="hljs-attr">"NEventsListener"</span>:<span class="hljs-number">0</span>,<span class="hljs-attr">"KernelVersion"</span>:<span class="hljs-string">"3.10.0-693.21.1.el7.x86_64"</span>,<span class="hljs-attr">"OperatingSystem"</span>:<span class="hljs-string">"CentOS Linux 7 (Core)"</span>,<span class="hljs-attr">"OSType"</span>:<span class="hljs-string">"linux"</span>,<span class="hljs-attr">"Architecture"</span>:<span class="hljs-string">"x86_64"</span>,<span class="hljs-attr">"IndexServerAddress"</span>:<span class="hljs-string">"https://index.docker.io/v1/"</span>,<span class="hljs-attr">"RegistryConfig"</span>:&#123;<span class="hljs-attr">"AllowNondistributableArtifactsCIDRs"</span>:[],<span class="hljs-attr">"AllowNondistributableArtifactsHostnames"</span>:[],<span class="hljs-attr">"InsecureRegistryCIDRs"</span>:[<span class="hljs-string">"127.0.0.0/8"</span>],<span class="hljs-attr">"IndexConfigs"</span>:&#123;<span class="hljs-attr">"docker.io"</span>:&#123;<span class="hljs-attr">"Name"</span>:<span class="hljs-string">"docker.io"</span>,<span class="hljs-attr">"Mirrors"</span>:[<span class="hljs-string">"https://0zs97su8.mirror.aliyuncs.com/"</span>],<span class="hljs-attr">"Secure"</span>:<span class="hljs-literal">true</span>,<span class="hljs-attr">"Official"</span>:<span class="hljs-literal">true</span>&#125;&#125;,<span class="hljs-attr">"Mirrors"</span>:[<span class="hljs-string">"https://0zs97su8.mirror.aliyuncs.com/"</span>]&#125;,<span class="hljs-attr">"NCPU"</span>:<span class="hljs-number">1</span>,<span class="hljs-attr">"MemTotal"</span>:<span class="hljs-number">1022570496</span>,<span class="hljs-attr">"GenericResources"</span>:<span class="hljs-literal">null</span>,<span class="hljs-attr">"DockerRootDir"</span>:<span class="hljs-string">"/var/lib/docker"</span>,<span class="hljs-attr">"HttpProxy"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"HttpsProxy"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"NoProxy"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"Name"</span>:<span class="hljs-string">"localhost"</span>,<span class="hljs-attr">"Labels"</span>:[],<span class="hljs-attr">"ExperimentalBuild"</span>:<span class="hljs-literal">false</span>,<span class="hljs-attr">"ServerVersion"</span>:<span class="hljs-string">"18.03.0-ce"</span>,<span class="hljs-attr">"ClusterStore"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"ClusterAdvertise"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"Runtimes"</span>:&#123;<span class="hljs-attr">"runc"</span>:&#123;<span class="hljs-attr">"path"</span>:<span class="hljs-string">"docker-runc"</span>&#125;&#125;,<span class="hljs-attr">"DefaultRuntime"</span>:<span class="hljs-string">"runc"</span>,<span class="hljs-attr">"Swarm"</span>:&#123;<span class="hljs-attr">"NodeID"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"NodeAddr"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"LocalNodeState"</span>:<span class="hljs-string">"inactive"</span>,<span class="hljs-attr">"ControlAvailable"</span>:<span class="hljs-literal">false</span>,<span class="hljs-attr">"Error"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"RemoteManagers"</span>:<span class="hljs-literal">null</span>&#125;,<span class="hljs-attr">"LiveRestoreEnabled"</span>:<span class="hljs-literal">false</span>,<span class="hljs-attr">"Isolation"</span>:<span class="hljs-string">""</span>,<span class="hljs-attr">"InitBinary"</span>:<span class="hljs-string">"docker-init"</span>,<span class="hljs-attr">"ContainerdCommit"</span>:&#123;<span class="hljs-attr">"ID"</span>:<span class="hljs-string">"cfd04396dc68220d1cecbe686a6cc3aa5ce3667c"</span>,<span class="hljs-attr">"Expected"</span>:<span class="hljs-string">"cfd04396dc68220d1cecbe686a6cc3aa5ce3667c"</span>&#125;,<span class="hljs-attr">"RuncCommit"</span>:&#123;<span class="hljs-attr">"ID"</span>:<span class="hljs-string">"4fc53a81fb7c994640722ac585fa9ca548971871"</span>,<span class="hljs-attr">"Expected"</span>:<span class="hljs-string">"4fc53a81fb7c994640722ac585fa9ca548971871"</span>&#125;,<span class="hljs-attr">"InitCommit"</span>:&#123;<span class="hljs-attr">"ID"</span>:<span class="hljs-string">"949e6fa"</span>,<span class="hljs-attr">"Expected"</span>:<span class="hljs-string">"949e6fa"</span>&#125;,<span class="hljs-attr">"SecurityOptions"</span>:[<span class="hljs-string">"]&#125;</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="5-安装-Docker-Compose"><a href="#5-安装-Docker-Compose" class="headerlink" title="5. 安装 Docker Compose"></a>5. 安装 Docker Compose</h2><h3 id="5-1-运行此命令下载最新版本的Docker-Compose"><a href="#5-1-运行此命令下载最新版本的Docker-Compose" class="headerlink" title="5.1 运行此命令下载最新版本的Docker Compose"></a>5.1 运行此命令下载最新版本的Docker Compose</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` &gt; /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+<h2 id="5-安装-Docker-Compose"><a href="#5-安装-Docker-Compose" class="headerlink" title="5. 安装 Docker Compose"></a>5. 安装 Docker Compose</h2><h3 id="5-1-运行此命令下载最新版本的Docker-Compose"><a href="#5-1-运行此命令下载最新版本的Docker-Compose" class="headerlink" title="5.1 运行此命令下载最新版本的Docker Compose"></a>5.1 运行此命令下载最新版本的Docker Compose</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` &gt; /usr/<span class="hljs-built_in">local</span>/bin/docker-compose<br></code></pre></td></tr></table></figure>
 
 <blockquote>
 <p>上面的命令是一个例子，可能会过时，为了确保使用最新的版本，请前往 <a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener">Github Compose repository release</a> 查看最新版本</p>
 <p>国内用户如果碰到速度过慢问题，可以使用DaoCloud的镜像，这里再次感谢<strong>DaoCloud</strong></p>
-<figure class="highlight plain"><figcaption><span>-L</span><a href="https://get.daocloud.io/docker/compose/releases/download/1.24.0/docker-compose-`uname" target="_blank" rel="noopener">-s`-`uname -m` > /usr/local/bin/docker-compose```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">### 5.2 给可执行文件添加权限</span><br><span class="line">```bash</span><br><span class="line">sudo chmod +x /usr/local/bin/docker-compose </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>-L</span><a href="https://get.daocloud.io/docker/compose/releases/download/1.24.0/docker-compose-`uname" target="_blank" rel="noopener">-s`-`uname -m` > /usr/local/bin/docker-compose```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs curl">### 5.2 给可执行文件添加权限<br>```bash<br>sudo chmod +x /usr/local/bin/docker-compose <br></code></pre></td></tr></table></figure>
 </blockquote>
-<h3 id="5-3-验证安装docker-compose-–version"><a href="#5-3-验证安装docker-compose-–version" class="headerlink" title="5.3 验证安装docker-compose –version"></a>5.3 验证安装docker-compose –version</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose version</span><br></pre></td></tr></table></figure>
+<h3 id="5-3-验证安装docker-compose-–version"><a href="#5-3-验证安装docker-compose-–version" class="headerlink" title="5.3 验证安装docker-compose –version"></a>5.3 验证安装docker-compose –version</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker-compose version<br></code></pre></td></tr></table></figure>
 
 <p><strong>输出如下</strong></p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker-compose version <span class="number">1.24</span><span class="number">.0</span>, build <span class="number">0</span>aa59064</span><br><span class="line">docker-py version: <span class="number">3.7</span><span class="number">.2</span></span><br><span class="line">CPython version: <span class="number">3.6</span><span class="number">.8</span></span><br><span class="line">OpenSSL version: OpenSSL <span class="number">1.1</span><span class="number">.0</span>j  <span class="number">20</span> Nov <span class="number">2018</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">docker-compose version <span class="hljs-number">1.24</span><span class="hljs-number">.0</span>, build <span class="hljs-number">0</span>aa59064<br>docker-py version: <span class="hljs-number">3.7</span><span class="hljs-number">.2</span><br>CPython version: <span class="hljs-number">3.6</span><span class="hljs-number">.8</span><br>OpenSSL version: OpenSSL <span class="hljs-number">1.1</span><span class="hljs-number">.0</span>j  <span class="hljs-number">20</span> Nov <span class="hljs-number">2018</span><br></code></pre></td></tr></table></figure>
 
 <blockquote>
 <p>参考资料:</p>
@@ -392,160 +374,156 @@
 <li><a href="https://get.daocloud.io/#install-compose" target="_blank" rel="noopener">DaoCloud</a></li>
 </ol>
 
-    </div>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/PaaS/">PaaS</a>
+                    
+                      <a class="hover-with-bg" href="/categories/PaaS/Docker/">Docker</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/linux/">linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/docker/">docker</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/05/22/Nexus%E6%BA%90%E6%9B%BF%E6%8D%A2%E5%8F%8AGitlab%E8%BF%81%E7%A7%BB/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Nexus源替换及Gitlab迁移</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/03/15/git-archive-%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6/">
+                        <span class="hidden-mobile">git archive 打包文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-    
-    
-    
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/docker/" rel="tag"># docker</a>
-              <a href="/tags/linux/" rel="tag"># linux</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2019/03/15/git-archive-%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6/" rel="prev" title="git archive 打包文件">
-      <i class="fa fa-chevron-left"></i> git archive 打包文件
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/05/22/Nexus%E6%BA%90%E6%9B%BF%E6%8D%A2%E5%8F%8AGitlab%E8%BF%81%E7%A7%BB/" rel="next" title="Nexus源替换及Gitlab迁移">
-      Nexus源替换及Gitlab迁移 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-  </div>
-
-
-          </div>
-          
-
+            
+          </article>
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-背景"><span class="nav-number">1.</span> <span class="nav-text">1. 背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-概述"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-为什么要使用-Docker"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 为什么要使用 Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-更高效的利用系统资源"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 更高效的利用系统资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-更快速的启动时间"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 更快速的启动时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-3-一致的运行环境"><span class="nav-number">1.2.3.</span> <span class="nav-text">1.2.3 一致的运行环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-4-持续交付和部署"><span class="nav-number">1.2.4.</span> <span class="nav-text">1.2.4 持续交付和部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-5-更轻松的迁移"><span class="nav-number">1.2.5.</span> <span class="nav-text">1.2.5 更轻松的迁移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-6-更轻松的维护和扩展"><span class="nav-number">1.2.6.</span> <span class="nav-text">1.2.6 更轻松的维护和扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-7-对比传统虚拟机总结"><span class="nav-number">1.2.7.</span> <span class="nav-text">1.2.7 对比传统虚拟机总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-环境"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-卸载旧版本"><span class="nav-number">2.</span> <span class="nav-text">2. 卸载旧版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-安装Docker"><span class="nav-number">3.</span> <span class="nav-text">3. 安装Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Ubuntu使用-APT-安装"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Ubuntu使用 APT 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-CentOS使用YUM安装"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 CentOS使用YUM安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-使用脚本自动安装"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 使用脚本自动安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-查看Docker版本"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 查看Docker版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-systemd启动Docker并配置开机自启"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 systemd启动Docker并配置开机自启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-配置镜像加速器"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 配置镜像加速器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-允许Docker测试示例"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 允许Docker测试示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-查看Docker版本信息"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 查看Docker版本信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-开启Docker-Remote-API"><span class="nav-number">4.</span> <span class="nav-text">4. 开启Docker Remote API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-安装-Docker-Compose"><span class="nav-number">5.</span> <span class="nav-text">5. 安装 Docker Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-运行此命令下载最新版本的Docker-Compose"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 运行此命令下载最新版本的Docker Compose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-验证安装docker-compose-–version"><span class="nav-number">5.2.</span> <span class="nav-text">5.3 验证安装docker-compose –version</span></a></li></ol></li></ol></div>
       </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Eric Shen"
-      src="https://secure.gravatar.com/avatar/681451b3cb8cfa3b6d209b671e925083">
-  <p class="site-author-name" itemprop="name">Eric Shen</p>
-  <div class="site-description" itemprop="description">Fake Geeker, Hoops Lover!</div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">14</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="feed-link motion-element">
-    <a href="/atom.xml" rel="alternate">
-      <i class="fa fa-rss"></i>RSS
-    </a>
-  </div>
-
-
-
-      </div>
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2020</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Eric Shen</span>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
-  </div>
 
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
+    
   </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
 
 
 
@@ -553,6 +531,50 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
 
 
 
@@ -566,9 +588,12 @@
 
 
 
-  
 
-  
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
 
 </body>
 </html>
