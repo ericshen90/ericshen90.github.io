@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="标准GitFlow工作流程版本管理的挑战虽然有这么优秀的版本管理工具，但是我们面对版本管理的时候，依然有非常大得挑战，我们都知道大家工作在同一个仓库上，那么彼此的代码协作必然带来很多问题和挑战，如下：
+
+如何开始一个Feature的开发，而不影响别的Feature？
+由于很容易创建新分支，分支多了如何管理，时间久了，如何知道每个分支是干什么的？
+哪些分支已经合并回了主干？
+如何进行Release的">
+  
+  <meta name="author" content="Eric Shen">
+  <meta name="keywords" content="">
+  
+  <title>标准GitFLow工作流程 - Eric Shen Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-dark.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ericshen.xyz","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Eric Shen Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="标准GitFLow工作流程">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-10-15 13:49" pubdate>
+        星期一, 十月 15日 2018, 1:49 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      24
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">标准GitFLow工作流程</h1>
+            
+            <div class="markdown-body">
+              <h1 id="标准GitFlow工作流程"><a href="#标准GitFlow工作流程" class="headerlink" title="标准GitFlow工作流程"></a>标准GitFlow工作流程</h1><h3 id="版本管理的挑战"><a href="#版本管理的挑战" class="headerlink" title="版本管理的挑战"></a>版本管理的挑战</h3><p>虽然有这么优秀的版本管理工具，但是我们面对版本管理的时候，依然有非常大得挑战，我们都知道大家工作在同一个仓库上，那么彼此的代码协作必然带来很多问题和挑战，如下：</p>
+<ul>
+<li>如何开始一个Feature的开发，而不影响别的<code>Feature</code>？</li>
+<li>由于很容易创建新分支，分支多了如何管理，时间久了，如何知道每个分支是干什么的？</li>
+<li>哪些分支已经合并回了主干？</li>
+<li>如何进行<code>Release</code>的管理？开始一个<code>Release</code>的时候如何冻结Feature, 如何在<code>Prepare Release</code>的时候，开发人员可以继续开发新的功能？</li>
+<li>线上代码出Bug了，如何快速修复？而且修复的代码要包含到开发人员的分支以及下一个<code>Release</code>?</li>
+</ul>
+<p>大部分开发人员现在使用<code>Git</code>就只是用三个甚至两个分支，一个是<code>Master</code>, 一个是<code>Develop</code>, 还有一个是基于<code>Develop</code>打得各种分支。这个在小项目规模的时候还勉强可以支撑，因为很多人做项目就只有一个<code>Release</code>, 但是人员一多，而且项目周期一长就会出现各种问题。</p>
+<span id="more"></span>
+
+<p>[TOC]</p>
+<h3 id="一、Git-Flow-简介"><a href="#一、Git-Flow-简介" class="headerlink" title="一、Git Flow 简介"></a>一、Git Flow 简介</h3><p><code>Git Flow</code> 是一个围绕项目开发发布的严格 git 分支模型，用于管理多人协作的大型项目中实现高效的协作开发，大致分为三种:</p>
+<ul>
+<li><code>Git Flow</code>: 最原始的 <code>Git Flow</code> 分支模型</li>
+<li><code>Github Flow</code>: <code>Git Flow</code> 的简化版，专门配合持续发布</li>
+<li><code>GitLab Flow</code>: <code>Git Flow</code> 与 <code>Github Flow</code> 的结合版</li>
+</ul>
+<p>关于三种 <code>Git Flow</code> 区别详情可参考大佬阮一峰的 <a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html">Git 工作流程</a></p>
+<h3 id="二、-Git-Flow-流程"><a href="#二、-Git-Flow-流程" class="headerlink" title="二、 Git Flow 流程"></a>二、 Git Flow 流程</h3><p>Github Flow 和 GitLab Flow 对于持续发布支持比较好，但是原始版本的 Git Flow 对于传统的按照版本发布更加友好一些，所以以下主要说明以下 Git Flow 的工作流程；Git Flow 主要分支模型如下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/BkcQboiAUa7NWMS.jpg" srcset="/img/loading.gif" alt=""></p>
+<blockquote>
+<p>上面这个官方图可能看起来不太直观，可参考下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/3V1RbWPzZftxBOy.jpg" srcset="/img/loading.gif" alt=""></p>
+</blockquote>
+<p>在整个分支模型中 <strong>存在两个长期分支: <code>develop</code> 和 <code>master</code></strong>，其中 <code>develop</code> 分支为开发分支，<code>master</code> 为生产分支；<strong><code>master</code> 代码始终保持随时可以部署到线上的状态；<code>develop</code> 分支用于合并最新提交的功能性代码</strong>；具体的分支定义如下</p>
+<ul>
+<li><code>master</code>: 生产代码，始终保持可以直接部署生产的状态</li>
+<li><code>develop</code>: 开发分支，每次合并最新功能代码到此分支</li>
+<li><code>feature</code>: 新功能分支，所有新开发的功能将采用 <code>feature/xxxx</code> 形式命名分支</li>
+<li><code>hotfixe</code>: 紧急修复补丁分支，当新功能部署到了线上出现了严重 bug 需要紧急修复时，则创建 <code>hotfixe/xxxx</code> 形式命名的分支</li>
+<li><code>release</code>: 稳定版分支，当完成大版本变动后，应该创建 <code>release/xxxx</code> 分支</li>
+</ul>
+<p>在整个分支模型中，<code>develop</code> 分支为最上游分支，会不断有新的 <code>feature</code> 合并入 <code>develop</code> 分支，当功能开发达到完成所有版本需求时，则从 <code>develop</code> 分支创建 <code>release</code> 分支，release 后如没有发现其他问题，最终 <code>release</code> 会被合并到 <code>master</code> 分支以完成线上部署</p>
+<blockquote>
+<p>Git Flow如何工作</p>
+</blockquote>
+<p><strong>初始分支</strong></p>
+<ul>
+<li>所有在<code>Master</code>分支上的<code>Commit</code>应该<code>Tag</code><br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/iZw7FSPfLsEcyBJ.jpg" srcset="/img/loading.gif" alt=""></li>
+<li><code>Feature</code> 分支分支名 <code>feature/feature1</code>分支做完后，必须合并回<code>Develop</code>分支, 合并完分支后一般会删点这个Feature分支，但是我们也可以保留<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/LnGjsQtRh4l2FSo.jpg" srcset="/img/loading.gif" alt=""></li>
+<li><code>Release</code>分支分支名 <code>release/release1</code>分支基于<code>Develop</code>分支创建，打完<code>Release</code>分之后，我们可以在这个<code>Release</code>分支上测试，修改Bug等。同时，其它开发人员可以基于开发新的<code>Feature</code> (记住：一旦打了<code>Release</code>分支之后不要从<code>Develop</code>分支上合并新的改动到<code>Release</code>分支)发布<code>Release</code>分支时，合并<code>Release</code>到<code>Master</code>和Develop， 同时在<code>Master</code>分支上打个Tag记住<code>Release</code>版本号，然后可以删除<code>Release</code>分支了。<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/HL8TN1UfK5FShyr.jpg" srcset="/img/loading.gif" alt=""></li>
+<li>维护分支 Hotfix分支名 hotfix/hotfix1分支基于Master分支创建，开发完后需要合并回Master和Develop分支，同时在Master上打一个tag<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/c89z3YPqKph5j1T.png" srcset="/img/loading.gif" alt="fa159868df4a416d391c6fd832851f9a.png"></li>
+</ul>
+<blockquote>
+<p>Git 命令：</p>
+</blockquote>
+<ol>
+<li>创建develop分支</li>
+</ol>
+<ul>
+<li><code>git branch develop git push -u origin develop</code></li>
+</ul>
+<ol start="2">
+<li>开始新Feature开发</li>
+</ol>
+<ul>
+<li><p><code>git checkout -b some-feature develop</code></p>
+</li>
+<li><p><code>git push -u origin some-feature</code> <em>可选推送至远端</em></p>
+</li>
+<li><p><code>git status</code></p>
+</li>
+<li><p><code>git add some-file</code></p>
+</li>
+<li><p><code>git commit</code></p>
+</li>
+</ul>
+<ol start="3">
+<li>完成Feature</li>
+</ol>
+<ul>
+<li><code>git pull origin develop</code></li>
+<li><code>git checkout develop</code></li>
+<li><code>git merge --no-ff some-feature</code></li>
+<li><code>git push origin develop</code></li>
+<li><code>git branch -d some-feature</code></li>
+<li><code>git push origin --delete some-feature</code><em>取决于是否已将Feature提交到远端</em></li>
+</ul>
+<ol start="4">
+<li>开始Release</li>
+</ol>
+<ul>
+<li><code>git checkout -b release-0.1.0 develop</code></li>
+</ul>
+<ol start="5">
+<li>完成Release</li>
+</ol>
+<ul>
+<li><code>git checkout master</code></li>
+<li><code>git merge --no-ff release-0.1.0</code></li>
+<li><code>git push</code></li>
+<li><code>git checkout develop</code></li>
+<li><code>git merge --no-ff release-0.1.0</code></li>
+<li><code>git push git branch -d release-0.1.0</code></li>
+<li><code>git push origin --delete release-0.1.0</code> <em>取决于是否已将Release提交到远端</em></li>
+<li><code>git tag -a v0.1.0 master</code></li>
+<li><code>git push --tags</code></li>
+</ul>
+<ol start="6">
+<li>开始Hotfix</li>
+</ol>
+<ul>
+<li><code>git checkout -b hotfix-0.1.1 master</code></li>
+</ul>
+<ol start="7">
+<li>完成Hotfix</li>
+</ol>
+<ul>
+<li><code>git checkout master</code></li>
+<li><code>git merge --no-ff hotfix-0.1.1</code></li>
+<li><code>git push</code></li>
+<li><code>git checkout develop</code></li>
+<li><code>git merge --no-ff hotfix-0.1.1</code></li>
+<li><code>git push</code></li>
+<li><code>git branch -d hotfix-0.1.1</code></li>
+<li><code>git tag -a v0.1.1 master</code></li>
+<li><code>git push --tags</code></li>
+</ul>
+<h3 id="三、Git-Flow-工具"><a href="#三、Git-Flow-工具" class="headerlink" title="三、Git Flow 工具"></a>三、Git Flow 工具</h3><p>针对于 Git Flow，其手动操作 git 命令可能过于繁琐，所以后来有了 git-flow 工具；git-flow 是一个 git 扩展集； git-flow 安装以及使用具体请参考 <a target="_blank" rel="noopener" href="https://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html">git-flow 备忘清单</a>，该文章详细描述了 git-flow 工具的使用方式<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/FYQLHx.png" srcset="/img/loading.gif" alt="git flow"></p>
+<ul>
+<li>那么又有人做出了<code>GUI</code>工具，你只需要点击下一步就行，工具帮你干这些事。<br>当你用Git-<code>flow</code>初始化后，基本上你只需要点击git flow菜单选择start feature, release或者hotfix, 做完后再次选择git flow菜单，点击Done Action.</li>
+</ul>
+<blockquote>
+<p>个人推荐：<a target="_blank" rel="noopener" href="https://www.sourcetreeapp.com/">SourceTree</a>强大的图形化Git工作流（点点点），最主要是免费！<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/L5yPmrD1hfi3NOX.png" srcset="/img/loading.gif" alt="image.png"></p>
+</blockquote>
+<p><strong>IDE集成参考</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/z7ZXnkro5bFc4Tv.png" srcset="/img/loading.gif" alt=""></p>
+<ul>
+<li><strong>JetBrain</strong>系列开发工具(如IDEA、WebStorm、PyCharm):<ul>
+<li><code>Settings</code>&gt;<code>Plugins</code>&gt;<code>Browse repositories</code>，搜索<strong>Git Flow Integration</strong>安装；</li>
+<li>或访问<a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/7315-git-flow-integration">JetBrain官方库</a>下载，在<code>Plugins</code>&gt;<code>Install plugin from disk</code>安装。</li>
+</ul>
+</li>
+<li><strong>VisualStudio</strong>系列开发工具：<ul>
+<li><code>工具</code>&gt;<code>扩展和更新</code>，搜索<strong>GitFlow</strong>安装，详见<a href="https://marketplace.visualstudio.com/search?term=gitflow&target=VS&category=Tools&vsVersion=&subCategory=All&sortBy=Relevance">Marketplace</a></li>
+</ul>
+</li>
+<li><strong>VS Code</strong>:<ul>
+<li><code>Extensions</code>，搜索<strong>gitflow</strong>安装，完成后通过<code>Command Palettee</code>调用，建议同<code>GitLens</code>配合食用</li>
+</ul>
+</li>
+</ul>
+<h3 id="四、GitLab-整合"><a href="#四、GitLab-整合" class="headerlink" title="四、GitLab 整合"></a>四、GitLab 整合</h3><p>以上 <code>Git Flow</code> 所有操作介绍的都是在本地操作，而正常我们在工作中都是基于 <code>GitLab</code> 搭建私有 <code>Git</code> 仓库来进行协同开发的，以下简述以下 <code>Git Flow</code> 配合 <code>GitLab</code> 的流程</p>
+<h4 id="4-1-开发-features"><a href="#4-1-开发-features" class="headerlink" title="4.1 开发 features"></a>4.1 开发 features</h4><p>当开发一个新功能时流程如下:</p>
+<ul>
+<li>本地 <code>git flow feature start xxxx</code> 开启一个 feature 新分支</li>
+<li><code>git flow feature publish xxxx</code> 将此分支推送到远端以便他人获取 (可选)</li>
+<li>完成开发后 <code>GitLab</code> 上向 <code>develop</code> 分支发起合并请求</li>
+<li><code>CI sonar</code> 等质量检测工具扫描，其他用户 <code>review</code> 代码</li>
+<li>确认无误后 <code>master</code> 权限用户合并其到 <code>develop</code> 分支</li>
+<li>部署到测试环境以便测试组测试</li>
+<li>如果测试不通过，则继续基于此分支开发，直到该功能开发完成</li>
+</ul>
+<h4 id="4-2-创建-release"><a href="#4-2-创建-release" class="headerlink" title="4.2 创建 release"></a>4.2 创建 release</h4><p>当一定量的 feature 开发完成并合并到 <code>develop</code> 后，如所有 <code>feature</code> 都测试通过并满足版本需求，则可以创建 <code>release</code> 版本分支；release 分支流程如下</p>
+<ul>
+<li>本地 <code>git flow release start xxxx</code> 开启 <code>release</code> 分支</li>
+<li><code>git flow release publish xxxx</code> 将其推送到远端以便他人获取</li>
+<li>继续进行完整性测试，出现问题继续修复，直到 <code>release</code> 完全稳定</li>
+<li>从 <code>release</code> 分支向 <code>master</code>、<code>develop</code> 分支分别发起合并请求</li>
+<li><code>master</code> 合并后创建对应的 <code>release</code> 标签，并部署生产环境</li>
+<li><code>develop</code> 合并 <code>release</code> 的后期修改</li>
+</ul>
+<h4 id="4-3-紧急修复hotfix"><a href="#4-3-紧急修复hotfix" class="headerlink" title="4.3 紧急修复hotfix"></a>4.3 紧急修复hotfix</h4><p>当 <code>master</code> 某个 <code>tag</code> 部署到生产环境后，也可能出现不符合预期的问题出现；此时应该基于 <code>master</code> 创建 <code>hotfix</code> 分支进行修复，流程如下标准<code>GitFlow</code>工作流程</p>
+<ul>
+<li>本地 <code>git flow hotfix start xxxx</code> 创建紧急修复分支</li>
+<li>修改代码后将其推送到远端，并向 <code>master</code>、<code>develop</code> 分支发起合并</li>
+<li><code>develop</code> 合并紧急修复补丁，如果必要最好再做一下测试</li>
+<li><code>master</code> 合并紧急修复补丁，创建紧急修复 <code>tag</code>，并部署生产环境</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html">Git 工作流程</a></li>
+<li><a target="_blank" rel="noopener" href="https://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html">git-flow 备忘清单</a></li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Git/">Git</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/git/">git</a>
+                    
+                      <a class="hover-with-bg" href="/tags/git-flow/">git-flow</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/03/15/git/git-archive-%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">git archive 打包文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/10/13/linux/Linux%E5%90%8C%E6%AD%A5%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4/">
+                        <span class="hidden-mobile">Linux同步系统时间</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                  
+                
+                
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https://ericshen.xyz/2018/10/15/git/%E6%A0%87%E5%87%86GitFLow%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/';
+        this.page.identifier = '/2018/10/15/git/%E6%A0%87%E5%87%86GitFLow%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/';
+      };
+      Fluid.utils.waitElementVisible('disqus_thread', function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', new Date());
+        (d.head || d.body).appendChild(s);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the
+      <a target="_blank" href="https://disqus.com/?ref_noscript" rel="nofollow noopener noopener">comments powered by Disqus.</a>
+    </noscript>
+  </div>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
