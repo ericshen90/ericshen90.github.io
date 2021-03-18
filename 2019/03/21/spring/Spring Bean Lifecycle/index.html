@@ -1,0 +1,540 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="Fake Geeker, Hoops Lover!">
+  
+  <meta name="author" content="Eric Shen">
+  <meta name="keywords" content="">
+  
+  <title>Spring Bean Lifecycle - Eric Shen Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-dark.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ericshen.xyz","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Eric Shen Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Spring Bean Lifecycle">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Eric Shen
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-03-21 00:00" pubdate>
+        星期四, 三月 21日 2019
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      19
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Spring Bean Lifecycle</h1>
+            
+            <div class="markdown-body">
+              <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Spring Bean 的生命周期在整个 Spring 中占有很重要的位置，掌握这些可以加深对 Spring 的理解。</p>
+<p>首先看下生命周期图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/09a8ab47.png" srcset="/img/loading.gif" alt="Spring BeanLifeCycle"></p>
+<p>再谈生命周期之前有一点需要先明确：</p>
+<blockquote>
+<p>Spring 只帮我们管理单例模式 Bean 的<strong>完整</strong>生命周期，对于 prototype 的 bean ，Spring 在创建好交给使用者之后则不会再管理后续的生命周期。</p>
+</blockquote>
+<h3 id="注解方式"><a href="#注解方式" class="headerlink" title="注解方式"></a>注解方式</h3><p>在 bean 初始化时会经历几个阶段，首先可以使用注解 <code>@PostConstruct</code>, <code>@PreDestroy</code> 来在 bean 的创建和销毁阶段进行调用:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AnnotationBean</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Logger LOGGER = LoggerFactory.getLogger(AnnotationBean.class);<br><br>    <span class="hljs-meta">@PostConstruct</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;AnnotationBean start&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@PreDestroy</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;AnnotationBean destroy&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="InitializingBean-DisposableBean-接口"><a href="#InitializingBean-DisposableBean-接口" class="headerlink" title="InitializingBean, DisposableBean 接口"></a>InitializingBean, DisposableBean 接口</h3><p>还可以实现 <code>InitializingBean,DisposableBean</code> 这两个接口，也是在初始化以及销毁阶段调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Service</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpringLifeCycleService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">InitializingBean</span>,<span class="hljs-title">DisposableBean</span></span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Logger LOGGER = LoggerFactory.getLogger(SpringLifeCycleService.class);<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">afterPropertiesSet</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycleService start&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycleService destroy&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="自定义初始化和销毁方法"><a href="#自定义初始化和销毁方法" class="headerlink" title="自定义初始化和销毁方法"></a>自定义初始化和销毁方法</h3><p>也可以自定义方法用于在初始化、销毁阶段调用:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LifeCycleConfig</span> </span>&#123;<br><br><br>    <span class="hljs-meta">@Bean</span>(initMethod = <span class="hljs-string">&quot;start&quot;</span>, destroyMethod = <span class="hljs-string">&quot;destroy&quot;</span>)<br>    <span class="hljs-keyword">public</span> SpringLifeCycle <span class="hljs-function"><span class="hljs-title">create</span>(<span class="hljs-params"></span>)</span>&#123;<br>        SpringLifeCycle springLifeCycle = <span class="hljs-keyword">new</span> SpringLifeCycle() ;<br><br>        <span class="hljs-keyword">return</span> springLifeCycle ;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpringLifeCycle</span></span>&#123;<br><br>    <span class="hljs-keyword">private</span> final <span class="hljs-keyword">static</span> Logger LOGGER = LoggerFactory.getLogger(SpringLifeCycle.class);<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-function"><span class="hljs-title">start</span>(<span class="hljs-params"></span>)</span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycle start&quot;</span>);<br>    &#125;<br><br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-function"><span class="hljs-title">destroy</span>(<span class="hljs-params"></span>)</span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycle destroy&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上是在 SpringBoot 中可以这样配置，如果是原始的基于 XML 也是可以使用:</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ocaml">&lt;bean <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;com.crossoverjie.spring.SpringLifeCycle&quot;</span> init-<span class="hljs-keyword">method</span>=<span class="hljs-string">&quot;start&quot;</span> destroy-<span class="hljs-keyword">method</span>=<span class="hljs-string">&quot;destroy&quot;</span>&gt;<br>&lt;/bean&gt;<br></code></pre></td></tr></table></figure>
+
+<p>来达到同样的效果。</p>
+<h3 id="实现-Aware-接口"><a href="#实现-Aware-接口" class="headerlink" title="实现 *Aware 接口"></a>实现 *Aware 接口</h3><p><code>*Aware</code> 接口可以用于在初始化 bean 时获得 Spring 中的一些对象，如获取 <code>Spring 上下文</code>等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpringLifeCycleAware</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ApplicationContextAware</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Logger LOGGER = LoggerFactory.getLogger(SpringLifeCycleAware.class);<br><br>    <span class="hljs-keyword">private</span> ApplicationContext applicationContext ;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setApplicationContext</span><span class="hljs-params">(ApplicationContext applicationContext)</span> <span class="hljs-keyword">throws</span> BeansException </span>&#123;<br>        <span class="hljs-keyword">this</span>.applicationContext = applicationContext ;<br>        LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycleAware start&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样在 <code>springLifeCycleAware</code> 这个 bean 初始化会就会调用 <code>setApplicationContext</code> 方法，并可以获得 <code>applicationContext</code> 对象。</p>
+<h3 id="BeanPostProcessor-增强处理器"><a href="#BeanPostProcessor-增强处理器" class="headerlink" title="BeanPostProcessor 增强处理器"></a>BeanPostProcessor 增强处理器</h3><p>实现 BeanPostProcessor 接口，Spring 中所有 bean 在做初始化时都会调用该接口中的两个方法，可以用于对一些特殊的 bean 进行处理：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs php">@Component<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpringLifeCycleProcessor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">BeanPostProcessor</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-built_in">static</span> Logger LOGGER = LoggerFactory.getLogger(SpringLifeCycleProcessor.<span class="hljs-keyword">class</span>);<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 预初始化 初始化之前调用</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> bean</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> beanName</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> BeansException</span><br><span class="hljs-comment">     */</span><br>    @Override<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">Object</span> postProcessBeforeInitialization(<span class="hljs-keyword">Object</span> bean, <span class="hljs-keyword">String</span> beanName) throws BeansException &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;annotationBean&quot;</span>.equals(beanName))&#123;<br>            LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycleProcessor start beanName=&#123;&#125;&quot;</span>,beanName);<br>        &#125;<br>        <span class="hljs-keyword">return</span> bean;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 后初始化  bean 初始化完成调用</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> bean</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> beanName</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> BeansException</span><br><span class="hljs-comment">     */</span><br>    @Override<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">Object</span> postProcessAfterInitialization(<span class="hljs-keyword">Object</span> bean, <span class="hljs-keyword">String</span> beanName) throws BeansException &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;annotationBean&quot;</span>.equals(beanName))&#123;<br>            LOGGER.info(<span class="hljs-string">&quot;SpringLifeCycleProcessor end beanName=&#123;&#125;&quot;</span>,beanName);<br>        &#125;<br>        <span class="hljs-keyword">return</span> bean;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>执行之后观察结果：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs routeros">019-03-21 00:40:24.856 [restartedMain] <span class="hljs-builtin-name">INFO</span>  c.c.s.p.SpringLifeCycleProcessor - SpringLifeCycleProcessor start <span class="hljs-attribute">beanName</span>=annotationBean<br>2019-03-21 00:40:24.860 [restartedMain] <span class="hljs-builtin-name">INFO</span>  c.c.spring.annotation.AnnotationBean - AnnotationBean start<br>2019-03-21 00:40:24.861 [restartedMain] <span class="hljs-builtin-name">INFO</span>  c.c.s.p.SpringLifeCycleProcessor - SpringLifeCycleProcessor end <span class="hljs-attribute">beanName</span>=annotationBean<br>2019-03-21 00:40:24.864 [restartedMain] <span class="hljs-builtin-name">INFO</span>  c.c.s.aware.SpringLifeCycleAware - SpringLifeCycleAware start<br>2019-03-21 00:40:24.867 [restartedMain] <span class="hljs-builtin-name">INFO</span>  c.c.s.service.SpringLifeCycleService - SpringLifeCycleService start<br>2019-03-21 00:40:24.887 [restartedMain] <span class="hljs-builtin-name">INFO</span>  c.c.spring.SpringLifeCycle - SpringLifeCycle start<br>2019-03-21 00:40:25.062 [restartedMain] <span class="hljs-builtin-name">INFO</span>  o.s.b.d.a.OptionalLiveReloadServer - LiveReload<span class="hljs-built_in"> server </span>is running on<span class="hljs-built_in"> port </span>35729<br>2019-03-21 00:40:25.122 [restartedMain] <span class="hljs-builtin-name">INFO</span>  o.s.j.e.a.AnnotationMBeanExporter - Registering beans <span class="hljs-keyword">for</span> JMX exposure on startup<br>2019-03-21 00:40:25.140 [restartedMain] <span class="hljs-builtin-name">INFO</span>  com.crossoverjie.Application - Started Application <span class="hljs-keyword">in</span> 2.309 seconds (JVM running <span class="hljs-keyword">for</span> 3.681)<br>2019-03-21 00:40:25.143 [restartedMain] <span class="hljs-builtin-name">INFO</span>  com.crossoverjie.Application - start ok!<br>2019-03-21 00:40:25.153 [Thread-8] <span class="hljs-builtin-name">INFO</span>  o.s.c.a.AnnotationConfigApplicationContext - Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@3913adad: startup date [Wed Mar 21 00:40:23 CST 2019]; root of context hierarchy<br>2019-03-21 00:40:25.155 [Thread-8] <span class="hljs-builtin-name">INFO</span>  o.s.j.e.a.AnnotationMBeanExporter - Unregistering JMX-exposed beans on shutdown<br>2019-03-21 00:40:25.156 [Thread-8] <span class="hljs-builtin-name">INFO</span>  c.c.spring.SpringLifeCycle - SpringLifeCycle destroy<br>2019-03-21 00:40:25.156 [Thread-8] <span class="hljs-builtin-name">INFO</span>  c.c.s.service.SpringLifeCycleService - SpringLifeCycleService destroy<br>2019-03-21 00:40:25.156 [Thread-8] <span class="hljs-builtin-name">INFO</span>  c.c.spring.annotation.AnnotationBean - AnnotationBean destroy<br></code></pre></td></tr></table></figure>
+
+<p>直到 Spring 上下文销毁时则会调用自定义的销毁方法以及实现了 <code>DisposableBean</code> 的 <code>destroy()</code> 方法。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Spring中Bean的生命周期如下:</p>
+<ul>
+<li><p>Bean容器找到配置文件中Spring Bean的定义。</p>
+</li>
+<li><p>Bean容器利用Java Reflection API创建一个Bean的实例。</p>
+</li>
+<li><p>如果涉及到一些属性值 利用set方法设置一些属性值。</p>
+</li>
+<li><p>如果Bean实现了BeanNameAware接口，调用setBeanName()方法，传入Bean的名字。</p>
+</li>
+<li><p>如果Bean实现了BeanClassLoaderAware接口，调用setBeanClassLoader()方法，传入ClassLoader对象的实例。</p>
+</li>
+<li><p>如果Bean实现了BeanFactoryAware接口，调用setBeanClassLoader()方法，传入ClassLoader对象的实例。</p>
+</li>
+<li><p>与上面的类似，如果实现了其他*Aware接口，就调用相应的方法。</p>
+</li>
+<li><p>如果有和加载这个Bean的Spring容器相关的BeanPostProcessor对象，执行postProcessBeforeInitialization()方法</p>
+</li>
+<li><p>如果Bean实现了InitializingBean接口，执行afterPropertiesSet()方法。</p>
+</li>
+<li><p>如果Bean在配置文件中的定义包含<code>init-method</code>属性，执行指定的方法。</p>
+</li>
+<li><p>如果有和加载这个Bean的Spring容器相关的BeanPostProcessor对象，执行postProcessAfterInitialization()方法</p>
+</li>
+<li><p>当要销毁Bean的时候，如果Bean实现了DisposableBean接口，执行destroy()方法。</p>
+</li>
+<li><p>当要销毁Bean的时候，如果Bean在配置文件中的定义包含<code>destroy-method</code>属性，执行指定的方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/image-20210318200700668.png" srcset="/img/loading.gif" alt="image-20210318200700668"></p>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Spring-Framework/">Spring Framework</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Spring/">Spring</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/04/15/docker/Ubuntu&amp;CentOS%E5%AE%89%E8%A3%85Dokcer-CE/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Ubuntu&CentOS安装Dokcer-CE</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/03/15/git/git-archive-%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6/">
+                        <span class="hidden-mobile">git archive 打包文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
