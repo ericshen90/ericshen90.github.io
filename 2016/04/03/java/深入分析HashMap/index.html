@@ -255,7 +255,7 @@ JDK 1.8 以前 HashMap 的实现是 数组+链表，即使哈希函数取得再�
 <h1 id="2-JDK1-8中HashMap的数据结构"><a href="#2-JDK1-8中HashMap的数据结构" class="headerlink" title="2. JDK1.8中HashMap的数据结构"></a>2. JDK1.8中HashMap的数据结构</h1><blockquote>
 <p><strong>HashMap</strong> 是数组+链表+红黑树(JDK1.8 增加了红黑树部分)实现的</p>
 </blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/5NqP4KTYOufAoHb.png" srcset="/img/loading.gif" alt="image-20200503171753893"></p>
+<p><img src="http://image-ericshen.test.upcdn.net/uPic/Nil92g_5NqP4KTYOufAoHb" srcset="/img/loading.gif" alt="image-20200503171753893"></p>
 <h3 id="2-1-新增红黑树"><a href="#2-1-新增红黑树" class="headerlink" title="2.1. 新增红黑树"></a>2.1. 新增红黑树</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Tree bins</span><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Entry for Tree bins. Extends LinkedHashMap.Entry (which in turn</span><br><span class="hljs-comment"> * extends Node) so can be used as extension of either regular or</span><br><span class="hljs-comment"> * linked node.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TreeNode</span>&lt;<span class="hljs-title">K</span>,<span class="hljs-title">V</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title">LinkedHashMap</span>.<span class="hljs-title">Entry</span>&lt;<span class="hljs-title">K</span>,<span class="hljs-title">V</span>&gt; </span>&#123;<br>    TreeNode&lt;K,V&gt; parent;  <span class="hljs-comment">// red-black tree links</span><br>    TreeNode&lt;K,V&gt; left;<br>    TreeNode&lt;K,V&gt; right;<br>    TreeNode&lt;K,V&gt; prev;    <span class="hljs-comment">// needed to unlink next upon deletion</span><br>    <span class="hljs-keyword">boolean</span> red;<br>    TreeNode(<span class="hljs-keyword">int</span> hash, K key, V val, Node&lt;K,V&gt; next) &#123;<br>        <span class="hljs-keyword">super</span>(hash, key, val, next);<br>    &#125;<br>  ......<br></code></pre></td></tr></table></figure>
 
 <h3 id="2-2-红黑树的三个关键参数"><a href="#2-2-红黑树的三个关键参数" class="headerlink" title="2.2. 红黑树的三个关键参数"></a>2.2. 红黑树的三个关键参数</h3><table>
@@ -298,7 +298,7 @@ JDK 1.8 以前 HashMap 的实现是 数组+链表，即使哈希函数取得再�
 </li>
 </ul>
 </blockquote>
-<h1 id="3-分析-HashMap-的-put-方法"><a href="#3-分析-HashMap-的-put-方法" class="headerlink" title="3. 分析 HashMap 的 put 方法"></a>3. 分析 HashMap 的 put 方法</h1><h3 id="3-1-HashMap-的-put-方法执行过程可以通过下图来理解"><a href="#3-1-HashMap-的-put-方法执行过程可以通过下图来理解" class="headerlink" title="3.1. HashMap 的 put 方法执行过程可以通过下图来理解"></a>3.1. HashMap 的 put 方法执行过程可以通过下图来理解</h3><p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/JK6NFSEB5mDe3uV-20210224210601366.png" srcset="/img/loading.gif" alt="JK6NFSEB5mDe3uV"></p>
+<h1 id="3-分析-HashMap-的-put-方法"><a href="#3-分析-HashMap-的-put-方法" class="headerlink" title="3. 分析 HashMap 的 put 方法"></a>3. 分析 HashMap 的 put 方法</h1><h3 id="3-1-HashMap-的-put-方法执行过程可以通过下图来理解"><a href="#3-1-HashMap-的-put-方法执行过程可以通过下图来理解" class="headerlink" title="3.1. HashMap 的 put 方法执行过程可以通过下图来理解"></a>3.1. HashMap 的 put 方法执行过程可以通过下图来理解</h3><p><img src="http://image-ericshen.test.upcdn.net/uPic/gzo5Yg_JK6NFSEB5mDe3uV-20210224210601366" srcset="/img/loading.gif" alt="JK6NFSEB5mDe3uV"></p>
 <blockquote>
 <ul>
 <li><p>判断键值对数组 table[i]是否为空或为 null，否则执行 resize()进行扩容;</p>
@@ -352,15 +352,15 @@ JDK 1.8 以前 HashMap 的实现是 数组+链表，即使哈希函数取得再�
 <h3 id="3-3-JDK1-8-VS-JDK1-7-扩容机制"><a href="#3-3-JDK1-8-VS-JDK1-7-扩容机制" class="headerlink" title="3.3. JDK1.8 VS JDK1.7 扩容机制"></a>3.3. JDK1.8 VS JDK1.7 扩容机制</h3><ul>
 <li>下面举个例子说明下扩容过程。假设了我们的 hash 算法就是简单的用 key mod 一下表的大小(也就是数组的长度)。其中的哈希桶数组 table 的 size=2， 所以 key = 3、7、5，put 顺 序依次为 5、7、3。在 mod 2 以后都冲突在 table[1]这里了。这里假设负载因子 loadFactor=1， 即当键值对的实际大小 size 大于 table 的实际大小时进行扩容。接下来的三个步骤是哈希桶 数组 resize 成 4，然后所有的 Node 重新 rehash 的过程。</li>
 </ul>
-<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/Ck5RnxSTwbXUfjm.png" srcset="/img/loading.gif" alt="Ck5RnxSTwbXUfjm"></p>
+<p><img src="http://image-ericshen.test.upcdn.net/uPic/o1D7Xh_Ck5RnxSTwbXUfjm" srcset="/img/loading.gif" alt="Ck5RnxSTwbXUfjm"></p>
 <ul>
 <li>下面我们讲解下 JDK1.8 做了哪些优化。经过观测可以发现，我们使用的是 2 次幂的扩展(指长 度扩为原来 2 倍)，所以，元素的位置要么是在原位置，要么是在原位置再移动 2 次幂的位置。 看下图可以明白这句话的意思，n 为 table 的长度，图(a)表示扩容前的 key1 和 key2 两种 key 确定索引位置的示例，图(b)表示扩容后 key1 和 key2 两种 key 确定索引位置的示例， 其中 hash1 是 key1 对应的哈希与高位运算结果。</li>
 </ul>
-<p><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/XaP9x8RBtn5Zi4K.png" srcset="/img/loading.gif" alt="image-20200504140954765"></p>
+<p><img src="http://image-ericshen.test.upcdn.net/uPic/o70Ff1_XaP9x8RBtn5Zi4K" srcset="/img/loading.gif" alt="image-20200504140954765"></p>
 <ul>
-<li><p>元素在重新计算 hash 之后，因为 n 变为 2 倍，那么 n-1 的 mask 范围在高位多 1bit(红色)，因 此新的 index 就会发生这样的变化:<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/s6ncj98FyOqvwYk.png" srcset="/img/loading.gif" alt="image-20200504141652310"></p>
+<li><p>元素在重新计算 hash 之后，因为 n 变为 2 倍，那么 n-1 的 mask 范围在高位多 1bit(红色)，因 此新的 index 就会发生这样的变化:<br><img src="http://image-ericshen.test.upcdn.net/uPic/PNmTAu_s6ncj98FyOqvwYk" srcset="/img/loading.gif" alt="image-20200504141652310"></p>
 </li>
-<li><p>因此，我们在扩充 HashMap 的时候，不需要像 JDK1.7 的实现那样重新计算 hash，只需要看 看原来的 hash 值新增的那个 bit 是 1 还是 0 就好了，是 0 的话索引没变，是 1 的话索引变成“原 索引+oldCap”，可以看看下图为 16 扩充为 32 的 resize 示意图<br><img src="https://cdn.jsdelivr.net/gh/ericshen90/oss@main/uPic/3z1KbQcylsBuhRo.png" srcset="/img/loading.gif" alt="image-20200504141050042"></p>
+<li><p>因此，我们在扩充 HashMap 的时候，不需要像 JDK1.7 的实现那样重新计算 hash，只需要看 看原来的 hash 值新增的那个 bit 是 1 还是 0 就好了，是 0 的话索引没变，是 1 的话索引变成“原 索引+oldCap”，可以看看下图为 16 扩充为 32 的 resize 示意图<br><img src="http://image-ericshen.test.upcdn.net/uPic/JzLQol_3z1KbQcylsBuhRo" srcset="/img/loading.gif" alt="image-20200504141050042"></p>
 </li>
 <li><p>这个设计确实非常的巧妙，既省去了重新计算 hash 值的时间，而且同时，由于新增的 1bit 是 0 还是 1 可以认为是随机的，因此 resize 的过程，均匀的把之前的冲突的节点分散到新的 bucket 了。这一块就是 JDK1.8 新增的优化点。</p>
 </li>
