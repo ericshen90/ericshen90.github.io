@@ -15,7 +15,7 @@
   
   <meta name="theme-color" content="#2f4154">
   
-    <meta name="description" content="Fake Geeker, Hoops Lover!">
+    <meta name="description" content="HashMap：为什么容量总是为 2 的次幂HashMap 是根据 key 的 hash 值决策 key 放入到哪个桶（bucket）中，通过 tab=[(n - 1) &amp;amp; hash] 公式计算得出。其中 tab 是一个哈希表">
   
   <meta name="author" content="Eric Shen">
   <meta name="keywords" content="">
@@ -181,8 +181,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2018-02-21 14:22" pubdate>
-        星期三, 二月 21日 2018
+      <time datetime="2019-05-21 14:22" pubdate>
+        星期二, 五月 21日 2019
       </time>
     </span>
   
@@ -193,7 +193,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      894 字
+      895 字
     </span>
   
 
@@ -237,6 +237,9 @@
             
             <div class="markdown-body">
               <h1 id="HashMap：为什么容量总是为-2-的次幂"><a href="#HashMap：为什么容量总是为-2-的次幂" class="headerlink" title="HashMap：为什么容量总是为 2 的次幂"></a>HashMap：为什么容量总是为 2 的次幂</h1><p>HashMap 是根据 key 的 hash 值决策 key 放入到哪个桶（bucket）中，通过 <code>tab=[(n - 1) &amp; hash]</code> 公式计算得出。其中 tab 是一个哈希表</p>
+<span id="more"></span>
+
+<p>[TOC]</p>
 <h2 id="1-为什么要保证-capacity-是-2-的次幂呢？"><a href="#1-为什么要保证-capacity-是-2-的次幂呢？" class="headerlink" title="1. 为什么要保证 capacity 是 2 的次幂呢？"></a><strong>1. 为什么要保证 capacity 是 2 的次幂呢？</strong></h2><h3 id="（1）在-get-方法实现中，实际上是匹配链表中的-Node-tab-中的数据。"><a href="#（1）在-get-方法实现中，实际上是匹配链表中的-Node-tab-中的数据。" class="headerlink" title="（1）在 get 方法实现中，实际上是匹配链表中的 Node[] tab 中的数据。"></a>（1）在 get 方法实现中，实际上是匹配链表中的 Node[] tab 中的数据。</h3><blockquote>
 <p><code>(n - 1) &amp; hash</code> 实际上是计算出 key 在 tab 中索引位置，当 key 的 hash 没有冲突时，key 在 HashMap 存储的位置就是匹配的 node 中的第一个节点。如果 hash 有冲突，就会在 node 里面节点中查询，直至匹配到相等的 key。 </p>
 </blockquote>
@@ -294,9 +297,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2018/07/14/linux/%E8%A7%A3%E5%86%B3Ubuntu-18-04-DHCP-ip%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98/">
+                      <a href="/2019/05/22/Nexus%E6%BA%90%E6%9B%BF%E6%8D%A2%E5%8F%8AGitlab%E8%BF%81%E7%A7%BB/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">解决Ubuntu 18.04 DHCP ip失效问题</span>
+                        <span class="hidden-mobile">Nexus源替换及Gitlab迁移</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -304,8 +307,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2016/04/03/java/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90HashMap/">
-                        <span class="hidden-mobile">深入分析HashMap</span>
+                      <a href="/2019/04/15/docker/Ubuntu&amp;CentOS%E5%AE%89%E8%A3%85Dokcer-CE/">
+                        <span class="hidden-mobile">Ubuntu&CentOS安装Dokcer-CE</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

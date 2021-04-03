@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="Fake Geeker, Hoops Lover!">
+  
+  <meta name="author" content="Eric Shen">
+  <meta name="keywords" content="">
+  
+  <title>CentOS7下离线安装MySQL5.7 - Eric Shen Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/solarized-dark.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ericshen.xyz","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Eric Shen Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Eric Shen Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="CentOS7下离线安装MySQL5.7">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Eric Shen
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-09-10 10:22" pubdate>
+        星期二, 九月 10日 2019
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      17
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CentOS7下离线安装MySQL5.7</h1>
+            
+            <div class="markdown-body">
+              <h1 id="CentOS7下离线安装MySQL5-7"><a href="#CentOS7下离线安装MySQL5-7" class="headerlink" title="CentOS7下离线安装MySQL5.7"></a>CentOS7下离线安装MySQL5.7</h1><p>😭客户现场没有互联网，需要在 <code>CentOS</code> 系统的测试服务器上安装 <code>MySQL</code> </p>
+<p><strong>本文适用于服务器不能联网的情况下的安装操作</strong></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><table><thead><tr><th>项目</th><th>版本</th><th>说明</th></tr></thead><tbody><tr><td>操作系统</td><td>CentOS 7.2.1511 x86_64</td><td>最小化安装</td></tr><tr><td>MySQL</td><td>Community 5.7.18-1.el7.x86_64</td><td>rpm 包</td></tr></tbody></table>
+
+<p>注：可以使用 <code>cat /etc/redhat-release</code> 命令，来确定自己安装的 CentOS 的具体版本。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li><p>下载 <code>MySQL</code> 的安装包，这里推荐使用搜狐的镜像站下载，因为从 MySQL 官网下载的速度实在感人，<a target="_blank" rel="noopener" href="http://mirrors.sohu.com/mysql/MySQL-5.7/">镜像地址</a> 选择对应的版本号下载即可。我在此使用的 rpm 包有以下 4 个：</p>
+<ul>
+<li><p>mysql-community-client-5.7.18-1.el7.x86_64.rpm</p>
+</li>
+<li><p>mysql-community-common-5.7.18-1.el7.x86_64.rpm</p>
+</li>
+<li><p>mysql-community-libs-5.7.18-1.el7.x86_64.rpm</p>
+</li>
+<li><p>mysql-community-server-5.7.18-1.el7.x86_64.rpm</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>以上四个 rpm 包是必须的，如果还需要其他的功能，可以自行进行下载。以当前版本为例，包含全部的 rpm 包的文件为`mysql-5.7.18-1.el7.x86_64.rpm-bundle.tar`</code></pre><ul>
+<li><p>下载 <code>numactl</code> 软件包：</p>
+<ul>
+<li><p><code>numactl-2.0.9-6.el7_2.x86_64.rpm</code></p>
+</li>
+<li><p><code>numactl-devel-2.0.9-6.el7_2.x86_64.rpm</code></p>
+</li>
+<li><p><code>numactl-libs-2.0.9-6.el7_2.x86_64.rpm</code></p>
+</li>
+</ul>
+</li>
+<li><p>下载其他相关支持：</p>
+<ul>
+<li><p><code>perl-Data-Dumper-2.145-3.el7.x86_64.rpm</code></p>
+</li>
+<li><p><code>libaio-0.3.109-13.el7.x86_64.rpm</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>以上软件包是待会儿要用到的，请提前准备好。这个软件包网上直接搜索就能下载得到，这里提供一个下载地址[下载地址](http://rpmfind.net/linux/rpm2html/) 直接在搜索框搜索即可，下载时注意看版本号和位数（64 位）</code></pre><ul>
+<li>将下载好的软件包一并上传到服务器上，准备安装。</li>
+</ul>
+<h2 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h2><p>以下只是我的安装顺序，其实这些软件包的安装顺序没有太多明确的要求，不一定非要按以下顺序安装，但是可以会有一些相关的依赖问题，如果抛出依赖相关的错误，只要把上边对应的依赖安装上在重试一次即可。</p>
+<ul>
+<li><p>安装 <code>libaio-0.3.109-13.el7.x86_64.rpm</code></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">rpm</span> -ivh libaio-<span class="hljs-number">0</span>.<span class="hljs-number">3</span>.<span class="hljs-number">109</span>-<span class="hljs-number">13</span>.el<span class="hljs-number">7</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>.rpm<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>安装<code>perl-Data-Dumper-2.145-3.el7.x86_64.rpm</code></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">rpm</span> -ivh perl-Data-Dumper-<span class="hljs-number">2</span>.<span class="hljs-number">145</span>-<span class="hljs-number">3</span>.el<span class="hljs-number">7</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span>.rpm<br></code></pre></td></tr></table></figure>
+
+<p>以上这两项安装时我并没有遇到依赖问题，如果在实际安装时遇到了，请查看相关提示，在下载对应的包安装即可。</p>
+</li>
+<li><p>安装<code>numactl</code>相关</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">rpm</span> -ivh numactl*<br></code></pre></td></tr></table></figure>
+
+<p>如果不安装此包，我们将会得到如下错误</p>
+<blockquote>
+<p>error: Failed dependencies:<br>libnuma.so.1()(64bit) is needed by mysql-community-server-5.7.18-1.el7.x86_64<br>libnuma.so.1(libnuma_1.1)(64bit) is needed by mysql-community-server-5.7.18-1.el7.x86_64<br>libnuma.so.1(libnuma_1.2)(64bit) is needed by mysql-community-server-5.7.18-1.el7.x86_64</p>
+</blockquote>
+</li>
+<li><p>若此时直接安装 mysql，我们会得到一个异常：</p>
+<blockquote>
+<p>warning: mysql-community-libs-5.7.18-1.el7.x86_64.rpm: Header V3 DSA/SHA1 Signature, key ID 5072e1f5: NOKEY error: Failed dependencies:<br>mysql-community-common(x86-64) &gt;= 5.7.9 is needed by mysql-community-libs-5.7.18-1.el7.x86_64<br>mariadb-libs is obsoleted by mysql-community-libs-5.7.18-1.el7.x86_64</p>
+</blockquote>
+</li>
+</ul>
+<p>第一行还能看明白，是依赖问题，第二行的 “mariadb-libs 被废弃” 是什么鬼？废弃了为什么不提供一个新的还要出现这种弱智提示呢？经过一番搜寻，才发现是因为在 CentOS 7 上已经有一个<code>mariadb</code> 而这个会与 <code>MySQL</code>的<code>mariadb</code>发生冲突。所以此时我们需要将系统自带的<code>mariadb</code>卸载掉，然后使用 mysql 自带的<code>mariadb</code>。</p>
+<p>我们先来查看系统安装的版本<code>rpm -qa | grep mariadb</code>, 随后进行卸载，卸载的过程中会提示不能卸载，因为有其他软件依赖此包，我们要加上 <code>--nodeps</code> 参数强制卸载</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">rpm</span> -e --nodeps mariadb-libs-<span class="hljs-number">5</span>.<span class="hljs-number">5</span>.<span class="hljs-number">37</span>-<span class="hljs-number">1</span>.el<span class="hljs-number">7</span>_<span class="hljs-number">0</span>.x<span class="hljs-number">86</span>_<span class="hljs-number">64</span><br></code></pre></td></tr></table></figure>
+
+<p>注意我上述写的 <code>mariadb-libs-5.5.37-1.el7_0.x86_64</code> 是我刚刚用<code>rpm -qa | grep mariadb</code>查询出的结果。不同版本可能会有所不同。</p>
+<ul>
+<li>解决好这个问题后，就可以安装 mysql 了，<code>rpm -ivh mysql-community-*</code> 即可。</li>
+</ul>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>使用 <code>service mysqld start</code> 命令启动 mysql 实例，为了验证，我们使用<code>service mysqld status</code>验证一下。输出结果如下：</p>
+<blockquote>
+<p>Redirecting to /bin/systemctl status mysqld.service<br>● mysqld.service - MySQL Server<br>Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)<br>Active: active (<strong><em>running</em></strong>) since Mon 2017-07-03 15:39:02 CST; 5s ago</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">Docs: man:mysqld(<span class="hljs-number">8</span>)<br>   http:<span class="hljs-regexp">//</span>dev.mysql.com<span class="hljs-regexp">/doc/</span>refman<span class="hljs-regexp">/en/u</span>sing-systemd.html<br></code></pre></td></tr></table></figure>
+
+<p>Process: 28054 ExecStart=/usr/sbin/mysqld –daemonize –pid-file=/var/run/mysqld/mysqld.pid $MYSQLD_OPTS (code=exited, status=0/SUCCESS)<br>Process: 27978 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)<br>Main PID: 28056 (mysqld)<br>CGroup: /system.slice/mysqld.service</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">└─<span class="hljs-number">28056</span> <span class="hljs-regexp">/usr/</span>sbin<span class="hljs-regexp">/mysqld --daemonize --pid-file=/</span>var<span class="hljs-regexp">/run/my</span>sqld/mysqld.pid<br></code></pre></td></tr></table></figure>
+
+<p>Jul 03 15:38:57 nodemaster systemd[1]: Starting MySQL Server…<br>Jul 03 15:39:02 nodemaster systemd[1]: Started MySQL Server.</p>
+</blockquote>
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p>我们使用 <code>mysql -u root</code>时会提示我们要输入密码，这个密码存储在 <code>/var/log/mysqld.log</code> 文件内，是系统自动生成的。我们可以使用 <code>cat /var/log/mysqld.log | grep password</code> 命令将密码找出来，然后填入，进行登录，登录之后进行修改密码等操作。这些操作在官方文档上都有详细的说明，可以自行查看。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/linux/">linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/mysql/">mysql</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/09/14/cicd/%E8%A7%A3%E5%86%B3Linux%E4%B8%8BHarbor%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E5%A4%B1%E8%B4%A5/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">解决Linux下Harbor开机启动失败</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/30/linux/CentOS7-Ubuntu-18-%E6%97%B6%E9%97%B4%E8%AE%BE%E7%BD%AE/">
+                        <span class="hidden-mobile">CentOS7 & Ubuntu 18 时间设置</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

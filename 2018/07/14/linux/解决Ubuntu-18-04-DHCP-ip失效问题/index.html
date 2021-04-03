@@ -236,7 +236,7 @@
             <h1 style="display: none">解决Ubuntu 18.04 DHCP ip失效问题</h1>
             
             <div class="markdown-body">
-              <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个虚拟机集群，自然是装好一个，然后 <code>clone</code> 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 <code>ip</code> 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
+              <h1 id="解决Ubuntu-18-04-DHCP-ip失效问题"><a href="#解决Ubuntu-18-04-DHCP-ip失效问题" class="headerlink" title="解决Ubuntu 18.04 DHCP ip失效问题"></a>解决Ubuntu 18.04 DHCP ip失效问题</h1><p>今天在准备弄一个<code>k8s</code>虚拟机集群，自然是装好一个，然后 <code>clone</code> 成三份。但是有一个问题，clone 的时候虽然选择了更换 <code>MAC</code> 地址，但是 起来之后发现 <code>ip</code> 地址还是没变。原来是 <code>systemd-networkd</code> 的老 bug。它不是根据 <code>MAC</code> 地址来决定是否换 IP，而是根据 <code>/etc/machine-id</code> 来计算出来一个值，如果这个值发生了变化，那么就更换 IP 地址。</p>
 <p>所以就需要把 <code>/etc/machine-id</code> 给换一下。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo su<br>uuidgen | sed <span class="hljs-string">&#x27;s/-//g&#x27;</span> &gt; /etc/machine-id<br>reboot<br></code></pre></td></tr></table></figure>
 
@@ -290,8 +290,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2018/02/21/java/HashMap%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%B9%E9%87%8F%E6%80%BB%E6%98%AF%E4%B8%BA%202%20%E7%9A%84%E6%AC%A1%E5%B9%82/">
-                        <span class="hidden-mobile">HashMap：为什么容量总是为 2 的次幂</span>
+                      <a href="/2018/07/03/linux/CentOS%E7%9A%84service%E8%87%AA%E5%90%AF%E5%8A%A8/">
+                        <span class="hidden-mobile">CentOS的service自启动</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

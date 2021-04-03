@@ -15,7 +15,13 @@
   
   <meta name="theme-color" content="#2f4154">
   
-    <meta name="description" content="Fake Geeker, Hoops Lover!">
+    <meta name="description" content="前言Spring Bean 的生命周期在整个 Spring 中占有很重要的位置，掌握这些可以加深对 Spring 的理解。
+首先看下生命周期图：
+
+再谈生命周期之前有一点需要先明确：
+
+Spring 只帮我们管理单例模式 Bean 的完整生命周期，对于 prototype 的 bean ，Spring 在创建好交给使用者之后则不会再管理后续的生命周期。
+">
   
   <meta name="author" content="Eric Shen">
   <meta name="keywords" content="">
@@ -243,6 +249,9 @@
 <blockquote>
 <p>Spring 只帮我们管理单例模式 Bean 的<strong>完整</strong>生命周期，对于 prototype 的 bean ，Spring 在创建好交给使用者之后则不会再管理后续的生命周期。</p>
 </blockquote>
+<span id="more"></span>
+
+<p>[TOC]</p>
 <h3 id="注解方式"><a href="#注解方式" class="headerlink" title="注解方式"></a>注解方式</h3><p>在 bean 初始化时会经历几个阶段，首先可以使用注解 <code>@PostConstruct</code>, <code>@PreDestroy</code> 来在 bean 的创建和销毁阶段进行调用:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AnnotationBean</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Logger LOGGER = LoggerFactory.getLogger(AnnotationBean.class);<br><br>    <span class="hljs-meta">@PostConstruct</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;AnnotationBean start&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@PreDestroy</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>&#123;<br>        LOGGER.info(<span class="hljs-string">&quot;AnnotationBean destroy&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -333,9 +342,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2019/04/15/docker/Ubuntu&amp;CentOS%E5%AE%89%E8%A3%85Dokcer-CE/">
+                      <a href="/2019/04/03/java/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90HashMap/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Ubuntu&CentOS安装Dokcer-CE</span>
+                        <span class="hidden-mobile">深入分析HashMap</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

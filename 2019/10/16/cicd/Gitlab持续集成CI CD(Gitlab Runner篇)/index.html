@@ -282,7 +282,7 @@ GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行�
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo tee /usr/<span class="hljs-built_in">local</span>/docker/runner/environment/daemon.json &lt;&lt;-<span class="hljs-string">&#x27;EOF&#x27;</span><br>&#123;<br>  <span class="hljs-string">&quot;registry-mirrors&quot;</span>: [<br>  <span class="hljs-string">&quot;https://registry.docker-cn.com&quot;</span> <span class="hljs-comment">#docker-cn加速器</span><br>  ],<br>  <span class="hljs-string">&quot;insecure-registries&quot;</span>: [<br>    <span class="hljs-string">&quot;192.168.10.133:5000&quot;</span>   <span class="hljs-comment">#harbor仓库地址</span><br>  ]<br>&#125;<br>EOF<br></code></pre></td></tr></table></figure>
 
 <blockquote>
-<p>推荐配置阿里云镜像加速器，可参考<a href="https://ericshen.xyz/2019/04/15/Ubuntu安装Dokcer-CE/">Linux安装Dokcer CE 3.5</a>)</p>
+<p>推荐配置阿里云镜像加速器，可参考<a target="_blank" rel="noopener" href="http://ericshen.tech/2019/04/15/Ubuntu安装Dokcer-CE/">Linux安装Dokcer CE 3.5</a>)</p>
 </blockquote>
 <h2 id="2-3-Dockerfile"><a href="#2-3-Dockerfile" class="headerlink" title="2.3 Dockerfile"></a>2.3 Dockerfile</h2><p>在<code>/usr/local/docker/runner/environment</code> 目录下创建 <code>Dockerfile</code></p>
 <p><code>vim /usr/local/docker/runner/environment/Dockerfile</code></p>
@@ -410,7 +410,7 @@ GitLab CI 最大的作用是管理各个项目的构建状态，因此，运行�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/06/11/spring/SpringMVC%20%E7%9A%84DispatcherServlet%E6%BA%90%E7%A0%81%20Part1/">
+                      <a href="/2020/06/11/spring/SpringMVC%E7%9A%84DispatcherServlet%E6%BA%90%E7%A0%81Part1/">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">DispatcherServlet解析</span>
                         <span class="visible-mobile">上一篇</span>
